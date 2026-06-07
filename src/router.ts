@@ -6,7 +6,7 @@ import PrintPage from './pages/PrintPage.vue';
 import NotFoundPage from './pages/NotFoundPage.vue';
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   scrollBehavior(to) {
     if (to.hash) {
       return { el: to.hash, top: 84 };

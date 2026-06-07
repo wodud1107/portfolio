@@ -1,3 +1,5 @@
+import { publicAsset } from "./assets";
+
 export type ProjectStatus = "Released" | "MVP" | "Prototype" | "Coursework";
 
 export interface ProjectLink {
@@ -139,35 +141,35 @@ export const projects: Project[] = [
       "대표 프로젝트: App Store 출시 iOS 앱에서 상태 동기화, 렌더링 성능, 알림 신뢰성, 출시 후 크래시 대응을 담당했습니다.",
     screenshots: [
       {
-        src: "/assets/damago/readme-1.jpg",
+        src: publicAsset("assets/damago/readme-1.jpg"),
         alt: "Damago 홈 화면",
         caption: "펫 상태와 먹이 주기 중심의 홈 화면",
         type: "phone",
         group: "product",
       },
       {
-        src: "/assets/damago/readme-2.jpg",
+        src: publicAsset("assets/damago/readme-2.jpg"),
         alt: "Damago 컬렉션 화면",
         caption: "수집한 캐릭터를 확인하고 변경하는 컬렉션",
         type: "phone",
         group: "product",
       },
       {
-        src: "/assets/damago/readme-3.jpg",
+        src: publicAsset("assets/damago/readme-3.jpg"),
         alt: "Damago 커플 활동 화면",
         caption: "일일 질문과 밸런스 게임 기반 커플 활동",
         type: "phone",
         group: "product",
       },
       {
-        src: "/assets/damago/readme-4.jpg",
+        src: publicAsset("assets/damago/readme-4.jpg"),
         alt: "Damago Dynamic Island 화면",
         caption: "Dynamic Island에서 이어지는 가벼운 상호작용",
         type: "phone",
         group: "product",
       },
       {
-        src: "/assets/damago/instruments-before.jpg",
+        src: publicAsset("assets/damago/instruments-before.jpg"),
         alt: "Damago 렌더링 성능 개선 전 Instruments 화면",
         caption:
           "개선 전: Core Animation Commits와 GPU Hitch가 집중적으로 발생",
@@ -179,7 +181,7 @@ export const projects: Project[] = [
         ],
       },
       {
-        src: "/assets/damago/instruments-after.jpg",
+        src: publicAsset("assets/damago/instruments-after.jpg"),
         alt: "Damago 렌더링 성능 개선 후 Instruments 화면",
         caption: "실험안: Core Animation Commits 166회, GPU Hitch 1회까지 감소",
         type: "wide",
@@ -191,7 +193,7 @@ export const projects: Project[] = [
         ],
       },
       {
-        src: "/assets/damago/instruments-final-declarative.png",
+        src: publicAsset("assets/damago/instruments-final-declarative.png"),
         alt: "Damago 선언형 UI 최종안 Instruments 화면",
         caption: "최종안: 선언형 UI 유지, Commits 2,411회 / GPU Hitch 7회",
         type: "wide",
@@ -248,7 +250,7 @@ export const projects: Project[] = [
         result:
           "서버 응답, 로컬 캐시, 화면 상태가 Repository 중심의 한 방향 흐름으로 정리되면서, ViewModel과 SwiftUI View가 일관된 상태를 구독할 수 있었습니다.",
         image: {
-          src: "/assets/damago/Local First 파이프라인.png",
+          src: publicAsset("assets/damago/Local First 파이프라인.png"),
           alt: "Damago Local-First 상태 동기화 파이프라인",
         },
         links: [
@@ -403,7 +405,7 @@ export const projects: Project[] = [
     ],
     screenshots: [
       {
-        src: "/assets/puzzole/fill-progress.jpg",
+        src: publicAsset("assets/puzzole/fill-progress.jpg"),
         alt: "Puzzole 셀 채우기 진행 화면",
         caption:
           "touch point를 cell hit-test로 변환해 결정적인 fill state로 저장",
@@ -411,7 +413,7 @@ export const projects: Project[] = [
         group: "product",
       },
       {
-        src: "/assets/puzzole/color-selection.jpg",
+        src: publicAsset("assets/puzzole/color-selection.jpg"),
         alt: "Puzzole 색상 선택 상태",
         caption:
           "display color 선택을 사용자 입력으로 받고 semantic color 검증과 분리",
@@ -419,7 +421,7 @@ export const projects: Project[] = [
         group: "product",
       },
       {
-        src: "/assets/puzzole/validation-state.jpg",
+        src: publicAsset("assets/puzzole/validation-state.jpg"),
         alt: "Puzzole 플레이 검증 상태 화면",
         caption:
           "playable cell coverage와 shape grouping 검증으로 퍼즐 진행 상태를 판단",
@@ -628,7 +630,7 @@ return PlayerProgressValidationResult(
     ],
     screenshots: [
       {
-        src: "/assets/csflashcards/Simulator Screenshot - iPhone 17 Pro - 2026-06-06 at 20.22.16.png",
+        src: publicAsset("assets/csflashcards/Simulator Screenshot - iPhone 17 Pro - 2026-06-06 at 20.22.16.png"),
         alt: "CS FlashCards 질문 카드 화면",
         caption:
           "CS 개념을 모바일에서 반복 학습할 수 있도록 구성한 질문 카드 화면",
@@ -636,7 +638,7 @@ return PlayerProgressValidationResult(
         group: "product",
       },
       {
-        src: "/assets/csflashcards/Simulator Screenshot - iPhone 17 Pro - 2026-06-06 at 20.22.41.png",
+        src: publicAsset("assets/csflashcards/Simulator Screenshot - iPhone 17 Pro - 2026-06-06 at 20.22.41.png"),
         alt: "CS FlashCards 답변 카드 화면",
         caption: "카드 클릭하여 질문과 설명을 확인하는 학습 흐름",
         type: "phone",
@@ -701,7 +703,7 @@ return PlayerProgressValidationResult(
     ],
     screenshots: [
       {
-        src: "/assets/wwdc-translator/560452964-a1981b7a-b705-4675-b827-8383871d4ccb.png",
+        src: publicAsset("assets/wwdc-translator/560452964-a1981b7a-b705-4675-b827-8383871d4ccb.png"),
         alt: "WWDC Translator 영상 자막 오버레이 화면",
         caption:
           "WWDC 영상 위에 한국어 번역 자막을 시간 기준으로 표시한 Prototype 화면",

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ProjectCard from '../components/ProjectCard.vue';
+import { publicAsset } from '../data/assets';
 import { contactLinks } from '../data/contact';
 import { experiences } from '../data/experience';
 import { featuredProjects, secondaryProjects } from '../data/projects';
@@ -9,32 +10,33 @@ const credentials = [
   {
     title: 'Naver Boostcamp Web·Mobile 10기 iOS 과정',
     type: '수료증',
-    image: '/assets/experience/previews/boostcamp.jpg',
-    href: '/assets/experience/네이버 부스트캠프 멤버십 ios과정 수료증.pdf',
+    image: publicAsset('assets/experience/previews/boostcamp.jpg'),
+    href: publicAsset('assets/experience/네이버 부스트캠프 멤버십 ios과정 수료증.pdf'),
   },
   {
     title: 'SQLD',
     type: '자격증',
-    image: '/assets/experience/previews/sqld.jpg',
-    href: '/assets/experience/sqld 자격증.pdf',
+    image: publicAsset('assets/experience/previews/sqld.jpg'),
+    href: publicAsset('assets/experience/sqld 자격증.pdf'),
   },
   {
     title: 'OPIc',
     type: '성적표',
-    image: '/assets/experience/previews/opic.jpg',
-    href: '/assets/experience/오픽성적표.pdf',
+    image: publicAsset('assets/experience/previews/opic.jpg'),
+    href: publicAsset('assets/experience/오픽성적표.pdf'),
   },
 ];
 
 const email = contactLinks.find((link) => link.label === 'Email');
 const github = contactLinks.find((link) => link.label === 'GitHub');
 const blog = contactLinks.find((link) => link.label === 'Blog');
+const profileImage = publicAsset('assets/profile.jpeg');
 </script>
 
 <template>
   <section id="home" class="hero">
     <figure class="hero-profile">
-      <img src="/assets/profile.jpeg" alt="김재영 프로필 사진" />
+      <img :src="profileImage" alt="김재영 프로필 사진" />
     </figure>
     <div class="hero-content">
       <p class="eyebrow">iOS Developer / Client Engineer</p>

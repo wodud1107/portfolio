@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRoute } from "vue-router";
+import { publicAsset } from "../data/assets";
 import { contactLinks } from "../data/contact";
 import { experiences } from "../data/experience";
 import { projects } from "../data/projects";
@@ -45,6 +46,8 @@ const contacts = contactOrder
     contactLinks.find((link) => link.label === label && link.href),
   )
   .filter((link): link is NonNullable<typeof link> => Boolean(link));
+
+const profileImage = publicAsset("assets/profile.jpeg");
 
 const printIntroParagraphs = [
   "출시된 iOS 앱에서 사용자가 체감하는 지연, 끊김, 크래시를 줄이는 데 집중해온 개발자입니다. Damago 팀 프로젝트에서 Local-First 상태 동기화, 렌더링 병목 분석, Live Activity 연동, 출시 후 크래시 대응을 경험했습니다.",
@@ -191,7 +194,7 @@ const printSections = computed<PrintSection[]>(() => {
       storyTitles: ["Local-First 상태 동기화"],
       diagram: {
         title: "Local-First Pipeline",
-        src: "/assets/damago/Local First 파이프라인.png",
+        src: publicAsset("assets/damago/Local First 파이프라인.png"),
         alt: "Damago Local-First 상태 동기화 파이프라인",
       },
     },
@@ -338,7 +341,7 @@ function highlightedSwiftLines(code: string) {
 
     <header class="print-hero avoid-break">
       <figure class="print-profile">
-        <img src="/assets/profile.jpeg" alt="김재영 프로필 사진" />
+        <img :src="profileImage" alt="김재영 프로필 사진" />
       </figure>
       <div class="print-hero-body">
         <div>
