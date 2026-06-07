@@ -1,9 +1,12 @@
 <script setup lang="ts">
-const navItems = [
-  { label: 'Home', href: '/#home' },
-  { label: 'Tech', href: '/#tech' },
-  { label: 'Projects', href: '/#projects' },
-  { label: 'Experience', href: '/#experience' },
+const internalNavItems = [
+  { label: 'Home', to: { name: 'home', hash: '#home' } },
+  { label: 'Tech', to: { name: 'home', hash: '#tech' } },
+  { label: 'Projects', to: { name: 'home', hash: '#projects' } },
+  { label: 'Experience', to: { name: 'home', hash: '#experience' } },
+];
+
+const externalNavItems = [
   { label: 'Blog', href: 'https://thinkartic1107.tistory.com/', external: true },
 ];
 </script>
@@ -16,12 +19,19 @@ const navItems = [
         <span>Jaeyoung Kim</span>
       </RouterLink>
       <nav class="site-nav" aria-label="주요 메뉴">
+        <RouterLink
+          v-for="item in internalNavItems"
+          :key="item.label"
+          :to="item.to"
+        >
+          {{ item.label }}
+        </RouterLink>
         <a
-          v-for="item in navItems"
+          v-for="item in externalNavItems"
           :key="item.href"
           :href="item.href"
-          :target="item.external ? '_blank' : undefined"
-          :rel="item.external ? 'noreferrer' : undefined"
+          target="_blank"
+          rel="noreferrer"
         >
           {{ item.label }}
         </a>
