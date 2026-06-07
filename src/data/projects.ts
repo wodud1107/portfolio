@@ -683,7 +683,7 @@ return PlayerProgressValidationResult(
     period: "2026",
     status: "Prototype",
     featured: false,
-    categories: ["iOS", "Product"],
+    categories: ["iOS"],
     tags: ["Personal Tool", "MVP"],
     keywords: ["SwiftUI", "WebKit", "AVKit", "Translation", "Subtitle Sync"],
     links: [
@@ -732,7 +732,7 @@ return PlayerProgressValidationResult(
     period: "2025",
     status: "Coursework",
     featured: false,
-    categories: ["System", "Backend"],
+    categories: ["System"],
     tags: ["Academic Project", "Embedded"],
     keywords: [
       "Raspberry Pi",
