@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import ProjectCard from '../components/ProjectCard.vue';
 import { publicAsset } from '../data/assets';
 import { contactLinks } from '../data/contact';
@@ -11,26 +12,38 @@ const credentials = [
     title: 'Naver Boostcamp Web·Mobile 10기 iOS 과정',
     type: '수료증',
     image: publicAsset('assets/experience/previews/boostcamp.jpg'),
-    href: publicAsset('assets/experience/네이버 부스트캠프 멤버십 ios과정 수료증.pdf'),
   },
   {
     title: 'SQLD',
     type: '자격증',
     image: publicAsset('assets/experience/previews/sqld.jpg'),
-    href: publicAsset('assets/experience/sqld 자격증.pdf'),
-  },
-  {
-    title: 'OPIc',
-    type: '성적표',
-    image: publicAsset('assets/experience/previews/opic.jpg'),
-    href: publicAsset('assets/experience/오픽성적표.pdf'),
   },
 ];
+
+type Credential = (typeof credentials)[number];
 
 const email = contactLinks.find((link) => link.label === 'Email');
 const github = contactLinks.find((link) => link.label === 'GitHub');
 const blog = contactLinks.find((link) => link.label === 'Blog');
 const profileImage = publicAsset('assets/profile.jpeg');
+const activeCredential = ref<Credential | null>(null);
+
+function openCredential(credential: Credential) {
+  activeCredential.value = credential;
+}
+
+function closeCredential() {
+  activeCredential.value = null;
+}
+
+function handleKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape') {
+    closeCredential();
+  }
+}
+
+onMounted(() => window.addEventListener('keydown', handleKeydown));
+onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown));
 </script>
 
 <template>
@@ -139,18 +152,45 @@ const profileImage = publicAsset('assets/profile.jpeg');
       <h2>자격증 및 수료 자료</h2>
     </div>
     <div class="credential-grid">
-      <a
+      <button
         v-for="credential in credentials"
         :key="credential.title"
         class="credential-card"
-        :href="credential.href"
-        target="_blank"
-        rel="noreferrer"
+        type="button"
+        @click="openCredential(credential)"
       >
         <img :src="credential.image" :alt="`${credential.title} 미리보기`" loading="lazy" />
         <span>{{ credential.type }}</span>
         <strong>{{ credential.title }}</strong>
-      </a>
+      </button>
     </div>
   </section>
+
+  <Teleport to="body">
+    <div
+      v-if="activeCredential"
+      class="credential-modal"
+      role="dialog"
+      aria-modal="true"
+      :aria-label="`${activeCredential.title} 보기`"
+      @keydown.esc="closeCredential"
+    >
+      <button
+        class="modal-backdrop"
+        type="button"
+        aria-label="자격증 자료 닫기"
+        @click="closeCredential"
+      />
+      <section class="credential-modal-panel">
+        <button class="modal-close" type="button" aria-label="닫기" @click="closeCredential">
+          ×
+        </button>
+        <img :src="activeCredential.image" :alt="`${activeCredential.title} 원본 보기`" />
+        <div class="modal-caption">
+          <strong>{{ activeCredential.type }}</strong>
+          <span>{{ activeCredential.title }}</span>
+        </div>
+      </section>
+    </div>
+  </Teleport>
 </template>

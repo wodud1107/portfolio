@@ -1046,10 +1046,16 @@ dd {
 }
 
 .credential-card {
+  appearance: none;
   overflow: hidden;
   display: grid;
   gap: 10px;
-  padding-bottom: 18px;
+  padding: 0 0 18px;
+  width: 100%;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 
 .credential-card img {
@@ -1076,6 +1082,40 @@ dd {
 .credential-card strong {
   color: var(--ink);
   line-height: 1.35;
+}
+
+.credential-card:hover,
+.credential-card:focus-visible {
+  border-color: rgba(0, 87, 255, 0.34);
+}
+
+.credential-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.credential-modal-panel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: min(760px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow: hidden;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 22px 80px rgba(0, 0, 0, 0.34);
+}
+
+.credential-modal-panel img {
+  display: block;
+  width: 100%;
+  max-height: calc(100vh - 150px);
+  object-fit: contain;
+  background: #f7f7f7;
 }
 
 .print-page {
