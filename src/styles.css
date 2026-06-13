@@ -68,14 +68,11 @@ button {
 }
 
 .brand-mark {
-  display: inline-grid;
+  display: block;
   width: 34px;
   height: 34px;
-  place-items: center;
-  color: #ffffff;
-  background: var(--accent);
+  object-fit: cover;
   border-radius: 8px;
-  font-size: 0.85rem;
 }
 
 .site-nav {
