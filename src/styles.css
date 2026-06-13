@@ -2133,6 +2133,17 @@ body:has(.print-page) main {
     line-height: 1.36;
   }
 
+  .print-page--general .print-performance-grid figcaption ul {
+    display: none;
+  }
+
+  .print-page--general
+    .print-project[data-project="cs-flashcards"]
+    .print-media-card
+    img {
+    max-height: 54mm;
+  }
+
   .print-code-block pre {
     font-size: 6.25pt;
     line-height: 1.28;

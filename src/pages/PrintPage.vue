@@ -187,14 +187,6 @@ const printSections = computed<PrintSection[]>(() => {
         storyTitles: ["GPIO 핀 방향 분리", "드라이버/API/앱 계층 분리"],
         includeLinks: true,
       },
-      {
-        title: "WWDC Translator - 빠른 MVP 검증",
-        project: wwdcTranslator,
-        includeOverview: true,
-        storyTitles: ["Transcript 추출과 영상 싱크 연결"],
-        includeProductImages: true,
-        includeLinks: true,
-      },
     ];
   }
 
@@ -350,7 +342,10 @@ function highlightedSwiftLines(code: string) {
 </script>
 
 <template>
-  <section class="print-page">
+  <section
+    class="print-page"
+    :class="{ 'print-page--general': variant === 'general' }"
+  >
     <div class="print-toolbar no-print">
       <RouterLink class="text-link" to="/">← 홈으로 돌아가기</RouterLink>
       <button class="button primary" type="button" @click="printPortfolio">
@@ -413,6 +408,7 @@ function highlightedSwiftLines(code: string) {
       v-for="section in printSections"
       :key="section.title"
       class="print-project page-break"
+      :data-project="section.project?.slug"
     >
       <header class="print-project-header avoid-break">
         <p v-if="section.project" class="eyebrow">
