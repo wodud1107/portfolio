@@ -4,7 +4,7 @@ import PageHeader from '../components/PageHeader.vue';
 import ProjectCard from '../components/ProjectCard.vue';
 import { projects } from '../data/projects';
 
-const filters = ['All', 'iOS', 'Backend', 'System', 'Product', 'Performance'];
+const filters = ['All', 'iOS', 'Frontend', 'Backend', 'System', 'Product', 'Performance'];
 const selectedFilter = ref('All');
 
 const filteredProjects = computed(() => {

@@ -676,6 +676,66 @@ return PlayerProgressValidationResult(
     ],
   },
   {
+    slug: "portfolio",
+    name: "Portfolio",
+    summary: "Vue 3와 TypeScript로 구성한 프로젝트 중심 개발자 포트폴리오",
+    role: "Frontend Developer",
+    period: "2026",
+    status: "Released",
+    featured: false,
+    categories: ["Frontend", "Product"],
+    tags: ["Personal Project", "Deployed"],
+    keywords: [
+      "TypeScript",
+      "Vue 3",
+      "Vue Router",
+      "Vite",
+      "GitHub Pages",
+    ],
+    links: [
+      {
+        label: "Website",
+        href: "https://wodud1107.github.io/portfolio/",
+      },
+      {
+        label: "GitHub",
+        href: "https://github.com/wodud1107/portfolio",
+      },
+    ],
+    overview: [
+      "프로젝트 경험과 의사결정 과정을 일관된 구조로 전달하기 위해 만든 Vue 기반 포트폴리오입니다.",
+      "프로젝트, 기술 스택, 경험 데이터를 분리하고 재사용 가능한 컴포넌트와 라우트에서 조합하도록 구성했습니다.",
+    ],
+    problem: [
+      "프로젝트가 늘어나면서 카드와 상세 페이지에 같은 내용을 반복 작성하면 수정 지점이 분산되고 정보가 달라질 수 있었습니다.",
+      "GitHub Pages의 하위 경로 배포와 SPA 직접 접근을 함께 지원하려면 asset base와 라우팅 fallback을 맞춰야 했습니다.",
+    ],
+    roleDetails: [
+      "Vue 컴포넌트와 TypeScript 데이터 모델로 홈, 프로젝트 목록, 상세 페이지를 구성했습니다.",
+      "Vue Router 기반 내비게이션과 GitHub Actions·Pages 배포 흐름을 연결했습니다.",
+    ],
+    decisionStories: [
+      {
+        title: "콘텐츠와 화면 컴포넌트 분리",
+        problem:
+          "프로젝트 설명을 각 카드와 상세 페이지에 직접 작성하면 같은 내용을 반복 수정해야 하고, 화면마다 정보가 달라지기 쉬웠습니다.",
+        decision:
+          "프로젝트, 기술 스택, 경험을 TypeScript 데이터로 분리하고 ProjectCard와 상세 페이지가 같은 데이터를 조합하도록 구성했습니다.",
+        result:
+          "한 곳에서 내용을 수정하면 홈, 프로젝트 목록, 상세 페이지에 함께 반영되어 콘텐츠의 일관성과 유지보수성을 높였습니다.",
+      },
+      {
+        title: "GitHub Pages SPA 경로 대응",
+        problem:
+          "GitHub Pages의 `/portfolio/` 하위 경로에서 asset 절대 경로와 Vue Router history fallback이 맞지 않아 배포 화면과 직접 접근 경로가 깨졌습니다.",
+        decision:
+          "Vite base와 Vue Router base를 배포 경로에 맞추고, 빌드 시 `index.html`을 `404.html`로 복사해 SPA fallback을 구성했습니다.",
+        result:
+          "GitHub Pages에서도 정적 asset, 내비게이션, 프로젝트 상세 URL 직접 접근이 같은 기준으로 동작하도록 배포 구조를 정리했습니다.",
+      },
+    ],
+  },
+  {
     slug: "wwdc-translator",
     name: "WWDC Translator",
     summary: "WWDC 영상 학습을 위한 개인용 실시간 자막 번역 앱",

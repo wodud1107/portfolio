@@ -1,13 +1,12 @@
 # Portfolio
 
-Vue 3와 Vite로 만든 김재영 개발자 포트폴리오 웹사이트입니다. 프로젝트 경험, 기술 스택, 수상 및 교육 이력, 인쇄용 PDF 페이지를 한 곳에서 관리할 수 있도록 구성했습니다.
+Vue 3와 Vite로 만든 김재영 개발자 포트폴리오 웹사이트입니다. 프로젝트 경험, 기술 스택, 수상 및 교육 이력을 한 곳에서 관리할 수 있도록 구성했습니다.
 
 ## 주요 기능
 
 - 프로젝트 카드와 상세 페이지를 분리한 포트폴리오 구성
 - 프로젝트별 Problem / Decision / Result 중심의 의사결정 기록
 - 이미지 캐러셀과 코드 스니펫 모달 제공
-- iOS 지원용, General SW 지원용 인쇄 페이지 제공
 - GitHub Pages 배포 경로를 고려한 Vite base 설정
 
 ## 기술 스택
@@ -38,8 +37,6 @@ npm run build
 - `/`
 - `/projects`
 - `/projects/:slug`
-- `/print/ios` // pdf 인쇄용
-- `/print/general` // pdf 인쇄용
 
 ## 데이터 관리
 

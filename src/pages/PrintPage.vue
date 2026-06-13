@@ -79,6 +79,7 @@ function projectBySlug(slug: string) {
 const damago = projectBySlug("damago");
 const puzzole = projectBySlug("puzzole-puzzlekit");
 const csFlashCards = projectBySlug("cs-flashcards");
+const portfolio = projectBySlug("portfolio");
 const wwdcTranslator = projectBySlug("wwdc-translator");
 const gpioRsp = projectBySlug("gpio-rsp");
 
@@ -113,7 +114,14 @@ const damagoReliabilityRows = [
 ];
 
 const printSections = computed<PrintSection[]>(() => {
-  if (!damago || !puzzole || !csFlashCards || !wwdcTranslator || !gpioRsp)
+  if (
+    !damago ||
+    !puzzole ||
+    !csFlashCards ||
+    !portfolio ||
+    !wwdcTranslator ||
+    !gpioRsp
+  )
     return [];
 
   if (variant.value === "general") {
@@ -158,6 +166,17 @@ const printSections = computed<PrintSection[]>(() => {
           "CSV 데이터 Import와 Migration 분리",
         ],
         includeProductImages: true,
+        includeLinks: true,
+      },
+      {
+        title: "Portfolio - Vue / SPA 배포 구조",
+        project: portfolio,
+        includeOverview: true,
+        includeRole: true,
+        storyTitles: [
+          "콘텐츠와 화면 컴포넌트 분리",
+          "GitHub Pages SPA 경로 대응",
+        ],
         includeLinks: true,
       },
       {
@@ -236,7 +255,7 @@ const printSections = computed<PrintSection[]>(() => {
     },
     {
       title: "Other Projects",
-      summaryProjects: [csFlashCards, wwdcTranslator, gpioRsp],
+      summaryProjects: [csFlashCards, portfolio, wwdcTranslator, gpioRsp],
     },
   ];
 });

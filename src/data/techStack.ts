@@ -6,7 +6,11 @@ export interface StackGroup {
 export const stackGroups: StackGroup[] = [
   {
     title: 'Language',
-    items: ['Swift', 'C', 'Python'],
+    items: ['Swift', 'C', 'Python', 'TypeScript'],
+  },
+  {
+    title: 'Frontend',
+    items: ['Vue 3', 'Vue Router', 'Vite', 'Plain CSS'],
   },
   {
     title: 'iOS / Apple',
@@ -22,6 +26,6 @@ export const stackGroups: StackGroup[] = [
   },
   {
     title: 'Tools',
-    items: ['Xcode', 'Instruments', 'GitHub Actions', 'Fastlane'],
+    items: ['Xcode', 'Instruments', 'GitHub Actions', 'GitHub Pages', 'Fastlane'],
   },
 ];
