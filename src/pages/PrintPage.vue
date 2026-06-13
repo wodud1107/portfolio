@@ -150,9 +150,9 @@ const printSections = computed<PrintSection[]>(() => {
         includeOverview: true,
         includeRole: true,
         storyTitles: [
-          "자유 드로잉이 아닌 Cell-Based Puzzle Painting",
           "Generator-First 스테이지 설계",
-          "Display Color와 Semantic Color 분리",
+          "숨겨진 정답에 의존하지 않는 풀이 검증",
+          "Stage Validation과 Quality Evaluation 분리",
         ],
         includeCode: true,
       },
@@ -233,16 +233,16 @@ const printSections = computed<PrintSection[]>(() => {
       project: puzzole,
       storyTitles: [
         "Generator-First 스테이지 설계",
-        "자유 드로잉이 아닌 Cell-Based Puzzle Painting",
+        "숨겨진 정답에 의존하지 않는 풀이 검증",
       ],
       includeCode: true,
       codeIntro:
-        "저장소 전체 공개 대신, 퍼즐 엔진의 핵심 판단 로직인 진행 검증, 스테이지 생성, 색상 의미 충돌 검증 코드 일부를 발췌했습니다.",
+        "저장소 전체 공개 대신, 풀이 가능성을 보장하는 스테이지 생성과 숨겨진 정답에 의존하지 않는 검증 코드 일부를 발췌했습니다.",
     },
     {
-      title: "Puzzole - Semantic Color / 검증 요약",
+      title: "Puzzole - Validation / Quality Policy",
       project: puzzole,
-      storyTitles: ["Display Color와 Semantic Color 분리"],
+      storyTitles: ["Stage Validation과 Quality Evaluation 분리"],
       includeCode: true,
     },
     {
@@ -290,13 +290,9 @@ function storiesFor(section: PrintSection) {
 }
 
 function storySnippets(project: Project, story: ProjectDecisionStory) {
-  return (
-    story.snippetIndexes
-      ?.map((index) => project.codeSnippets?.[index])
-      .filter((snippet): snippet is NonNullable<typeof snippet> =>
-        Boolean(snippet),
-      ) ?? []
-  );
+  const storyIndex = project.decisionStories?.indexOf(story) ?? -1;
+  const snippet = project.codeSnippets?.[storyIndex];
+  return snippet ? [snippet] : [];
 }
 
 function printStorySnippets(project: Project, story: ProjectDecisionStory) {
@@ -323,7 +319,7 @@ function highlightSwift(line: string) {
 }
 
 function isCoreSwiftLine(line: string) {
-  return /validator\.validate|evaluator\.evaluate|missingCells|extraCells|makePaintedShapeGroups|semanticColorsByPlacement|adjacentConflicts|orthogonalNeighbors|conflicts\.insert/.test(
+  return /validator\.validate|evaluator\.evaluate|missingCells|extraCells|makePaintedShapeGroups|matchesBaseShape|occupiedCells|fillRatio|allSatisfy/.test(
     line,
   );
 }

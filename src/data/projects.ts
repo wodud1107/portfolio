@@ -41,7 +41,6 @@ export interface ProjectDecisionStory {
     caption?: string;
   };
   links?: ProjectLink[];
-  snippetIndexes?: number[];
 }
 
 export interface ProjectRoleGroup {
@@ -373,16 +372,6 @@ export const projects: Project[] = [
     ],
     decisionStories: [
       {
-        title: "자유 드로잉이 아닌 Cell-Based Puzzle Painting",
-        problem:
-          "자유 드로잉처럼 stroke path를 저장하면 퍼즐 규칙 검증과 스테이지 생성이 복잡해지고, 제품의 핵심인 “셀을 칠해 퍼즐을 푸는 경험”이 흐려졌습니다.",
-        decision:
-          "touch point를 cell hit-test로 변환한 뒤 fill cell, validate progress로 이어지는 결정적 입력 모델을 선택했습니다.",
-        result:
-          "사용자 입력, 보드 상태, 퍼즐 검증이 하나의 제품 루프로 연결되어 MVP에서 가장 중요한 플레이 흐름을 먼저 완성할 수 있었습니다.",
-        snippetIndexes: [1],
-      },
-      {
         title: "Generator-First 스테이지 설계",
         problem:
           "임의의 비트맵 보드에서 정답 shape 배치를 역으로 추론하면 난도가 높고, MVP 단계에서 풀 수 없는 퍼즐이 생성될 위험이 컸습니다.",
@@ -390,17 +379,24 @@ export const projects: Project[] = [
           "배치 가능한 shape 후보를 먼저 만들고, 겹침과 경계를 검증한 뒤 quality evaluator로 사용할 만한 스테이지를 남기는 generator-first 방식을 선택했습니다.",
         result:
           "생성된 스테이지가 solved placement를 기준으로 만들어져 solvable stage를 보장할 수 있었고, JSON 저장/로드와 curated stage 확장 기반을 만들었습니다.",
-        snippetIndexes: [0],
       },
       {
-        title: "Display Color와 Semantic Color 분리",
+        title: "숨겨진 정답에 의존하지 않는 풀이 검증",
         problem:
-          "사용자가 자유롭게 색을 선택하게 하면 시각 색상과 퍼즐 검증 의미가 섞여 인접 shape 구분 규칙을 안정적으로 판단하기 어려웠습니다.",
+          "스테이지 생성에 사용한 placement를 정답으로 강제하면, 같은 BaseShape으로 보드를 올바르게 다시 구성한 대안 풀이까지 오답이 됩니다.",
         decision:
-          "렌더링에 쓰는 display color와 검증에 쓰는 semantic color를 분리하고, PlayerProgressValidator에서 coverage, grouping, adjacent conflict를 별도로 판단했습니다.",
+          "생성 placement는 풀이 가능성을 보장하는 용도로만 사용했습니다. 화면의 display color와 검증용 semantic color를 분리하고, 같은 의미색의 연결 셀을 정규화한 뒤 회전된 BaseShape와 비교했습니다.",
         result:
-          "사용자에게는 자유로운 색 선택을 제공하면서도, 퍼즐 규칙은 테스트 가능한 도메인 로직으로 유지할 수 있었습니다.",
-        snippetIndexes: [2],
+          "플레이어가 숨겨진 생성 배치를 재현하지 않아도 유효한 BaseShape 조합이면 정답으로 인정하고, 잘못 합쳐지거나 분리된 그룹은 동일한 도메인 규칙으로 검증할 수 있게 됐습니다.",
+      },
+      {
+        title: "Stage Validation과 Quality Evaluation 분리",
+        problem:
+          "겹침이나 경계 초과가 없는 유효한 스테이지라도, 빈 공간이 지나치게 많으면 실제 퍼즐로 사용하기 어려웠습니다.",
+        decision:
+          "StageValidator는 겹침, 경계, 빈 스테이지 같은 구조적 정합성만 판단하고, StageQualityEvaluator는 playable cell의 fill ratio처럼 제품 품질에 관한 휴리스틱을 별도 정책으로 평가하도록 분리했습니다.",
+        result:
+          "도메인 오류와 품질 기준을 독립적으로 변경하고 테스트할 수 있게 되었고, 생성기는 구조적으로 올바른 후보 중 플레이에 적합한 스테이지만 선택할 수 있게 됐습니다.",
       },
     ],
     screenshots: [
@@ -476,16 +472,20 @@ for _ in 0..<maxAttempts {
         source:
           "DrawingPuzzle/PuzzleKit/Sources/PuzzleKit/PlayerProgressValidator.swift",
         description:
-          "칠해진 셀을 coverage, shape grouping, adjacent semantic-color conflict로 나눠 검증합니다.",
-        printCode: `let missingCells = playableCells.subtracting(paintedCells)
-let extraCells = paintedCells.subtracting(playableCells)
-let paintedGroups = makePaintedShapeGroups(from: paintedSemanticColors)
+          "전체 셀 coverage와 연결된 semantic-color 그룹의 BaseShape 일치 여부를 독립적으로 검증합니다.",
+        printCode: `let paintedGroups = makePaintedShapeGroups(from: paintedSemanticColors)
+let validShapeGroups = paintedGroups.filter {
+    matchesBaseShape($0.cells, baseShape: stage.baseShape)
+}
+let invalidShapeGroups = paintedGroups.filter {
+    !matchesBaseShape($0.cells, baseShape: stage.baseShape)
+}
 
 return PlayerProgressValidationResult(
-    missingCells: missingCells,
-    extraCells: extraCells,
-    invalidShapeGroups: invalidShapeGroups,
-    adjacentConflicts: adjacentSemanticColorConflicts(...)
+    missingCells: playableCells.subtracting(paintedCells),
+    extraCells: paintedCells.subtracting(playableCells),
+    validShapeGroups: validShapeGroups,
+    invalidShapeGroups: invalidShapeGroups
 )`,
         code: `public func validate(
     stage: PuzzleStage,
@@ -496,107 +496,78 @@ return PlayerProgressValidationResult(
 
     let missingCells = playableCells.subtracting(paintedCells)
     let extraCells = paintedCells.subtracting(playableCells)
-    let expectedPlacementCells = stage.placements.map {
-        $0.occupiedCells(for: stage.baseShape)
-    }
-
     let paintedGroups = makePaintedShapeGroups(from: paintedSemanticColors)
-    var coveredPlacements: [CoveredShapePlacement] = []
+    var validShapeGroups: [PaintedShapeGroup] = []
     var invalidShapeGroups: [PaintedShapeGroup] = []
 
     for group in paintedGroups {
-        if let placementIndex = expectedPlacementCells.firstIndex(of: group.cells) {
-            coveredPlacements.append(
-                CoveredShapePlacement(
-                    placementIndex: placementIndex,
-                    semanticColorID: group.semanticColorID,
-                    cells: group.cells
-                )
-            )
+        if matchesBaseShape(group.cells, baseShape: stage.baseShape) {
+            validShapeGroups.append(group)
         } else {
             invalidShapeGroups.append(group)
         }
     }
 
-    let placementSemanticColors = semanticColorsByPlacement(
-        expectedPlacementCells: expectedPlacementCells,
-        paintedSemanticColors: paintedSemanticColors
-    )
-    let adjacentConflicts = adjacentSemanticColorConflicts(
-        expectedPlacementCells: expectedPlacementCells,
-        placementSemanticColors: placementSemanticColors
-    )
-
     return PlayerProgressValidationResult(
-        expectedPlacementCount: stage.placements.count,
         missingCells: missingCells,
         extraCells: extraCells,
-        coveredPlacements: coveredPlacements,
-        invalidShapeGroups: invalidShapeGroups,
-        adjacentConflicts: adjacentConflicts
+        validShapeGroups: validShapeGroups,
+        invalidShapeGroups: invalidShapeGroups
     )
 }`,
       },
       {
-        title: "Adjacent Color Conflict 탐지",
+        title: "Validation과 Quality Evaluation 분리",
         source:
-          "DrawingPuzzle/PuzzleKit/Sources/PuzzleKit/PlayerProgressValidator.swift",
+          "DrawingPuzzle/PuzzleKit/Sources/PuzzleKit/StageValidator.swift, StageQualityEvaluator.swift",
         description:
-          "사용자 색상은 자유롭게 선택하되, 인접한 정답 shape가 같은 의미 색으로 합쳐지는 경우를 규칙 위반으로 잡아냅니다.",
-        printCode: `for neighbor in cell.orthogonalNeighbors {
-    guard let neighborIndex = placementIndexByCell[neighbor],
-          neighborIndex != placementIndex,
-          placementSemanticColors[neighborIndex] == semanticColorID
-    else { continue }
-
-    conflicts.insert(
-        AdjacentSemanticColorConflict(
-            firstPlacementIndex: min(placementIndex, neighborIndex),
-            secondPlacementIndex: max(placementIndex, neighborIndex),
-            semanticColorID: semanticColorID
-        )
-    )
-}`,
-        code: `private func adjacentSemanticColorConflicts(
-    expectedPlacementCells: [Set<GridPosition>],
-    placementSemanticColors: [Int: SemanticColorID]
-) -> [AdjacentSemanticColorConflict] {
-    var placementIndexByCell: [GridPosition: Int] = [:]
-
-    for (index, cells) in expectedPlacementCells.enumerated() {
-        for cell in cells {
-            placementIndexByCell[cell] = index
+          "스테이지의 구조적 유효성과 플레이 품질을 서로 다른 정책 객체가 판단하도록 분리합니다.",
+        printCode: `func validate(stage: PuzzleStage) -> Bool {
+    var occupiedCells: Set<GridPosition> = []
+    for placement in stage.placements {
+        let cells = placement.occupiedCells(for: stage.baseShape)
+        guard occupiedCells.intersection(cells).isEmpty else {
+            return false
         }
+        occupiedCells.formUnion(cells)
     }
+    guard !occupiedCells.isEmpty else { return false }
+    return occupiedCells.allSatisfy(stage.bounds.contains)
+}
 
-    var conflicts: Set<AdjacentSemanticColorConflict> = []
+func evaluate(stage: PuzzleStage) -> Bool {
+    let fillRatio = Double(stage.playableCells.count)
+        / Double(stage.rowLimit * stage.columnLimit)
+    return fillRatio >= 0.75
+}`,
+        code: `public struct StageValidator {
+    public func validate(stage: PuzzleStage) -> Bool {
+        var occupiedCells: Set<GridPosition> = []
 
-    for (cell, placementIndex) in placementIndexByCell {
-        guard let semanticColorID = placementSemanticColors[placementIndex] else {
-            continue
-        }
+        for placement in stage.placements {
+            let cells = placement.occupiedCells(for: stage.baseShape)
 
-        for neighbor in cell.orthogonalNeighbors {
-            guard let neighborPlacementIndex = placementIndexByCell[neighbor],
-                  neighborPlacementIndex != placementIndex,
-                  placementSemanticColors[neighborPlacementIndex] == semanticColorID else {
-                    continue
+            guard occupiedCells.intersection(cells).isEmpty else {
+                return false
             }
 
-            conflicts.insert(
-                AdjacentSemanticColorConflict(
-                    firstPlacementIndex: min(placementIndex, neighborPlacementIndex),
-                    secondPlacementIndex: max(placementIndex, neighborPlacementIndex),
-                    semanticColorID: semanticColorID
-                )
-            )
+            occupiedCells.formUnion(cells)
         }
-    }
 
-    return conflicts.sorted {
-        $0.firstPlacementIndex == $1.firstPlacementIndex
-            ? $0.secondPlacementIndex < $1.secondPlacementIndex
-            : $0.firstPlacementIndex < $1.firstPlacementIndex
+        guard !occupiedCells.isEmpty else {
+            return false
+        }
+
+        return occupiedCells.allSatisfy(stage.bounds.contains)
+    }
+}
+
+public struct StageQualityEvaluator {
+    public func evaluate(stage: PuzzleStage) -> Bool {
+        let fillRatio = Double(stage.playableCells.count)
+            / Double(stage.rowLimit * stage.columnLimit)
+
+        return fillRatio >= 0.75
     }
 }`,
       },

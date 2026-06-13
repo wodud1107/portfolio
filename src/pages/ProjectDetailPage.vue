@@ -49,7 +49,7 @@ function highlightSwift(line: string) {
 }
 
 function isCoreSwiftLine(line: string) {
-  return /validator\.validate|evaluator\.evaluate|missingCells|extraCells|makePaintedShapeGroups|semanticColorsByPlacement|adjacentConflicts|orthogonalNeighbors|conflicts\.insert/.test(
+  return /validator\.validate|evaluator\.evaluate|missingCells|extraCells|makePaintedShapeGroups|matchesBaseShape|occupiedCells|fillRatio|allSatisfy/.test(
     line,
   );
 }
@@ -125,7 +125,11 @@ function highlightedSwiftLines(code: string) {
     <article v-if="project.decisionStories?.length" class="detail-section">
       <h2>Decision Stories</h2>
       <div class="decision-story-list">
-        <section v-for="story in project.decisionStories" :key="story.title" class="decision-story">
+        <section
+          v-for="(story, storyIndex) in project.decisionStories"
+          :key="story.title"
+          class="decision-story"
+        >
           <h3>{{ story.title }}</h3>
           <dl class="pdr-list">
             <div>
@@ -156,20 +160,17 @@ function highlightedSwiftLines(code: string) {
               {{ link.label }}
             </a>
           </div>
-          <div v-if="story.snippetIndexes?.length" class="story-code-block">
+          <div v-if="project.codeSnippets?.[storyIndex]" class="story-code-block">
             <p>관련 코드</p>
             <div class="code-chip-list story-code-chip-list">
-              <template v-for="snippetIndex in story.snippetIndexes" :key="snippetIndex">
-                <button
-                  v-if="project.codeSnippets?.[snippetIndex]"
-                  class="code-chip"
-                  type="button"
-                  :aria-label="`${project.codeSnippets[snippetIndex].title} 코드 확인하기`"
-                  @click="openSnippet(snippetIndex)"
-                >
-                  <strong>코드 확인하기</strong>
-                </button>
-              </template>
+              <button
+                class="code-chip"
+                type="button"
+                :aria-label="`${project.codeSnippets[storyIndex].title} 코드 확인하기`"
+                @click="openSnippet(storyIndex)"
+              >
+                <strong>코드 확인하기</strong>
+              </button>
             </div>
           </div>
         </section>
