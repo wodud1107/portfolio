@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import ImageCarousel from '../components/ImageCarousel.vue';
 import { findProjectBySlug } from '../data/projects';
-import type { ProjectCodeSnippet } from '../data/projects';
+import type { ProjectCodeSnippet, ProjectDecisionStory } from '../data/projects';
 
 const route = useRoute();
 const project = computed(() => findProjectBySlug(String(route.params.slug)));
@@ -20,8 +20,14 @@ const performanceScreenshots = computed(
   () => project.value?.screenshots?.filter((screenshot) => screenshot.group === 'performance') ?? [],
 );
 
-function openSnippet(index: number) {
-  const snippet = project.value?.codeSnippets?.[index];
+function snippetForStory(story: ProjectDecisionStory, fallbackIndex: number) {
+  return (
+    project.value?.codeSnippets?.find((snippet) => snippet.storyTitle === story.title) ??
+    project.value?.codeSnippets?.[fallbackIndex]
+  );
+}
+
+function openSnippet(snippet?: ProjectCodeSnippet) {
   if (snippet) activeSnippet.value = snippet;
 }
 
@@ -49,7 +55,7 @@ function highlightSwift(line: string) {
 }
 
 function isCoreSwiftLine(line: string) {
-  return /validator\.validate|evaluator\.evaluate|missingCells|extraCells|makePaintedShapeGroups|matchesBaseShape|occupiedCells|fillRatio|allSatisfy/.test(
+  return /ToolPickerHost|BoardView|BoardViewportUIView|BKRenderer|scrollView|miniMapView|focusBoard|isCameraNeeded|isBoardClipped|minimumNumberOfTouches|onBoardPointSelected|onProgressValidated|PlayerProgressValidator|#expect|@Test|StageValidator|StageQualityEvaluator|canonicalRotationKey|rotatedShape|occupiedCells|makePlacementCandidates|validator\.validate|evaluator\.evaluate|difficultyEvaluator\.evaluate|StageSerialization\.encode|sortedManifest|missingCells|extraCells|makePaintedShapeGroups|matchesBaseShape|normalizedCells|fillRatio|allSatisfy/.test(
     line,
   );
 }
@@ -160,14 +166,14 @@ function highlightedSwiftLines(code: string) {
               {{ link.label }}
             </a>
           </div>
-          <div v-if="project.codeSnippets?.[storyIndex]" class="story-code-block">
+          <div v-if="snippetForStory(story, storyIndex)" class="story-code-block">
             <p>관련 코드</p>
             <div class="code-chip-list story-code-chip-list">
               <button
                 class="code-chip"
                 type="button"
-                :aria-label="`${project.codeSnippets[storyIndex].title} 코드 확인하기`"
-                @click="openSnippet(storyIndex)"
+                :aria-label="`${snippetForStory(story, storyIndex)?.title} 코드 확인하기`"
+                @click="openSnippet(snippetForStory(story, storyIndex))"
               >
                 <strong>코드 확인하기</strong>
               </button>

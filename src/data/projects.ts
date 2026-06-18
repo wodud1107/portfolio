@@ -24,6 +24,7 @@ export interface ProjectScreenshot {
 
 export interface ProjectCodeSnippet {
   title: string;
+  storyTitle?: string;
   source: string;
   description: string;
   code: string;
@@ -339,8 +340,8 @@ export const projects: Project[] = [
   },
   {
     slug: "puzzole-puzzlekit",
-    name: "Puzzole / PuzzleKit",
-    summary: "셀 기반 퍼즐 페인팅을 위한 Swift 퍼즐 엔진과 iOS 플레이 앱",
+    name: "Puzzole",
+    summary: "셀을 칠해 반복 회전 도형을 완성하는 iOS puzzle painting 앱",
     role: "Solo iOS / Engine Developer",
     period: "2026 - In Progress",
     status: "MVP",
@@ -352,34 +353,31 @@ export const projects: Project[] = [
       "SwiftUI",
       "UIKit",
       "SPM",
+      "Domain Modeling",
       "StageGenerator",
+      "StageGenCLI",
       "Swift Testing",
     ],
     links: [],
     overview: [
-      "Puzzole은 자유 드로잉 앱이 아니라 셀 단위로 칠하고 검증하는 puzzle painting 앱입니다.",
-      "PuzzleKit은 퍼즐 규칙과 스테이지 데이터를, BrushKit은 셀 채움 렌더링을, Puzzole 앱은 사용자 플레이 흐름을 담당하도록 나눴습니다.",
-      "광고 수익형 출시 프로덕트로 계획 중인 프로젝트라 전체 저장소 공개 대신 핵심 엔진 코드 일부를 포트폴리오에 발췌했습니다.",
+      "Puzzole은 플레이어가 보드의 셀을 칠해 같은 모양의 반복 회전 도형을 완성하는 iOS puzzle painting 앱입니다.",
+      "앱은 SwiftUI로 stage 화면과 tool picker를 구성하고, UIKit board에서 touch hit-test, cell painting, undo, minimap navigation을 처리합니다.",
+      "퍼즐 규칙과 stage data는 PuzzleKit으로, painted cell fill rendering은 BrushKit으로 분리했으며, StageGenCLI로 생성한 stage JSON과 manifest를 앱에 bundle로 로드하여 플레이 흐름에 연결했습니다.",
+      "출시를 고려 중인 개인 프로젝트라 전체 저장소 공개 대신 Puzzole 앱의 플레이 흐름과 그 기반이 되는 도메인 모델, 생성/검증 코드 일부를 포트폴리오에 발췌했습니다.",
     ],
     problem: [
-      "일반 드로잉 엔진처럼 stroke path를 저장하면 퍼즐 규칙 검증과 스테이지 생성이 불필요하게 복잡해졌습니다.",
-      "출시 전 MVP 단계에서 중요한 것은 브러시 질감보다 터치 입력, 셀 상태, JSON 스테이지, 검증 로직이 한 흐름으로 연결되는 것이었습니다.",
+      "stroke path 중심 모델은 시각 표현에는 적합하지만, 반복 도형으로 보드를 구성했는지 검증하거나 스테이지를 생성하기에는 상태가 불필요하게 복잡했습니다.",
+      "임의의 보드에서 정답 배치를 역으로 찾는 방식은 풀 수 없는 퍼즐을 만들 위험이 컸고, MVP 단계에서는 생성 가능한 스테이지와 검증 가능한 풀이 규칙이 먼저 필요했습니다.",
+      "생성에 사용한 숨겨진 placement를 정답으로 강제하면 같은 BaseShape로 만든 대안 풀이까지 오답이 되므로, 생성기의 solvability 보장과 플레이어 풀이 검증을 분리해야 했습니다.",
     ],
     roleDetails: [
-      'BaseShape, CellOffset, GridPosition, Rotation, ShapePlacement를 설계해 퍼즐 조각과 배치 상태를 좌표 기반 도메인 모델로 표현했습니다.',
-      'StageGenerator, StageValidator, StageSerialization, PlayerProgressValidator를 구현해 생성 가능한 스테이지와 사용자의 풀이 상태를 검증했습니다.',
-      'UIKit BoardView에서 touch handling과 cell hit-test를 직접 처리하고, SwiftUI는 화면 composition과 상태 표시 영역에 사용했습니다.',
+      "BaseShape, CellOffset, GridPosition, Rotation, ShapePlacement를 설계해 반복 회전 도형과 보드 배치를 좌표 기반 도메인 모델로 표현했습니다.",
+      "SwiftUI StageView와 UIKit BoardUIView를 연결해 tool picker, cell hit-test painting, erase mode, stroke undo, minimap navigation을 플레이 화면에 통합했습니다.",
+      "PlayerProgressValidator에서 painted semantic color를 연결 그룹으로 묶고, normalized rotated BaseShape와 비교해 숨겨진 생성 placement에 의존하지 않는 풀이 검증을 구현했습니다.",
+      "BaseShapeGenerator와 StageGenerator, StageGenCLI로 stage JSON과 score-sorted manifest를 batch export하고, Puzzole 앱에서는 manifest order로 bundled stage를 로드하도록 연결했습니다.",
+      "PuzzleKit과 BrushKit을 Swift Package로 분리하고 black-box package tests를 작성해 UI 없이 도메인 규칙과 렌더링 동작을 검증했습니다.",
     ],
     decisionStories: [
-      {
-        title: "Generator-First 스테이지 설계",
-        problem:
-          "임의의 비트맵 보드에서 정답 shape 배치를 역으로 추론하면 난도가 높고, MVP 단계에서 풀 수 없는 퍼즐이 생성될 위험이 컸습니다.",
-        decision:
-          "배치 가능한 shape 후보를 먼저 만들고, 겹침과 경계를 검증한 뒤 quality evaluator로 사용할 만한 스테이지를 남기는 generator-first 방식을 선택했습니다.",
-        result:
-          "생성된 스테이지가 solved placement를 기준으로 만들어져 solvable stage를 보장할 수 있었고, JSON 저장/로드와 curated stage 확장 기반을 만들었습니다.",
-      },
       {
         title: "숨겨진 정답에 의존하지 않는 풀이 검증",
         problem:
@@ -390,13 +388,40 @@ export const projects: Project[] = [
           "플레이어가 숨겨진 생성 배치를 재현하지 않아도 유효한 BaseShape 조합이면 정답으로 인정하고, 잘못 합쳐지거나 분리된 그룹은 동일한 도메인 규칙으로 검증할 수 있게 됐습니다.",
       },
       {
-        title: "Stage Validation과 Quality Evaluation 분리",
+        title: "Generator-First 스테이지 생성",
         problem:
-          "겹침이나 경계 초과가 없는 유효한 스테이지라도, 빈 공간이 지나치게 많으면 실제 퍼즐로 사용하기 어려웠습니다.",
+          "임의의 비트맵 보드에서 정답 shape 배치를 역으로 추론하면 난도가 높고, MVP 단계에서 풀 수 없는 퍼즐이 생성될 위험이 컸습니다.",
         decision:
-          "StageValidator는 겹침, 경계, 빈 스테이지 같은 구조적 정합성만 판단하고, StageQualityEvaluator는 playable cell의 fill ratio처럼 제품 품질에 관한 휴리스틱을 별도 정책으로 평가하도록 분리했습니다.",
+          "배치 가능한 shape 후보를 먼저 만들고, 겹침과 경계를 검증한 뒤 quality evaluator로 사용할 만한 stage만 남기는 generator-first 방식을 선택했습니다.",
         result:
-          "도메인 오류와 품질 기준을 독립적으로 변경하고 테스트할 수 있게 되었고, 생성기는 구조적으로 올바른 후보 중 플레이에 적합한 스테이지만 선택할 수 있게 됐습니다.",
+          "생성된 스테이지가 solved placement를 기준으로 만들어져 solvable stage를 보장할 수 있었고, JSON 저장/로드와 curated stage 확장 기반을 만들었습니다.",
+      },
+      {
+        title: "큰 보드를 위한 Camera와 Minimap",
+        problem:
+          "큰 스테이지를 화면에 모두 맞추면 셀이 작아져 칠하기 어렵고, 한 손가락 스크롤을 쓰면 Puzzole의 핵심 조작인 cell painting gesture와 충돌했습니다.",
+        decision:
+          "BoardUIView를 UIScrollView 기반 BoardViewportUIView로 감싸 one-finger painting, two-finger pan, pinch zoom을 분리하고, 보드가 viewport 밖으로 잘릴 때만 interactive minimap을 표시했습니다.",
+        result:
+          "작은 보드는 그대로 중앙에 보여주고, 큰 보드는 읽기 쉬운 cell size를 유지한 채 탐색할 수 있게 되었으며 minimap tap/drag로 현재 viewport를 직접 이동할 수 있게 됐습니다.",
+      },
+      {
+        title: "Stroke가 아닌 좌표 도메인 모델",
+        problem:
+          "stroke path를 저장하는 방식은 화면 재현에는 맞지만, Puzzole의 핵심 규칙인 '반복 회전 도형으로 보드가 구성됐는가'를 판단하기에는 셀과 도형의 의미가 흐려졌습니다.",
+        decision:
+          "입력 결과를 stroke가 아니라 GridPosition 기반 cell state로 보고, BaseShape는 상대 좌표, ShapePlacement는 anchor와 rotation, PuzzleStage는 placements에서 playableCells를 파생하도록 모델링했습니다.",
+        result:
+          "같은 좌표 모델로 회전, 배치 충돌, stage 생성, 플레이어 풀이 검증을 처리할 수 있게 되었고, 퍼즐 규칙을 UI와 렌더링에서 분리한 PuzzleKit 테스트 대상으로 만들었습니다.",
+      },
+      {
+        title: "Puzzole, PuzzleKit, BrushKit 경계",
+        problem:
+          "touch 처리, cell rendering, puzzle rule, stage generation이 한 앱 레이어에 섞이면 Puzzole의 플레이 UX를 바꿀 때 엔진과 렌더러까지 함께 흔들릴 수 있었습니다.",
+        decision:
+          "Puzzole은 SwiftUI 화면 구성과 UIKit board interaction을 담당하고, PuzzleKit은 stage/rule/progress validation을, BrushKit은 painted cell fill rendering을 맡도록 경계를 나눴습니다.",
+        result:
+          "앱에서는 tool state와 board interaction을 빠르게 조정하면서도, 퍼즐 규칙과 렌더링 동작은 별도 모듈의 API로 호출하고 UI 없이 package tests로 검증할 수 있게 됐습니다.",
       },
     ],
     screenshots: [
@@ -427,11 +452,88 @@ export const projects: Project[] = [
     ],
     codeSnippets: [
       {
-        title: "Generator-First Stage 생성",
+        title: "좌표 기반 도메인 모델",
+        storyTitle: "Stroke가 아닌 좌표 도메인 모델",
         source:
-          "DrawingPuzzle/PuzzleKit/Sources/PuzzleKit/StageGenerator.swift",
+          "DrawingPuzzle/PuzzleKit/Sources/PuzzleKit/Stage/BaseShape.swift, ShapePlacement.swift",
         description:
-          "무작위 보드에서 정답을 추론하지 않고, 배치 가능한 shape 후보로부터 풀 수 있는 스테이지를 먼저 생성합니다.",
+          "BaseShape는 상대 좌표와 회전 규칙을, ShapePlacement는 anchor 기반 절대 셀 변환을 담당하도록 나눴습니다.",
+        printCode: `public func rotated(_ rotation: Rotation) -> BaseShape {
+    let rotatedCells = cells.map { cell in
+        switch rotation {
+        case .degree0:
+            return cell
+        case .degree90:
+            return CellOffset(row: cell.column, column: -cell.row)
+        case .degree180:
+            return CellOffset(row: -cell.row, column: -cell.column)
+        case .degree270:
+            return CellOffset(row: -cell.column, column: cell.row)
+        }
+    }
+    return BaseShape(cells: Set(rotatedCells).normalized())
+}
+
+public var canonicalRotationKey: String {
+    Rotation.allCases
+        .map { rotated($0).cells.stableKey }
+        .min() ?? ""
+}
+
+public func occupiedCells(for shape: BaseShape) -> Set<GridPosition> {
+    let rotatedShape = shape.rotated(rotation)
+    return Set(rotatedShape.cells.map {
+        GridPosition(row: anchor.row + $0.row, column: anchor.column + $0.column)
+    })
+}`,
+        code: `public struct BaseShape: Codable {
+    public let cells: Set<CellOffset>
+
+    public func rotated(_ rotation: Rotation) -> BaseShape {
+        let rotatedCells = cells.map { cell in
+            switch rotation {
+            case .degree0:
+                return cell
+            case .degree90:
+                return CellOffset(row: cell.column, column: -cell.row)
+            case .degree180:
+                return CellOffset(row: -cell.row, column: -cell.column)
+            case .degree270:
+                return CellOffset(row: -cell.column, column: cell.row)
+            }
+        }
+
+        return BaseShape(cells: Set(rotatedCells).normalized())
+    }
+
+    public var canonicalRotationKey: String {
+        Rotation.allCases
+            .map { rotated($0).cells.stableKey }
+            .min() ?? ""
+    }
+}
+
+public struct ShapePlacement: Codable {
+    public let shapeID: String
+    public let anchor: GridPosition
+    public let rotation: Rotation
+
+    public func occupiedCells(for shape: BaseShape) -> Set<GridPosition> {
+        let rotatedShape = shape.rotated(rotation)
+
+        return Set(rotatedShape.cells.map {
+            GridPosition(row: anchor.row + $0.row, column: anchor.column + $0.column)
+        })
+    }
+}`,
+      },
+      {
+        title: "Generator-First Stage 생성",
+        storyTitle: "Generator-First 스테이지 생성",
+        source:
+          "DrawingPuzzle/PuzzleKit/Sources/PuzzleKit/Generation/StageGenerator.swift",
+        description:
+          "무작위 보드에서 정답을 추론하지 않고, 배치 가능한 shape 후보를 만든 뒤 검증과 품질 평가를 통과한 stage만 반환합니다.",
         printCode: `let candidates = makePlacementCandidates(baseShape: baseShape, bounds: bounds)
 
 for _ in 0..<maxAttempts {
@@ -469,10 +571,11 @@ for _ in 0..<maxAttempts {
       },
       {
         title: "Player Progress 검증",
+        storyTitle: "숨겨진 정답에 의존하지 않는 풀이 검증",
         source:
-          "DrawingPuzzle/PuzzleKit/Sources/PuzzleKit/PlayerProgressValidator.swift",
+          "DrawingPuzzle/PuzzleKit/Sources/PuzzleKit/Validation/PlayerProgressValidator.swift",
         description:
-          "전체 셀 coverage와 연결된 semantic-color 그룹의 BaseShape 일치 여부를 독립적으로 검증합니다.",
+          "생성 placement를 정답으로 쓰지 않고, 플레이어가 칠한 semantic-color 연결 그룹을 normalized rotated BaseShape와 비교합니다.",
         printCode: `let paintedGroups = makePaintedShapeGroups(from: paintedSemanticColors)
 let validShapeGroups = paintedGroups.filter {
     matchesBaseShape($0.cells, baseShape: stage.baseShape)
@@ -514,60 +617,312 @@ return PlayerProgressValidationResult(
         validShapeGroups: validShapeGroups,
         invalidShapeGroups: invalidShapeGroups
     )
+}
+
+private func makePaintedShapeGroups(
+    from paintedSemanticColors: [GridPosition: SemanticColorID]
+) -> [PaintedShapeGroup] {
+    var remainingCells = Set(paintedSemanticColors.keys)
+    var groups: [PaintedShapeGroup] = []
+
+    while let start = remainingCells.first {
+        guard let semanticColorID = paintedSemanticColors[start] else { continue }
+
+        var stack = [start]
+        var groupCells: Set<GridPosition> = []
+        remainingCells.remove(start)
+
+        while let current = stack.popLast() {
+            groupCells.insert(current)
+
+            for neighbor in current.orthogonalNeighbors {
+                guard remainingCells.contains(neighbor),
+                      paintedSemanticColors[neighbor] == semanticColorID else {
+                    continue
+                }
+
+                remainingCells.remove(neighbor)
+                stack.append(neighbor)
+            }
+        }
+
+        groups.append(PaintedShapeGroup(
+            semanticColorID: semanticColorID,
+            cells: groupCells
+        ))
+    }
+
+    return groups
+}
+
+private func matchesBaseShape(
+    _ cells: Set<GridPosition>,
+    baseShape: BaseShape
+) -> Bool {
+    guard cells.count == baseShape.cells.count else {
+        return false
+    }
+
+    let normalizedCells = Set(cells.map {
+        CellOffset(row: $0.row, column: $0.column)
+    }).normalized()
+
+    return Rotation.allCases.contains {
+        baseShape.rotated($0).cells == normalizedCells
+    }
 }`,
       },
       {
-        title: "Validation과 Quality Evaluation 분리",
+        title: "Puzzole 앱의 모듈 경계",
+        storyTitle: "Puzzole, PuzzleKit, BrushKit 경계",
         source:
-          "DrawingPuzzle/PuzzleKit/Sources/PuzzleKit/StageValidator.swift, StageQualityEvaluator.swift",
+          "DrawingPuzzle/Puzzole/Puzzole/StagePlay/StageView.swift, BoardView.swift, BoardUIView.swift",
         description:
-          "스테이지의 구조적 유효성과 플레이 품질을 서로 다른 정책 객체가 판단하도록 분리합니다.",
-        printCode: `func validate(stage: PuzzleStage) -> Bool {
-    var occupiedCells: Set<GridPosition> = []
-    for placement in stage.placements {
-        let cells = placement.occupiedCells(for: stage.baseShape)
-        guard occupiedCells.intersection(cells).isEmpty else {
-            return false
-        }
-        occupiedCells.formUnion(cells)
-    }
-    guard !occupiedCells.isEmpty else { return false }
-    return occupiedCells.allSatisfy(stage.bounds.contains)
-}
+          "Puzzole은 SwiftUI 화면 구성, UIKit board interaction, PuzzleKit validation, BrushKit rendering을 각 경계에서 연결합니다.",
+        printCode: `struct StageView: View {
+    let stage: PuzzleStage
+    @StateObject private var toolPickerViewModel = ToolPickerViewModel()
 
-func evaluate(stage: PuzzleStage) -> Bool {
-    let fillRatio = Double(stage.playableCells.count)
-        / Double(stage.rowLimit * stage.columnLimit)
-    return fillRatio >= 0.75
-}`,
-        code: `public struct StageValidator {
-    public func validate(stage: PuzzleStage) -> Bool {
-        var occupiedCells: Set<GridPosition> = []
-
-        for placement in stage.placements {
-            let cells = placement.occupiedCells(for: stage.baseShape)
-
-            guard occupiedCells.intersection(cells).isEmpty else {
-                return false
+    var body: some View {
+        ToolPickerHost(toolPickerViewModel: toolPickerViewModel) {
+            BoardView(
+                stage: stage,
+                paintTool: toolPickerViewModel.paintTool
+            ) { result in
+                if result.isSolved {
+                    print("Solved")
+                }
             }
-
-            occupiedCells.formUnion(cells)
         }
-
-        guard !occupiedCells.isEmpty else {
-            return false
-        }
-
-        return occupiedCells.allSatisfy(stage.bounds.contains)
     }
 }
 
-public struct StageQualityEvaluator {
-    public func evaluate(stage: PuzzleStage) -> Bool {
-        let fillRatio = Double(stage.playableCells.count)
-            / Double(stage.rowLimit * stage.columnLimit)
+struct BoardView: UIViewRepresentable {
+    func makeUIView(context: Context) -> BoardViewportUIView {
+        let viewportView = BoardViewportUIView(stage: stage)
+        viewportView.selectedBrush = paintTool.selectedBrush
+        viewportView.selectedSemanticColorID = paintTool.selectedColor.semanticColorID
+        viewportView.onProgressValidated = onProgressValidated
+        return viewportView
+    }
+}
 
-        return fillRatio >= 0.75
+func validateProgress() -> PlayerProgressValidationResult {
+    PlayerProgressValidator().validate(
+        stage: stage,
+        paintedSemanticColors: paintedSemanticColors
+    )
+}`,
+        code: `import SwiftUI
+import PuzzleKit
+
+struct StageView: View {
+    let stage: PuzzleStage
+
+    @StateObject private var toolPickerViewModel = ToolPickerViewModel()
+    @State private var progressResult: PlayerProgressValidationResult?
+    @State private var undoRequest = 0
+
+    var body: some View {
+        ToolPickerHost(
+            toolPickerViewModel: toolPickerViewModel,
+            onUndo: {
+                undoRequest += 1
+            }
+        ) {
+            BoardView(
+                stage: stage,
+                paintTool: toolPickerViewModel.paintTool,
+                undoRequest: undoRequest
+            ) { result in
+                progressResult = result
+
+                if result.isSolved {
+                    print("Solved")
+                }
+            }
+        }
+    }
+}
+
+struct BoardView: UIViewRepresentable {
+    let stage: PuzzleStage
+    let paintTool: PaintTool
+    let undoRequest: Int
+    let onProgressValidated: (PlayerProgressValidationResult) -> Void
+
+    func makeUIView(context: Context) -> BoardViewportUIView {
+        let viewportView = BoardViewportUIView(stage: stage)
+        viewportView.selectedMode = paintTool.selectedMode
+        viewportView.selectedBrush = paintTool.selectedBrush
+        viewportView.selectedColor = paintTool.selectedColor.uiColor(alpha: 0xFF).cgColor
+        viewportView.selectedSemanticColorID = paintTool.selectedColor.semanticColorID
+        viewportView.onProgressValidated = onProgressValidated
+        return viewportView
+    }
+}
+
+import UIKit
+import BrushKit
+import PuzzleKit
+
+final class BoardUIView: UIView {
+    private let renderer = BKRenderer()
+    private let stage: PuzzleStage
+
+    private var paintedCells: [GridPosition: PaintedCell] = [:]
+
+    func validateProgress() -> PlayerProgressValidationResult {
+        PlayerProgressValidator().validate(
+            stage: stage,
+            paintedSemanticColors: paintedCells.mapValues(\.semanticColorID)
+        )
+    }
+}`,
+      },
+      {
+        title: "ScrollView Camera와 Interactive Minimap",
+        storyTitle: "큰 보드를 위한 Camera와 Minimap",
+        source:
+          "DrawingPuzzle/Puzzole/Puzzole/StagePlay/BoardViewportUIView.swift, MiniMapUIView.swift",
+        description:
+          "한 손가락 painting과 camera navigation이 충돌하지 않도록 UIScrollView camera와 clipped-state minimap을 분리했습니다.",
+        printCode: `scrollView.panGestureRecognizer.minimumNumberOfTouches = 2
+scrollView.addSubview(boardView)
+addSubview(miniMapView)
+
+boardView.onPaintedCellChanged = { [weak self] position, color in
+    self?.miniMapView.updatePaintedCell(at: position, color: color)
+}
+
+miniMapView.onBoardPointSelected = { [weak self] point in
+    self?.focusBoard(at: point)
+}
+
+let isCameraNeeded = minimumBoardSize.width > bounds.width
+    || minimumBoardSize.height > bounds.height
+
+scrollView.panGestureRecognizer.minimumNumberOfTouches = 2
+scrollView.minimumZoomScale = CellSize.minimum / CellSize.ideal
+scrollView.maximumZoomScale = CellSize.maximum / CellSize.ideal
+
+miniMapView.isHidden = !isBoardClipped
+
+private func focusBoard(at point: CGPoint) {
+    let visibleSize = CGSize(
+        width: scrollView.bounds.width / scrollView.zoomScale,
+        height: scrollView.bounds.height / scrollView.zoomScale
+    )
+    let targetRect = CGRect(
+        x: point.x - visibleSize.width / 2,
+        y: point.y - visibleSize.height / 2,
+        width: visibleSize.width,
+        height: visibleSize.height
+    )
+    scrollView.zoom(to: targetRect, animated: false)
+}`,
+        code: `import UIKit
+import PuzzleKit
+
+final class BoardViewportUIView: UIView {
+    private let stage: PuzzleStage
+    private let scrollView = UIScrollView()
+
+    private lazy var boardView = BoardUIView(stage: stage)
+    private lazy var miniMapView = MiniMapUIView(stage: stage)
+
+    private func configure() {
+        scrollView.delegate = self
+        scrollView.delaysContentTouches = false
+        scrollView.panGestureRecognizer.minimumNumberOfTouches = 2
+
+        addSubview(scrollView)
+        scrollView.addSubview(boardView)
+        addSubview(miniMapView)
+
+        boardView.onPaintedCellChanged = { [weak self] position, color in
+            self?.miniMapView.updatePaintedCell(at: position, color: color)
+        }
+
+        miniMapView.onBoardPointSelected = { [weak self] point in
+            self?.focusBoard(at: point)
+        }
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        let minimumBoardSize = CGSize(
+            width: CGFloat(stage.columnLimit) * CellSize.minimum,
+            height: CGFloat(stage.rowLimit) * CellSize.minimum
+        )
+
+        let isCameraNeeded = minimumBoardSize.width > bounds.width
+            || minimumBoardSize.height > bounds.height
+
+        configureZoomIfNeeded(isCameraNeeded: isCameraNeeded)
+        updateMiniMapVisibility()
+        updateMiniMapViewport()
+    }
+
+    private func configureZoomIfNeeded(isCameraNeeded: Bool) {
+        if isCameraNeeded {
+            scrollView.isScrollEnabled = true
+            scrollView.minimumZoomScale = CellSize.minimum / CellSize.ideal
+            scrollView.maximumZoomScale = CellSize.maximum / CellSize.ideal
+            scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
+        } else {
+            scrollView.isScrollEnabled = false
+        }
+    }
+
+    private func updateMiniMapVisibility() {
+        let scaledBoardSize = CGSize(
+            width: boardView.bounds.width * scrollView.zoomScale,
+            height: boardView.bounds.height * scrollView.zoomScale
+        )
+
+        let isBoardClipped = scaledBoardSize.width > scrollView.bounds.width + 0.5
+            || scaledBoardSize.height > scrollView.bounds.height + 0.5
+
+        miniMapView.isHidden = !isBoardClipped
+    }
+
+    private func focusBoard(at point: CGPoint) {
+        let visibleSize = CGSize(
+            width: scrollView.bounds.width / scrollView.zoomScale,
+            height: scrollView.bounds.height / scrollView.zoomScale
+        )
+
+        let targetRect = CGRect(
+            x: point.x - visibleSize.width / 2,
+            y: point.y - visibleSize.height / 2,
+            width: visibleSize.width,
+            height: visibleSize.height
+        )
+
+        scrollView.zoom(to: targetRect, animated: false)
+    }
+}
+
+final class MiniMapUIView: UIView {
+    var onBoardPointSelected: ((CGPoint) -> Void)?
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        selectBoardPoint(from: touches)
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        selectBoardPoint(from: touches)
+    }
+
+    private func selectBoardPoint(from touches: Set<UITouch>) {
+        guard let point = touches.first?.location(in: self),
+              let boardPoint = boardPoint(from: point) else {
+            return
+        }
+
+        onBoardPointSelected?(boardPoint)
     }
 }`,
       },

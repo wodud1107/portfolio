@@ -291,7 +291,9 @@ function storiesFor(section: PrintSection) {
 
 function storySnippets(project: Project, story: ProjectDecisionStory) {
   const storyIndex = project.decisionStories?.indexOf(story) ?? -1;
-  const snippet = project.codeSnippets?.[storyIndex];
+  const snippet =
+    project.codeSnippets?.find((snippet) => snippet.storyTitle === story.title) ??
+    project.codeSnippets?.[storyIndex];
   return snippet ? [snippet] : [];
 }
 
@@ -319,7 +321,7 @@ function highlightSwift(line: string) {
 }
 
 function isCoreSwiftLine(line: string) {
-  return /validator\.validate|evaluator\.evaluate|missingCells|extraCells|makePaintedShapeGroups|matchesBaseShape|occupiedCells|fillRatio|allSatisfy/.test(
+  return /ToolPickerHost|BoardView|BoardViewportUIView|BKRenderer|scrollView|miniMapView|focusBoard|isCameraNeeded|isBoardClipped|minimumNumberOfTouches|onBoardPointSelected|onProgressValidated|PlayerProgressValidator|#expect|@Test|StageValidator|StageQualityEvaluator|canonicalRotationKey|rotatedShape|occupiedCells|makePlacementCandidates|validator\.validate|evaluator\.evaluate|difficultyEvaluator\.evaluate|StageSerialization\.encode|sortedManifest|missingCells|extraCells|makePaintedShapeGroups|matchesBaseShape|normalizedCells|fillRatio|allSatisfy/.test(
     line,
   );
 }
