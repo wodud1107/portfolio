@@ -765,6 +765,42 @@ dd {
   font-weight: 900;
 }
 
+.related-writing-section h3 {
+  margin-bottom: 10px;
+}
+
+.related-writing-section p {
+  max-width: 860px;
+  margin: 0;
+  color: #303030;
+  line-height: 1.65;
+  font-weight: 600;
+}
+
+.related-writing-section .section-link-list a {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  color: #ff5a4a;
+  background: #fff3f1;
+  border-color: rgba(255, 90, 74, 0.28);
+}
+
+.related-writing-section .section-link-list a:hover {
+  border-color: rgba(255, 90, 74, 0.52);
+}
+
+.related-writing-section .section-link-list span {
+  padding: 3px 6px;
+  color: #ffffff;
+  background: #ff5a4a;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
 .decision-story-list {
   display: grid;
   gap: 16px;

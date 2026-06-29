@@ -183,6 +183,22 @@ function highlightedSwiftLines(code: string) {
       </div>
     </article>
 
+    <article v-if="project.relatedWriting" class="detail-section related-writing-section">
+      <h2>Related Writing</h2>
+      <h3>{{ project.relatedWriting.title }}</h3>
+      <p>{{ project.relatedWriting.description }}</p>
+      <div class="section-link-list">
+        <a
+          :href="project.relatedWriting.link.href"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span>Blog</span>
+          {{ project.relatedWriting.link.label }}
+        </a>
+      </div>
+    </article>
+
     <article v-if="productScreenshots.length" class="detail-section media-section">
       <h2>Screenshots</h2>
       <ImageCarousel :images="productScreenshots" />

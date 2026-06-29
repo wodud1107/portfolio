@@ -49,6 +49,12 @@ export interface ProjectRoleGroup {
   items: string[];
 }
 
+export interface ProjectRelatedWriting {
+  title: string;
+  description: string;
+  link: ProjectLink;
+}
+
 export interface Project {
   slug: string;
   name: string;
@@ -69,6 +75,7 @@ export interface Project {
   decisionStories?: ProjectDecisionStory[];
   screenshots?: ProjectScreenshot[];
   codeSnippets?: ProjectCodeSnippet[];
+  relatedWriting?: ProjectRelatedWriting;
   extraSections?: ProjectDetailSection[];
 }
 
@@ -139,6 +146,15 @@ export const projects: Project[] = [
     ],
     featuredSummary:
       "대표 프로젝트: App Store 출시 iOS 앱에서 상태 동기화, 렌더링 성능, 알림 신뢰성, 출시 후 크래시 대응을 담당했습니다.",
+    relatedWriting: {
+      title: "SwiftUI Rendering Pipeline",
+      description:
+        "Damago의 화면 전환 끊김과 렌더링 병목을 분석하며 SwiftUI 렌더링 파이프라인과 Core Animation commit 흐름을 함께 정리했습니다. Instruments 측정 결과와 내부 렌더링 구조를 비교해, 수치 개선만이 아니라 선언형 UI 유지보수성까지 고려한 최종 구현안을 선택했습니다.",
+      link: {
+        label: "SwiftUI의 렌더링 파이프라인 알아보기",
+        href: "https://thinkartic1107.tistory.com/39",
+      },
+    },
     screenshots: [
       {
         src: publicAsset("assets/damago/readme-1.jpg"),
@@ -354,10 +370,7 @@ export const projects: Project[] = [
       "SwiftUI",
       "UIKit",
       "SPM",
-      "PuzzleKit",
-      "StageGenCLI",
       "Exact Cover",
-      "StageGenerator",
       "Local-First",
       "StoreKit",
       "AdMob",
@@ -382,6 +395,15 @@ export const projects: Project[] = [
       "StageProgressStore, StageProgressRepository, AdCoordinator, AdRemovalStore로 local progress, interstitial/rewarded ads, StoreKit entitlement 경계를 분리했습니다.",
       "SwiftUI stage selection/play 화면과 UIKit BoardViewportUIView/minimap을 결합해 one-finger painting, two-finger camera, pinch zoom이 충돌하지 않도록 구성했습니다.",
     ],
+    relatedWriting: {
+      title: "UIKit Touch Handling / Hit Testing",
+      description:
+        "Puzzole의 보드 입력 처리를 구현하며 UIKit의 hit-testing과 터치 전달 흐름을 정리했습니다. one-finger painting, two-finger pan/zoom, minimap interaction이 충돌하지 않도록 BoardViewportUIView, BoardUIView, MiniMapUIView의 입력 경계를 나누는 판단에 반영했습니다.",
+      link: {
+        label: "iOS의 Hit Testing 알아보기",
+        href: "https://thinkartic1107.tistory.com/42",
+      },
+    },
     decisionStories: [
       {
         title: "Unique-Solution Stage Catalog",
