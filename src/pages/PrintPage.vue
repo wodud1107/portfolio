@@ -145,16 +145,24 @@ const printSections = computed<PrintSection[]>(() => {
         includePerformanceImages: true,
       },
       {
-        title: "Puzzole - 도메인 모델링 / 검증 로직",
+        title: "Puzzole - Unique Catalog / Local-First 앱 설계",
         project: puzzole,
         includeOverview: true,
         includeRole: true,
         storyTitles: [
-          "Generator-First 스테이지 설계",
-          "숨겨진 정답에 의존하지 않는 풀이 검증",
-          "Stage Validation과 Quality Evaluation 분리",
+          "Unique-Solution Stage Catalog",
+          "Hint-Ready Puzzle Rule",
+          "Local-First v1, Backend-Ready Later",
         ],
         includeCode: true,
+      },
+      {
+        title: "Puzzole - App Flow / Large-board UX",
+        project: puzzole,
+        storyTitles: [
+          "App Flow and Monetization Boundary",
+          "Large-Board Play UX",
+        ],
       },
       {
         title: "CS FlashCards - Vapor / REST API / DB Migration",
@@ -229,21 +237,24 @@ const printSections = computed<PrintSection[]>(() => {
       includeProductImages: true,
     },
     {
-      title: "Puzzole - Generator / Validator",
+      title: "Puzzole - Catalog / Hint / Local Progress",
       project: puzzole,
       storyTitles: [
-        "Generator-First 스테이지 설계",
-        "숨겨진 정답에 의존하지 않는 풀이 검증",
+        "Unique-Solution Stage Catalog",
+        "Hint-Ready Puzzle Rule",
+        "Local-First v1, Backend-Ready Later",
       ],
       includeCode: true,
       codeIntro:
-        "저장소 전체 공개 대신, 풀이 가능성을 보장하는 스테이지 생성과 숨겨진 정답에 의존하지 않는 검증 코드 일부를 발췌했습니다.",
+        "유일해 카탈로그 검증, hidden placement 기반 힌트 선택, local progress 저장 경계를 보여주는 핵심 코드 일부를 발췌했습니다.",
     },
     {
-      title: "Puzzole - Validation / Quality Policy",
+      title: "Puzzole - v1 App Flow / UX Boundary",
       project: puzzole,
-      storyTitles: ["Stage Validation과 Quality Evaluation 분리"],
-      includeCode: true,
+      storyTitles: [
+        "App Flow and Monetization Boundary",
+        "Large-Board Play UX",
+      ],
     },
     {
       title: "Other Projects",
@@ -321,7 +332,7 @@ function highlightSwift(line: string) {
 }
 
 function isCoreSwiftLine(line: string) {
-  return /ToolPickerHost|BoardView|BoardViewportUIView|BKRenderer|scrollView|miniMapView|focusBoard|isCameraNeeded|isBoardClipped|minimumNumberOfTouches|onBoardPointSelected|onProgressValidated|PlayerProgressValidator|#expect|@Test|StageValidator|StageQualityEvaluator|canonicalRotationKey|rotatedShape|occupiedCells|makePlacementCandidates|validator\.validate|evaluator\.evaluate|difficultyEvaluator\.evaluate|StageSerialization\.encode|sortedManifest|missingCells|extraCells|makePaintedShapeGroups|matchesBaseShape|normalizedCells|fillRatio|allSatisfy/.test(
+  return /StageUniquenessAnalyzer|makeExactCoverModel|searchAlternativeSolution|hiddenCandidateIndices|hasAlternative|didReachSearchLimit|StageHintProvider|nextHint|overlapCount|cellsToApply|StageProgressStore|unlockedStageOrder|completedStageIDs|markCompleted|markStageCompleted|AdCoordinator|AdRemovalStore|InterstitialAdProvider|RewardedAdProvider|presentPostCompletionInterstitial|refreshEntitlements|hasRemovedAds|ToolPickerHost|BoardView|BoardViewportUIView|BKRenderer|scrollView|miniMapView|focusBoard|isCameraNeeded|isBoardClipped|minimumNumberOfTouches|onBoardPointSelected|onProgressValidated|PlayerProgressValidator|#expect|@Test|StageValidator|StageQualityEvaluator|canonicalRotationKey|rotatedShape|occupiedCells|makePlacementCandidates|validator\.validate|evaluator\.evaluate|difficultyEvaluator\.evaluate|StageSerialization\.encode|sortedManifest|missingCells|extraCells|makePaintedShapeGroups|matchesBaseShape|normalizedCells|fillRatio|allSatisfy/.test(
     line,
   );
 }

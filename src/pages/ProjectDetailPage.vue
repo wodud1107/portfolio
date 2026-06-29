@@ -55,7 +55,7 @@ function highlightSwift(line: string) {
 }
 
 function isCoreSwiftLine(line: string) {
-  return /ToolPickerHost|BoardView|BoardViewportUIView|BKRenderer|scrollView|miniMapView|focusBoard|isCameraNeeded|isBoardClipped|minimumNumberOfTouches|onBoardPointSelected|onProgressValidated|PlayerProgressValidator|#expect|@Test|StageValidator|StageQualityEvaluator|canonicalRotationKey|rotatedShape|occupiedCells|makePlacementCandidates|validator\.validate|evaluator\.evaluate|difficultyEvaluator\.evaluate|StageSerialization\.encode|sortedManifest|missingCells|extraCells|makePaintedShapeGroups|matchesBaseShape|normalizedCells|fillRatio|allSatisfy/.test(
+  return /StageUniquenessAnalyzer|makeExactCoverModel|searchAlternativeSolution|hiddenCandidateIndices|hasAlternative|didReachSearchLimit|StageHintProvider|nextHint|overlapCount|cellsToApply|StageProgressStore|unlockedStageOrder|completedStageIDs|markCompleted|markStageCompleted|AdCoordinator|AdRemovalStore|InterstitialAdProvider|RewardedAdProvider|presentPostCompletionInterstitial|refreshEntitlements|hasRemovedAds|ToolPickerHost|BoardView|BoardViewportUIView|BKRenderer|scrollView|miniMapView|focusBoard|isCameraNeeded|isBoardClipped|minimumNumberOfTouches|onBoardPointSelected|onProgressValidated|PlayerProgressValidator|#expect|@Test|StageValidator|StageQualityEvaluator|canonicalRotationKey|rotatedShape|occupiedCells|makePlacementCandidates|validator\.validate|evaluator\.evaluate|difficultyEvaluator\.evaluate|StageSerialization\.encode|sortedManifest|missingCells|extraCells|makePaintedShapeGroups|matchesBaseShape|normalizedCells|fillRatio|allSatisfy/.test(
     line,
   );
 }
