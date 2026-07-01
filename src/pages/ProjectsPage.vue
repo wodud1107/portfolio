@@ -3,16 +3,19 @@ import { computed, ref } from 'vue';
 import PageHeader from '../components/PageHeader.vue';
 import ProjectCard from '../components/ProjectCard.vue';
 import { projects } from '../data/projects';
+import { PROJECT_FILTERS } from '../types/portfolio';
+import type { ProjectFilter } from '../types/portfolio';
 
-const filters = ['All', 'iOS', 'Frontend', 'Backend', 'Product', 'Performance'];
-const selectedFilter = ref('All');
+const selectedFilter = ref<ProjectFilter>('All');
 
 const filteredProjects = computed(() => {
-  if (selectedFilter.value === 'All') {
+  const filter = selectedFilter.value;
+
+  if (filter === 'All') {
     return projects;
   }
 
-  return projects.filter((project) => project.categories.includes(selectedFilter.value));
+  return projects.filter((project) => project.categories.includes(filter));
 });
 </script>
 
@@ -26,7 +29,7 @@ const filteredProjects = computed(() => {
   <section class="section tight-section">
     <div class="filter-row" aria-label="프로젝트 필터">
       <button
-        v-for="filter in filters"
+        v-for="filter in PROJECT_FILTERS"
         :key="filter"
         class="filter-button"
         :class="{ active: selectedFilter === filter }"
