@@ -13,6 +13,11 @@ import type {
 } from "../data/projects";
 import { stackGroups } from "../data/techStack";
 import { highlightPortfolioText } from "../utils/highlightText";
+import {
+  getRoleSectionTitle,
+  getScreenshotsByGroup,
+  getStorySnippets,
+} from '../utils/projectDisplay';
 
 interface PrintSection {
   title: string;
@@ -374,11 +379,8 @@ function printPortfolio() {
   window.print();
 }
 
-function screenshotsFor(project: Project, group?: ProjectScreenshot["group"]) {
-  return (
-    project.screenshots?.filter((screenshot) => screenshot.group === group) ??
-    []
-  );
+function screenshotsFor(project: Project, group?: ProjectScreenshot['group']) {
+  return getScreenshotsByGroup(project, group);
 }
 
 function performanceScreenshotsForPrint(project: Project) {
@@ -419,9 +421,7 @@ function roleItemsForPrint(project: Project) {
 }
 
 function roleSectionTitle(project: Project) {
-  return project.tags.includes("Personal Project")
-    ? "Implementation Scope"
-    : "My Role";
+  return getRoleSectionTitle(project);
 }
 
 function storiesFor(section: PrintSection) {
@@ -435,11 +435,7 @@ function storiesFor(section: PrintSection) {
 }
 
 function storySnippets(project: Project, story: ProjectDecisionStory) {
-  const storyIndex = project.decisionStories?.indexOf(story) ?? -1;
-  const snippet =
-    project.codeSnippets?.find((snippet) => snippet.storyTitle === story.title) ??
-    project.codeSnippets?.[storyIndex];
-  return snippet ? [snippet] : [];
+  return getStorySnippets(project, story);
 }
 
 function printStorySnippets(project: Project, story: ProjectDecisionStory) {

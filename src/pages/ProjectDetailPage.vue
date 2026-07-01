@@ -6,6 +6,12 @@ import { findProjectBySlug } from '../data/projects';
 import type { ProjectCodeSnippet, ProjectDecisionStory } from '../data/projects';
 import { highlightPortfolioText } from '../utils/highlightText';
 import { highlightedSwiftLines } from '../utils/swiftHighlight';
+import {
+  getPerformanceScreenshots,
+  getProductScreenshots,
+  getRoleSectionTitle,
+  getSnippetForStory,
+} from '../utils/projectDisplay'
 
 const route = useRoute();
 const project = computed(() => findProjectBySlug(String(route.params.slug)));
@@ -15,18 +21,11 @@ const backLink = computed(() =>
     ? { to: { name: 'home', hash: '#projects' }, label: '← 홈으로 돌아가기' }
     : { to: { name: 'projects' }, label: '← 프로젝트 목록으로 돌아가기' },
 );
-const productScreenshots = computed(
-  () => project.value?.screenshots?.filter((screenshot) => screenshot.group !== 'performance') ?? [],
-);
-const performanceScreenshots = computed(
-  () => project.value?.screenshots?.filter((screenshot) => screenshot.group === 'performance') ?? [],
-);
+const productScreenshots = computed(() => getProductScreenshots(project.value));
+const performanceScreenshots = computed(() => getPerformanceScreenshots(project.value));
 
 function snippetForStory(story: ProjectDecisionStory, fallbackIndex: number) {
-  return (
-    project.value?.codeSnippets?.find((snippet) => snippet.storyTitle === story.title) ??
-    project.value?.codeSnippets?.[fallbackIndex]
-  );
+  return getSnippetForStory(project.value, story, fallbackIndex);
 }
 
 function openSnippet(snippet?: ProjectCodeSnippet) {
@@ -38,9 +37,7 @@ function closeSnippet() {
 }
 
 function roleSectionTitle() {
-  return project.value?.tags.includes('Personal Project')
-    ? 'Implementation Scope'
-    : 'My Role';
+  return project.value ? getRoleSectionTitle(project.value) : 'My Role';
 }
 </script>
 
