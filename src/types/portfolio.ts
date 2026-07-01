@@ -45,6 +45,7 @@ export interface ProjectCodeSnippet {
 export interface ProjectDecisionStory {
     title: string;
     problem: string;
+    decision: string;
     result: string;
     image?: {
         src: string;

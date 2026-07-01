@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted } from 'vue';
+import CredentialModal from '../components/CredentialModal.vue';
+import { useActiveItem } from '../composables/useActiveItem';
 import ProjectCard from '../components/ProjectCard.vue';
 import { publicAsset } from '../data/assets';
 import { contactLinks } from '../data/contact';
@@ -26,15 +28,11 @@ const email = contactLinks.find((link) => link.label === 'Email');
 const github = contactLinks.find((link) => link.label === 'GitHub');
 const blog = contactLinks.find((link) => link.label === 'Blog');
 const profileImage = publicAsset('assets/profile.jpeg');
-const activeCredential = ref<Credential | null>(null);
-
-function openCredential(credential: Credential) {
-  activeCredential.value = credential;
-}
-
-function closeCredential() {
-  activeCredential.value = null;
-}
+const {
+  activeItem: activeCredential,
+  openItem: openCredential,
+  closeItem: closeCredential,
+} = useActiveItem<Credential>();
 
 function handleKeydown(event: KeyboardEvent) {
   if (event.key === 'Escape') {
@@ -166,31 +164,9 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown));
     </div>
   </section>
 
-  <Teleport to="body">
-    <div
-      v-if="activeCredential"
-      class="credential-modal"
-      role="dialog"
-      aria-modal="true"
-      :aria-label="`${activeCredential.title} 보기`"
-      @keydown.esc="closeCredential"
-    >
-      <button
-        class="modal-backdrop"
-        type="button"
-        aria-label="자격증 자료 닫기"
-        @click="closeCredential"
-      />
-      <section class="credential-modal-panel">
-        <button class="modal-close" type="button" aria-label="닫기" @click="closeCredential">
-          ×
-        </button>
-        <img :src="activeCredential.image" :alt="`${activeCredential.title} 원본 보기`" />
-        <div class="modal-caption">
-          <strong>{{ activeCredential.type }}</strong>
-          <span>{{ activeCredential.title }}</span>
-        </div>
-      </section>
-    </div>
-  </Teleport>
+  <CredentialModal
+    v-if="activeCredential"
+    :credential="activeCredential"
+    @close="closeCredential"
+  />
 </template>
