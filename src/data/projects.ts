@@ -358,19 +358,19 @@ export const projects: Project[] = [
     slug: "puzzole",
     name: "Puzzole",
     summary:
-      "StageGenCLI로 생성한 유일해 스테이지 카탈로그를 로컬에서 로드하고, 플레이·힌트·진행 저장까지 연결한 iOS puzzle painting 앱",
-    role: "Solo iOS / Engine Developer",
+      "검증된 스테이지 1000개를 앱에 포함하고, 플레이·힌트·진행 저장을 서버 없이 연결한 iOS 퍼즐 앱",
+    role: "Solo iOS / Product Developer",
     period: "2026 - In Progress",
     status: "MVP",
     featured: true,
     categories: ["iOS", "Product"],
-    tags: ["Personal Project", "MVP", "Engine", "Product"],
+    tags: ["Personal Project", "MVP", "Product"],
     keywords: [
       "Swift",
       "SwiftUI",
       "UIKit",
       "SPM",
-      "Exact Cover",
+      "Puzzle Generation",
       "Local-First",
       "StoreKit",
       "AdMob",
@@ -378,27 +378,28 @@ export const projects: Project[] = [
     ],
     links: [],
     overview: [
-      "Puzzole은 플레이어가 보드의 셀을 칠해 반복 도형으로 구성된 hidden placement 해답을 완성하는 iOS puzzle painting 앱입니다.",
-      "PuzzleKit은 stage generation, stage data serialization, exact-cover 기반 uniqueness analysis, semantic color grouping validation, hint selection을 담당하고, Puzzole 앱은 bundled catalog loading, stage selection, board play, local progress를 연결합니다.",
-      "v1은 서버 없이 동작하도록 1000개 stage JSON과 score-sorted manifest를 bundle로 로드하고, stage clear/unlock progress는 local-first 구조로 저장합니다.",
-      "백엔드 stage pack, progress sync, entitlement validation은 v1 범위 밖으로 분리해 BackendExpansionPlan에 후속 확장 경계로 정리했습니다.",
+      "Puzzole은 플레이어가 보드의 셀을 칠해 반복 도형 해답을 완성하는 iOS 퍼즐 앱입니다.",
+      "퍼즐 데이터 생성·검증 로직과 앱 화면 흐름을 분리하고, 앱에서는 스테이지 선택, 보드 플레이, 힌트, 진행 저장을 연결했습니다.",
+      "v1은 서버 없이 동작하도록 검증된 스테이지 1000개를 앱에 포함하고, 완료/해금 상태는 기기에 저장합니다.",
+      "스테이지 팩 추가, 진행 동기화, 구매 검증은 첫 출시 범위에서 분리해 이후 서버 확장 계획으로 남겼습니다.",
     ],
     problem: [
-      "힌트가 hidden placement를 기준으로 제공되려면, 같은 보드를 다른 방식으로도 풀 수 있는 다중해 stage는 공정하지 않았습니다.",
-      "리팩터링 전 기존 카탈로그 샘플 50개 분석은 574.47초가 걸렸고 unique 비율은 24%에 그쳐, 출시 전 catalog 품질과 생성 생산성을 함께 개선해야 했습니다.",
-      "v1에서 서버 의존성을 먼저 넣으면 계정, 개인정보, 네트워크 실패, 심사 리스크가 커지므로 catalog loading, progress, purchase, ads를 로컬 우선 경계로 묶을 필요가 있었습니다.",
+      "힌트와 완료 판정이 신뢰되려면 같은 보드를 여러 방식으로 풀 수 있는 스테이지를 제외해야 했습니다.",
+      "리팩터링 전 샘플 50개 검증은 574.47초가 걸렸고 통과 비율은 24%에 그쳐, 출시 전 스테이지 품질과 생성 속도를 함께 개선해야 했습니다.",
+      "개선 후에는 검증 한도 100000 조건에서 1000개 스테이지를 8.46초에 재확인했고, 정답이 하나인 스테이지 1000개와 실패/복수 정답 0개를 확인했습니다.",
+      "v1에서 서버 의존성을 먼저 넣으면 계정, 개인정보, 네트워크 실패, 심사 리스크가 커지므로 스테이지 로딩, 진행 저장, 구매, 광고를 로컬 우선 경계로 묶을 필요가 있었습니다.",
     ],
     roleDetails: [
-      "StageGenCLI와 solver-driven StageGenerator로 stage JSON과 score-sorted manifest를 생성하고, StageUniquenessAnalyzer로 hidden solution 외 alternative tiling을 검증했습니다.",
-      "1000개 generated stage catalog를 maxSearchNodes = 100000 조건에서 재검증해 unique 1000개, multiple/unsolved/limited 0개를 확인했습니다.",
-      "StageHintProvider와 rewarded hint flow를 연결해 hidden placement 기준 힌트를 제공하고, stage clear/unlock 저장은 광고 기회보다 먼저 확정되도록 app flow를 분리했습니다.",
-      "StageProgressStore, StageProgressRepository, AdCoordinator, AdRemovalStore로 local progress, interstitial/rewarded ads, StoreKit entitlement 경계를 분리했습니다.",
-      "SwiftUI stage selection/play 화면과 UIKit BoardViewportUIView/minimap을 결합해 one-finger painting, two-finger camera, pinch zoom이 충돌하지 않도록 구성했습니다.",
+      "스테이지 생성 도구와 검증 로직으로 정답이 하나인 퍼즐 1000개를 만들고, 앱에서 로드할 순서 목록까지 함께 생성했습니다.",
+      "검증 한도 100000 조건에서 1000개 스테이지를 재확인해 정답이 하나인 스테이지 1000개, 실패/복수 정답 0개를 확인했습니다.",
+      "현재 풀이 상태를 기준으로 남은 셀을 안내하는 힌트 흐름을 구현하고, 완료/해금 저장은 광고보다 먼저 확정되도록 앱 흐름을 분리했습니다.",
+      "진행 저장, 광고, 구매 상태 확인을 각각 독립된 경계로 나눠 외부 SDK나 구매 상태 변화가 핵심 플레이 흐름을 흔들지 않도록 했습니다.",
+      "SwiftUI 화면과 UIKit 보드 뷰를 결합해 한 손가락 칠하기, 두 손가락 이동, 확대/축소, 미니맵 탐색이 충돌하지 않도록 구성했습니다.",
     ],
     relatedWriting: {
       title: "UIKit Touch Handling / Hit Testing",
       description:
-        "Puzzole의 보드 입력 처리를 구현하며 UIKit의 hit-testing과 터치 전달 흐름을 정리했습니다. one-finger painting, two-finger pan/zoom, minimap interaction이 충돌하지 않도록 BoardViewportUIView, BoardUIView, MiniMapUIView의 입력 경계를 나누는 판단에 반영했습니다.",
+        "Puzzole의 큰 보드 입력을 구현하며 UIKit의 hit-testing과 터치 전달 흐름을 정리했습니다. 칠하기, 화면 이동/확대, 미니맵 선택이 서로 충돌하지 않도록 입력 경계를 나누는 판단에 반영했습니다.",
       link: {
         label: "iOS의 Hit Testing 알아보기",
         href: "https://thinkartic1107.tistory.com/42",
@@ -406,57 +407,57 @@ export const projects: Project[] = [
     },
     decisionStories: [
       {
-        title: "Unique-Solution Stage Catalog",
+        title: "정답이 하나인 스테이지 카탈로그",
         problem:
-          "힌트와 stage clear 판정이 hidden placement를 기준으로 동작하려면, 같은 보드를 다른 방식으로도 풀 수 있는 stage는 공정하지 않았습니다. 리팩터링 전 기존 카탈로그 샘플 50개 분석은 574.47초가 걸렸고 unique 비율은 24%였습니다.",
+          "힌트와 완료 판정이 신뢰되려면 같은 보드를 여러 방식으로 풀 수 있으면 안 됐습니다. 리팩터링 전 샘플 50개 검증은 574.47초가 걸렸고 통과 비율은 24%였습니다.",
         decision:
-          "StageUniquenessAnalyzer에서 모든 가능한 BaseShape placement를 exact-cover model로 만들고, 생성기가 알고 있는 hidden solution을 제외한 alternative tiling이 있는지 탐색했습니다. StageGenCLI는 unique stage만 저장하도록 했습니다.",
+          "생성된 퍼즐을 별도 검증 단계에서 다시 분석해 다른 풀이 가능성을 탐색하고, 정답이 하나인 스테이지만 앱에 포함하도록 했습니다.",
         result:
-          "solver-driven generation과 uniqueness filter 이후, maxSearchNodes = 100000 조건에서 1000개 stage catalog를 8.46초에 재검증했고 unique 1000개, multiple/unsolved/limited 0개를 확인했습니다.",
+          "개선 후 검증 한도 100000 조건에서 1000개 스테이지를 8.46초에 재확인했고, 정답이 하나인 스테이지 1000개와 실패/복수 정답 0개를 확인했습니다. 리팩터링 전 샘플 50개 검증 574.47초, 통과 비율 24%였던 병목을 출시 가능한 수준으로 줄였습니다.",
       },
       {
-        title: "Hint-Ready Puzzle Rule",
+        title: "힌트와 완료 판정 기준 통합",
         problem:
-          "초기 규칙처럼 어떤 방식으로든 BaseShape 그룹을 만들면 정답으로 인정하면, rewarded hint가 참조할 하나의 canonical answer structure가 없어졌습니다.",
+          "초기 규칙처럼 어떤 방식으로든 비슷한 모양을 만들면 정답으로 인정하면, 힌트가 가리킬 하나의 기준이 흐려졌습니다.",
         decision:
-          "hidden placements를 stage clear 판정과 hint의 canonical answer structure로 삼고, StageHintProvider가 이미 칠한 셀과 덜 겹치는 placement를 골라 남은 셀만 힌트로 적용하도록 했습니다.",
+          "스테이지를 만들 때 정한 목표 배치를 완료 판정과 힌트의 공통 기준으로 삼고, 이미 칠한 셀과 덜 겹치는 남은 셀을 힌트로 보여주도록 했습니다.",
         result:
-          "색상 선택은 자유롭게 유지하면서도, 힌트와 stage clear 판정은 생성된 hidden placement 구조를 기준으로 일관되게 동작하게 됐습니다.",
+          "색상 선택의 자유는 유지하면서도, 힌트와 완료 판정은 같은 기준으로 일관되게 동작하게 됐습니다.",
       },
       {
-        title: "Local-First v1, Backend-Ready Later",
+        title: "서버 없이 동작하는 v1",
         problem:
-          "v1에 서버 catalog, account sync, server entitlement validation을 넣으면 출시 안정성, App Review 리스크, 오프라인 플레이보다 계정/네트워크/개인정보 처리가 먼저 커질 수 있었습니다.",
+          "v1에 서버 동기화와 계정을 넣으면 네트워크 실패, 개인정보 처리, 심사 리스크가 퍼즐 경험보다 먼저 커질 수 있었습니다.",
         decision:
-          "v1은 bundled stage catalog, local StageProgressStore, StoreKit local entitlement checks, provider-based ads로 유지했습니다. BackendExpansionPlan에는 stage packs, progress sync, entitlement validation을 후속 API로만 정리했습니다.",
+          "v1은 앱에 포함된 스테이지와 로컬 진행 저장으로 완성하고, 스테이지 팩, 진행 동기화, 구매 검증은 후속 서버 확장으로 분리했습니다.",
         result:
-          "v1은 bundled stage catalog와 local progress로 서버 없이 동작하고, stage pack metadata, progress sync, entitlement validation은 BackendExpansionPlan으로 분리해 post-release 확장 경계로 남겼습니다.",
+          "오프라인에서도 플레이 가능한 MVP를 먼저 만들고, 출시 이후 필요한 범위만 서버로 확장할 수 있는 여지를 남겼습니다.",
       },
       {
-        title: "App Flow and Monetization Boundary",
+        title: "완료 저장과 광고/구매 경계 분리",
         problem:
-          "광고, 구매, rewarded hint가 퍼즐 풀이 완료 저장과 섞이면 외부 SDK 실패나 구매 상태 변화가 stage clear flow를 흔들 수 있었습니다.",
+          "광고 로딩 실패나 구매 상태 확인이 스테이지 완료 저장과 섞이면, 퍼즐을 끝낸 경험 자체가 흔들릴 수 있었습니다.",
         decision:
-          "StageProgressRepository는 stage clear/unlock을 먼저 저장하고, AdCoordinator는 interstitial/rewarded ad를 provider boundary 뒤에서 처리하며, AdRemovalStore는 StoreKit entitlement로 passive ads를 건너뛰게 했습니다.",
+          "스테이지 완료와 해금은 먼저 저장하고, 광고와 구매 상태 확인은 별도 객체가 처리하도록 흐름을 나눴습니다.",
         result:
-          "스테이지 완료와 해금은 광고보다 먼저 확정되고, interstitial이 실패해도 app flow는 계속됩니다. 외부 SDK 실패가 product flow를 깨지 않도록 monetization boundary를 분리했습니다.",
+          "광고가 실패해도 완료 흐름은 유지되고, 수익화 기능이 핵심 플레이 경험을 깨지 않도록 만들었습니다.",
       },
       {
-        title: "Large-Board Play UX",
+        title: "큰 보드 조작 경험",
         problem:
-          "큰 stage를 화면에 전부 맞추면 셀이 작아져 칠하기 어렵고, 한 손가락 scroll은 Puzzole의 핵심 조작인 cell painting gesture와 충돌했습니다.",
+          "큰 보드를 한 화면에 모두 맞추면 셀이 작아지고, 한 손가락 스크롤은 칠하기 조작과 충돌했습니다.",
         decision:
-          "BoardUIView를 UIScrollView 기반 BoardViewportUIView로 감싸 one-finger painting, two-finger pan, pinch zoom을 분리하고, 보드가 viewport 밖으로 잘릴 때만 interactive minimap을 표시했습니다.",
+          "한 손가락은 칠하기에 쓰고, 두 손가락 이동과 확대/축소는 보드 카메라가 처리하도록 나눴습니다. 보드가 화면 밖으로 잘릴 때는 미니맵을 보여줬습니다.",
         result:
-          "작은 stage는 static board로 유지하고, 큰 stage는 scrollable camera와 interactive minimap을 사용해 cell size와 탐색성을 함께 확보했습니다.",
+          "작은 보드는 단순하게, 큰 보드는 탐색 가능한 방식으로 다뤄 셀 크기와 조작성을 함께 확보했습니다.",
       },
     ],
     screenshots: [
       {
         src: publicAsset("assets/puzzole/v1-stage-selection.png"),
-        alt: "Puzzole stage selection carousel",
+        alt: "Puzzole puzzle selection screen",
         caption:
-          "manifest-ordered catalog와 local progress를 연결한 stage selection",
+          "검증된 스테이지 목록과 진행 상황을 연결한 선택 화면",
         type: "wide",
         group: "product",
       },
@@ -464,43 +465,40 @@ export const projects: Project[] = [
         src: publicAsset("assets/puzzole/v1-play-minimap.png"),
         alt: "Puzzole board play with minimap",
         caption:
-          "one-finger painting과 two-finger camera를 분리한 large-board play",
+          "칠하기와 화면 이동/확대를 분리한 큰 보드 플레이",
         type: "wide",
         group: "product",
       },
       {
         src: publicAsset("assets/puzzole/v1-hint.png"),
         alt: "Puzzole stage play with shape side panel",
-        caption:
-          "hidden placement 기준 hint와 side-panel tool flow",
+        caption: "현재 풀이 상태를 기준으로 남은 셀을 안내하는 힌트 흐름",
         type: "wide",
         group: "product",
       },
       {
         src: publicAsset("assets/puzzole/v1-completion.png"),
-        alt: "Puzzole stage clear overlay",
-        caption:
-          "stage clear 저장과 unlock 이후 post-clear handoff",
+        alt: "Puzzole completion overlay",
+        caption: "완료 저장과 다음 스테이지 해금 이후의 마무리 흐름",
         type: "wide",
         group: "product",
       },
       {
         src: publicAsset("assets/puzzole/v1-color-tools.png"),
         alt: "Puzzole settings panel",
-        caption:
-          "sound, stage 이동, color slot 설정을 분리한 settings overlay",
+        caption: "소리, 스테이지 이동, 색상 설정을 모은 설정 화면",
         type: "wide",
         group: "product",
       },
     ],
     codeSnippets: [
       {
-        title: "Hidden Solution Uniqueness 분석",
-        storyTitle: "Unique-Solution Stage Catalog",
+        title: "정답 검증 로직",
+        storyTitle: "정답이 하나인 스테이지 카탈로그",
         source:
           "DrawingPuzzle/PuzzleKit/Sources/PuzzleKit/Validation/StageUniquenessAnalyzer.swift",
         description:
-          "생성된 hidden placements를 제외하고도 같은 playable cells를 덮는 alternative tiling이 있는지 exact-cover search로 확인합니다.",
+          "만든 퍼즐이 다른 방식으로도 풀리는지 확인해, 정답이 하나인 스테이지만 저장합니다.",
         printCode: `let model = makeExactCoverModel(stage: stage, playableCells: playableCells)
 let hiddenCandidateIndices = makeHiddenCandidateIndices(stage: stage, model: model)
 
@@ -602,12 +600,12 @@ private func searchAlternativeSolution(
 }`,
       },
       {
-        title: "Hidden Placement 기반 Hint 선택",
-        storyTitle: "Hint-Ready Puzzle Rule",
+        title: "현재 풀이 기준 힌트 선택",
+        storyTitle: "힌트와 완료 판정 기준 통합",
         source:
           "DrawingPuzzle/PuzzleKit/Sources/PuzzleKit/Stage/StageHintProvider.swift",
         description:
-          "현재 칠한 셀과 덜 겹치는 hidden placement를 골라, 아직 비어 있는 셀만 rewarded hint로 적용합니다.",
+          "이미 칠한 셀과 덜 겹치는 남은 셀을 골라 힌트로 보여줍니다.",
         printCode: `let paintedCells = Set(paintedSemanticColors.keys)
 
 let candidates = stage.placements.compactMap { placement -> StageHint? in
@@ -674,11 +672,11 @@ public struct StageHint: Equatable {
       },
       {
         title: "Local Progress와 v1 저장 경계",
-        storyTitle: "Local-First v1, Backend-Ready Later",
+        storyTitle: "서버 없이 동작하는 v1",
         source:
           "DrawingPuzzle/Puzzole/Puzzole/Source/Persistence/StageProgressStore.swift, StageProgressRepository.swift",
         description:
-          "v1은 서버 없이 stage clear/unlock을 local JSON으로 저장하고 repository API로 앱 흐름에 노출합니다.",
+          "서버 없이도 완료한 스테이지와 해금 상태를 기기에 안정적으로 저장합니다.",
         printCode: `struct StageProgressState: Codable, Equatable {
     var completedStageIDs: Set<String>
     var unlockedStageOrder: Int
@@ -747,12 +745,12 @@ final class StageProgressRepository: ObservableObject {
 }`,
       },
       {
-        title: "Stage Clear 이후 광고와 구매 경계",
-        storyTitle: "App Flow and Monetization Boundary",
+        title: "완료 저장 이후 광고/구매 처리",
+        storyTitle: "완료 저장과 광고/구매 경계 분리",
         source:
           "DrawingPuzzle/Puzzole/Puzzole/Source/Ads/AdCoordinator.swift, Source/AdRemoval/AdRemovalStore.swift",
         description:
-          "완료 저장/해금과 광고 presentation을 분리하고, StoreKit ad-removal entitlement로 passive ads만 건너뜁니다.",
+          "스테이지 완료 저장을 먼저 확정하고, 광고와 구매 상태 확인은 별도 흐름에서 처리합니다.",
         printCode: `@MainActor
 func presentPostCompletionInterstitial(from viewController: UIViewController) async {
     guard !adRemovalStore.hasRemovedAds else { return }
@@ -816,12 +814,12 @@ final class AdRemovalStore: ObservableObject {
 }`,
       },
       {
-        title: "ScrollView Camera와 Interactive Minimap",
-        storyTitle: "Large-Board Play UX",
+        title: "큰 보드 이동과 미니맵",
+        storyTitle: "큰 보드 조작 경험",
         source:
           "DrawingPuzzle/Puzzole/Puzzole/Source/StagePlay/BoardViewportUIView.swift, MiniMapUIView.swift",
         description:
-          "한 손가락 painting과 camera navigation이 충돌하지 않도록 UIScrollView camera와 clipped-state minimap을 분리했습니다.",
+          "칠하기, 화면 이동, 확대/축소, 미니맵 선택이 서로 충돌하지 않도록 입력 흐름을 나눕니다.",
         printCode: `scrollView.panGestureRecognizer.minimumNumberOfTouches = 2
 scrollView.addSubview(boardView)
 addSubview(miniMapView)
@@ -910,11 +908,11 @@ final class MiniMapUIView: UIView {
     ],
     extraSections: [
       {
-        title: "Backend Expansion Boundary",
+        title: "Server Expansion Boundary",
         items: [
-          "v1은 bundled stage_manifest.json과 puzzle_stageNN.json, local StageProgressStore, StoreKit entitlement checks로 서버 없이 동작합니다.",
-          "v1.1 이후에는 GET /stage-packs와 stage JSON cache로 backend-managed stage packs를 추가할 수 있도록 catalog와 progress 경계를 분리했습니다.",
-          "v2의 progress sync와 server-side entitlement validation은 account 또는 anonymous device ID가 필요하므로 v1 출시 범위에서 제외했습니다.",
+          "v1은 앱에 포함된 스테이지와 기기 내 진행 저장만으로 서버 없이 동작합니다.",
+          "출시 이후에는 서버에서 스테이지 팩을 내려받고 기기에 캐시할 수 있도록, 스테이지 목록과 진행 저장의 책임을 분리해 두었습니다.",
+          "진행 동기화와 서버 측 구매 검증은 계정 또는 익명 기기 식별자가 필요하므로 첫 출시 범위에서 제외했습니다.",
         ],
       },
     ],

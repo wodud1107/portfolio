@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router';
 import ImageCarousel from '../components/ImageCarousel.vue';
 import { findProjectBySlug } from '../data/projects';
 import type { ProjectCodeSnippet, ProjectDecisionStory } from '../data/projects';
+import { highlightPortfolioText } from '../utils/highlightText';
 
 const route = useRoute();
 const project = computed(() => findProjectBySlug(String(route.params.slug)));
@@ -33,6 +34,12 @@ function openSnippet(snippet?: ProjectCodeSnippet) {
 
 function closeSnippet() {
   activeSnippet.value = null;
+}
+
+function roleSectionTitle() {
+  return project.value?.tags.includes('Personal Project')
+    ? 'Implementation Scope'
+    : 'My Role';
 }
 
 function escapeHtml(value: string) {
@@ -77,7 +84,7 @@ function highlightedSwiftLines(code: string) {
       <div>
         <p class="eyebrow">{{ project.status }} · {{ project.period }}</p>
         <h1>{{ project.name }}</h1>
-        <p>{{ project.summary }}</p>
+        <p v-html="highlightPortfolioText(project.summary)"></p>
       </div>
       <dl class="detail-meta">
         <div>
@@ -91,40 +98,61 @@ function highlightedSwiftLines(code: string) {
       </dl>
     </header>
 
+    <article v-if="productScreenshots.length" class="detail-section media-section primary-media-section">
+      <h2>Screenshots</h2>
+      <ImageCarousel :images="productScreenshots" />
+    </article>
+
     <div class="tag-row detail-tags">
       <span v-for="tag in [...project.tags, ...project.keywords]" :key="tag">{{ tag }}</span>
     </div>
 
     <p v-if="project.featuredSummary" class="project-featured-summary">
-      {{ project.featuredSummary }}
+      <span v-html="highlightPortfolioText(project.featuredSummary)"></span>
     </p>
 
     <article class="detail-section">
       <h2>Overview</h2>
       <ul>
-        <li v-for="item in project.overview" :key="item">{{ item }}</li>
+        <li
+          v-for="item in project.overview"
+          :key="item"
+          v-html="highlightPortfolioText(item)"
+        ></li>
       </ul>
     </article>
 
     <article class="detail-section">
-      <h2>My Role</h2>
+      <h2>{{ roleSectionTitle() }}</h2>
       <div v-if="project.roleBreakdown?.length" class="role-breakdown">
         <section v-for="group in project.roleBreakdown" :key="group.title">
           <h3>{{ group.title }}</h3>
           <ul>
-            <li v-for="item in group.items" :key="item">{{ item }}</li>
+            <li
+              v-for="item in group.items"
+              :key="item"
+              v-html="highlightPortfolioText(item)"
+            ></li>
           </ul>
         </section>
       </div>
       <ul v-else>
-        <li v-for="item in project.roleDetails" :key="item">{{ item }}</li>
+        <li
+          v-for="item in project.roleDetails"
+          :key="item"
+          v-html="highlightPortfolioText(item)"
+        ></li>
       </ul>
     </article>
 
     <article class="detail-section">
       <h2>Problem</h2>
       <ul>
-        <li v-for="item in project.problem" :key="item">{{ item }}</li>
+        <li
+          v-for="item in project.problem"
+          :key="item"
+          v-html="highlightPortfolioText(item)"
+        ></li>
       </ul>
     </article>
 
@@ -140,15 +168,15 @@ function highlightedSwiftLines(code: string) {
           <dl class="pdr-list">
             <div>
               <dt>Problem</dt>
-              <dd>{{ story.problem }}</dd>
+              <dd v-html="highlightPortfolioText(story.problem)"></dd>
             </div>
             <div>
               <dt>Decision</dt>
-              <dd>{{ story.decision }}</dd>
+              <dd v-html="highlightPortfolioText(story.decision)"></dd>
             </div>
             <div>
               <dt>Result</dt>
-              <dd>{{ story.result }}</dd>
+              <dd v-html="highlightPortfolioText(story.result)"></dd>
             </div>
           </dl>
           <figure v-if="story.image" class="decision-story-image">
@@ -186,22 +214,16 @@ function highlightedSwiftLines(code: string) {
     <article v-if="project.relatedWriting" class="detail-section related-writing-section">
       <h2>Related Writing</h2>
       <h3>{{ project.relatedWriting.title }}</h3>
-      <p>{{ project.relatedWriting.description }}</p>
+      <p v-html="highlightPortfolioText(project.relatedWriting.description)"></p>
       <div class="section-link-list">
         <a
           :href="project.relatedWriting.link.href"
           target="_blank"
           rel="noreferrer"
         >
-          <span>Blog</span>
           {{ project.relatedWriting.link.label }}
         </a>
       </div>
-    </article>
-
-    <article v-if="productScreenshots.length" class="detail-section media-section">
-      <h2>Screenshots</h2>
-      <ImageCarousel :images="productScreenshots" />
     </article>
 
     <article v-if="performanceScreenshots.length" class="detail-section media-section">
@@ -234,7 +256,11 @@ function highlightedSwiftLines(code: string) {
     >
       <h2>{{ section.title }}</h2>
       <ul>
-        <li v-for="item in section.items" :key="item">{{ item }}</li>
+        <li
+          v-for="item in section.items"
+          :key="item"
+          v-html="highlightPortfolioText(item)"
+        ></li>
       </ul>
       <div v-if="section.links?.length" class="section-link-list">
         <a

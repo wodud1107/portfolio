@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import type { Project } from '../data/projects';
+import { highlightPortfolioText } from '../utils/highlightText';
 import ImageCarousel from './ImageCarousel.vue';
 
 const props = defineProps<{
@@ -11,7 +12,7 @@ const props = defineProps<{
 
 const route = useRoute();
 const previewScreenshots = computed(() =>
-  props.project.screenshots?.filter((screenshot) => screenshot.group !== 'performance').slice(0, 4) ?? [],
+  props.project.screenshots?.filter((screenshot) => screenshot.group !== 'performance').slice(0, 5) ?? [],
 );
 const flow = computed(() => {
   const story = props.project.decisionStories?.[0];
@@ -36,7 +37,7 @@ const detailRoute = computed(() => ({
       <span>{{ project.period }}</span>
     </div>
     <h3>{{ project.name }}</h3>
-    <p>{{ project.summary }}</p>
+    <p v-html="highlightPortfolioText(project.summary)"></p>
     <ImageCarousel v-if="previewScreenshots.length" :images="previewScreenshots" compact />
     <dl class="meta-list">
       <div>
@@ -47,15 +48,15 @@ const detailRoute = computed(() => ({
     <div class="project-flow">
       <section>
         <span>Problem</span>
-        <p>{{ flow.problem }}</p>
+        <p v-html="highlightPortfolioText(flow.problem)"></p>
       </section>
       <section>
         <span>Decision</span>
-        <p>{{ flow.decision }}</p>
+        <p v-html="highlightPortfolioText(flow.decision)"></p>
       </section>
       <section>
         <span>Result</span>
-        <p>{{ flow.result }}</p>
+        <p v-html="highlightPortfolioText(flow.result)"></p>
       </section>
     </div>
     <div class="tag-row" aria-label="프로젝트 태그">

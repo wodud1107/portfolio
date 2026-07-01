@@ -747,6 +747,15 @@ dd {
   margin-bottom: 16px;
 }
 
+.primary-media-section {
+  padding-top: 24px;
+  border-top: 0;
+}
+
+.primary-media-section + .detail-tags {
+  margin-top: 6px;
+}
+
 .section-link-list {
   display: flex;
   flex-wrap: wrap;
@@ -765,22 +774,7 @@ dd {
   font-weight: 900;
 }
 
-.related-writing-section h3 {
-  margin-bottom: 10px;
-}
-
-.related-writing-section p {
-  max-width: 860px;
-  margin: 0;
-  color: #303030;
-  line-height: 1.65;
-  font-weight: 600;
-}
-
 .related-writing-section .section-link-list a {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
   color: #ff5a4a;
   background: #fff3f1;
   border-color: rgba(255, 90, 74, 0.28);
@@ -790,15 +784,15 @@ dd {
   border-color: rgba(255, 90, 74, 0.52);
 }
 
-.related-writing-section .section-link-list span {
-  padding: 3px 6px;
-  color: #ffffff;
-  background: #ff5a4a;
-  border-radius: 999px;
-  font-size: 0.68rem;
-  font-weight: 900;
-  line-height: 1;
-  text-transform: uppercase;
+.related-writing-section h3 {
+  margin-bottom: 10px;
+}
+
+.related-writing-section p {
+  margin: 0;
+  color: #303030;
+  line-height: 1.65;
+  font-weight: 600;
 }
 
 .decision-story-list {
@@ -1298,6 +1292,11 @@ dd {
   font-weight: 900;
 }
 
+.portfolio-emphasis {
+  color: inherit;
+  font-weight: 900;
+}
+
 .print-section ul {
   padding-left: 18px;
   margin: 10px 0 0;
@@ -1356,6 +1355,12 @@ dd {
   border-color: rgba(0, 87, 255, 0.2);
 }
 
+.print-related-writing .print-link-list a {
+  color: #ff5a4a;
+  background: #fff3f1;
+  border-color: rgba(255, 90, 74, 0.28);
+}
+
 .print-stack-list span:nth-child(3n + 1) {
   border-color: rgba(0, 87, 255, 0.28);
 }
@@ -1375,9 +1380,18 @@ dd {
 }
 
 .print-project-header {
-  padding-bottom: 18px;
+  padding-bottom: 10px;
   break-after: avoid;
   page-break-after: avoid;
+}
+
+.print-project-header p {
+  margin: 0;
+}
+
+.print-project-header p:not(.eyebrow) {
+  padding-bottom: 0;
+  line-height: 1.45;
 }
 
 .print-project-header dl,
@@ -1416,6 +1430,8 @@ dd {
 }
 
 .print-story {
+  break-inside: avoid;
+  page-break-inside: avoid;
   padding: 16px;
   margin-top: 12px;
   background: #ffffff;
@@ -1424,9 +1440,16 @@ dd {
 }
 
 .print-story h4 {
+  break-after: avoid;
+  page-break-after: avoid;
   margin: 0;
   color: var(--accent);
   font-size: 1.06rem;
+}
+
+.print-pdr-list div {
+  break-inside: avoid;
+  page-break-inside: avoid;
 }
 
 .print-role-breakdown {
@@ -1504,13 +1527,22 @@ dd {
 }
 
 .print-code-block code {
-  display: grid;
+  display: block;
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
 .print-code-block .swift-code-line {
+  display: grid;
   grid-template-columns: 30px minmax(0, 1fr);
   padding: 0 8px 0 0;
+}
+
+.print-project[data-project="puzzole"] .print-code-block,
+.print-project[data-project="puzzole"] .print-code-block pre,
+.print-project[data-project="puzzole"] .print-code-block code,
+.print-project[data-project="puzzole"] .print-code-block .swift-code-line {
+  break-inside: auto;
+  page-break-inside: auto;
 }
 
 .print-code-block .swift-code-line.core-line {
@@ -1634,6 +1666,8 @@ dd {
 }
 
 .print-media-card {
+  break-inside: avoid;
+  page-break-inside: avoid;
   overflow: hidden;
   margin: 0;
   background: #ffffff;
@@ -1661,6 +1695,50 @@ dd {
 .print-media-card figcaption ul {
   padding-left: 16px;
   margin-top: 6px;
+}
+
+.print-project[data-project="puzzole"] .print-section ul,
+.print-project[data-project="puzzole"] .print-pdr-list dd {
+  line-height: 1.86;
+}
+
+.print-project[data-project="puzzole"] .print-section li {
+  margin-top: 8px;
+  line-height: 1.86;
+}
+
+.print-project[data-project="puzzole"] .print-section li:first-child {
+  margin-top: 0;
+}
+
+.print-project[data-project="puzzole"] .print-story {
+  break-inside: auto;
+  page-break-inside: auto;
+  padding: 20px;
+}
+
+.print-project[data-project="puzzole"] .print-code-block p {
+  line-height: 1.58;
+}
+
+.print-related-card {
+  padding: 12px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.print-related-card h4 {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+.print-related-card p {
+  margin: 0;
+  color: #303030;
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 @media (max-width: 860px) {
@@ -1852,7 +1930,7 @@ body:has(.print-page) main {
 }
 
 .print-section {
-  padding: 5mm 0 0;
+  padding: 5.5mm 0 0;
   border-top: 1px solid var(--line);
 }
 
@@ -1910,8 +1988,8 @@ body:has(.print-page) main {
 
 .print-strength-list li {
   color: #303030;
-  font-size: 8.5pt;
-  line-height: 1.5;
+  font-size: 8.7pt;
+  line-height: 1.55;
   font-weight: 500;
   padding: 1.2mm;
   word-break: keep-all;
@@ -1973,7 +2051,7 @@ body:has(.print-page) main {
 
   .print-section ul {
     margin-top: 2.4mm;
-    line-height: 1.42;
+    line-height: 1.48;
   }
 
   .print-featured-summary {
@@ -2023,6 +2101,10 @@ body:has(.print-page) main {
     padding-top: 0;
   }
 
+  .print-project-header {
+    padding-bottom: 1.2mm;
+  }
+
   .print-project-header h2,
   .print-section h2 {
     font-size: 17pt;
@@ -2033,18 +2115,20 @@ body:has(.print-page) main {
   }
 
   .print-story {
-    padding: 3.2mm;
-    margin-top: 3mm;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    padding: 3.8mm;
+    margin-top: 3.4mm;
     background: #ffffff;
     border: 1px solid var(--line);
   }
 
   .print-story h4 {
-    font-size: 10.6pt;
+    font-size: 10.8pt;
   }
 
   .print-pdr-list {
-    gap: 2mm;
+    gap: 2.3mm;
     margin-top: 3mm;
   }
 
@@ -2058,9 +2142,30 @@ body:has(.print-page) main {
   }
 
   .print-pdr-list dd {
-    font-size: 8.5pt;
-    line-height: 1.34;
+    font-size: 8.7pt;
+    line-height: 1.42;
     font-weight: 520;
+    word-break: keep-all;
+  }
+
+  .print-project[data-project="puzzole"] .print-section ul {
+    line-height: 1.68;
+  }
+
+  .print-project[data-project="puzzole"] .print-section li {
+    margin-top: 2.1mm;
+    line-height: 1.68;
+  }
+
+  .print-project[data-project="puzzole"] .print-role-breakdown li,
+  .print-project[data-project="puzzole"] .print-pdr-list dd {
+    line-height: 1.62;
+  }
+
+  .print-project[data-project="puzzole"] .print-story {
+    break-inside: auto;
+    page-break-inside: auto;
+    padding: 4.8mm;
   }
 
   .print-code-list {
@@ -2075,7 +2180,7 @@ body:has(.print-page) main {
   }
 
   .print-code-block {
-    padding: 2.6mm;
+    padding: 3mm;
   }
 
   .print-code-block h5 {
@@ -2084,8 +2189,8 @@ body:has(.print-page) main {
 
   .print-code-block p {
     margin-bottom: 2mm;
-    font-size: 7.3pt;
-    line-height: 1.32;
+    font-size: 7.6pt;
+    line-height: 1.38;
   }
 
   .print-diagram-card {
@@ -2178,8 +2283,8 @@ body:has(.print-page) main {
   }
 
   .print-code-block pre {
-    font-size: 6.25pt;
-    line-height: 1.28;
+    font-size: 6.8pt;
+    line-height: 1.32;
   }
 
   a {
