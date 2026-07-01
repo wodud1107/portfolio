@@ -5,6 +5,8 @@ export interface ContactLink {
   note?: string;
 }
 
+export type ContactLabel = 'Email' | 'GitHub' | 'Blog';
+
 export const contactLinks: ContactLink[] = [
   {
     label: 'Email',
@@ -22,3 +24,7 @@ export const contactLinks: ContactLink[] = [
     href: 'https://thinkartic1107.tistory.com/',
   },
 ];
+
+export function findContact(label: ContactLabel) {
+  return contactLinks.find((link) => link.label === label);
+}

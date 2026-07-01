@@ -6,31 +6,18 @@ import ProjectShowcaseSection from '../components/ProjectShowcaseSection.vue';
 import ExperienceSection from '../components/ExperienceSection.vue';
 import CredentialSection from '../components/CredentialSection.vue';
 import CredentialModal from '../components/CredentialModal.vue';
-import type { Credential } from '../types/portfolio';
+import { profileImage } from '../data/profile';
 import { useActiveItem } from '../composables/useActiveItem';
-import { publicAsset } from '../data/assets';
-import { contactLinks } from '../data/contact';
 import { experiences } from '../data/experience';
+import { credentials } from '../data/credentials';
+import { findContact } from '../data/contact';
+import type { Credential } from '../types/portfolio';
 import { featuredProjects, secondaryProjects } from '../data/projects';
 import { stackGroups } from '../data/techStack';
 
-const credentials: Credential[] = [
-  {
-    title: 'Naver Boostcamp Web·Mobile 10기 iOS 과정',
-    type: '수료증',
-    image: publicAsset('assets/experience/previews/boostcamp.jpg'),
-  },
-  {
-    title: 'SQLD',
-    type: '자격증',
-    image: publicAsset('assets/experience/previews/sqld.jpg'),
-  },
-];
-
-const email = contactLinks.find((link) => link.label === 'Email');
-const github = contactLinks.find((link) => link.label === 'GitHub');
-const blog = contactLinks.find((link) => link.label === 'Blog');
-const profileImage = publicAsset('assets/profile.jpeg');
+const email = findContact('Email')
+const github = findContact('GitHub')
+const blog = findContact('Blog');
 const {
   activeItem: activeCredential,
   openItem: openCredential,
