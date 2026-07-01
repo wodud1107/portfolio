@@ -1100,75 +1100,10 @@ final class MiniMapUIView: UIView {
       },
     ],
   },
-  {
-    slug: "gpio-rsp",
-    name: "GPIO RSP",
-    summary:
-      "라즈베리파이 GPIO 2비트 통신으로 구현한 가위바위보 시스템 프로젝트",
-    role: "System Programming Developer",
-    period: "2025",
-    status: "Coursework",
-    featured: false,
-    categories: ["System"],
-    tags: ["Academic Project", "Embedded"],
-    keywords: [
-      "Raspberry Pi",
-      "GPIO",
-      "Linux Kernel Module",
-      "Device Driver",
-      "Makefile",
-    ],
-    links: [
-      { label: "GitHub", href: "https://github.com/wodud1107/slow_airdrop" },
-    ],
-    overview: [
-      "GPIO RSP는 라즈베리파이 간 GPIO 2비트 시퀀스 통신으로 가위바위보 게임을 구현한 시스템 프로그래밍 프로젝트입니다.",
-      "커널 모듈 드라이버, 사용자 API, 응용 프로그램, Makefile을 분리해 구조화했습니다.",
-    ],
-    problem: [
-      "GPIO 핀을 직접 다루는 코드는 쇼트 위험과 방향 설정 오류가 발생하기 쉬워 안전한 추상화가 필요했습니다.",
-      "실제 가위바위보처럼 동시 제출을 구현하려면 하드웨어 동기화와 공정성 문제가 함께 발생했습니다.",
-    ],
-    roleDetails: [
-      "GPIO export/unexport, 입력/출력 모드 설정, 2비트 송수신 API를 구성했습니다.",
-      "DATA1, DATA2, CLK, GND 기반 통신과 앱 레벨 게임 흐름을 구현했습니다.",
-    ],
-    decisionStories: [
-      {
-        title: "GPIO 핀 방향 분리",
-        problem:
-          "GPIO 핀을 직접 연결하는 프로젝트에서는 Output끼리 연결되는 쇼트 위험과 방향 설정 오류가 가장 먼저 관리해야 할 리스크였습니다.",
-        decision:
-          "송신과 수신 역할을 명확히 나누고, 드라이버/API 계층에서 입력/출력 모드 설정을 분리했습니다.",
-        result:
-          "하드웨어 연결 위험을 낮추면서 사용자 앱에서는 send/recv 흐름만 다루도록 추상화할 수 있었습니다.",
-      },
-      {
-        title: "동시 제출 대신 순차 제출 MVP",
-        problem:
-          "실제 가위바위보처럼 동시 제출을 구현하려면 READY/SYNC 핀, 타이밍, 공정성 검증이 필요해 MVP 범위를 크게 넘었습니다.",
-        decision:
-          "초기 버전에서는 단방향 순차 제출을 선택하고, 안정적인 2비트 송수신과 결과 판정에 집중했습니다.",
-        result:
-          "제한된 범위 안에서 GPIO 통신, 커널 모듈, 사용자 API, 앱 판정 흐름을 끝까지 연결할 수 있었습니다.",
-      },
-      {
-        title: "드라이버/API/앱 계층 분리",
-        problem:
-          "GPIO 제어 코드가 앱 로직에 섞이면 테스트와 디버깅이 어려워지고, 어떤 계층에서 문제가 났는지 추적하기 힘들었습니다.",
-        decision:
-          "커널 모듈, 사용자 API, 응용 프로그램, Makefile을 분리해 시스템 계층별 책임을 드러냈습니다.",
-        result:
-          "모바일 프로젝트 외에도 OS/하드웨어 경계의 기본기를 실제 프로젝트 구조로 설명할 수 있게 됐습니다.",
-      },
-    ],
-  },
 ];
 
 export const featuredProjects = projects.filter((project) => project.featured);
-export const secondaryProjects = projects.filter(
-  (project) => !project.featured,
-);
+export const secondaryProjects = projects.filter((project) => !project.featured);
 
 export function findProjectBySlug(slug: string) {
   return projects.find((project) => project.slug === slug);
