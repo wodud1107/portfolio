@@ -1,14 +1,12 @@
 <script setup lang="ts">
+import type { Credential } from '../types/portfolio';
+
 defineProps<{
-    credential: {
-        title: string;
-        type: string;
-        image: string;
-    };
+  credential: Credential;
 }>();
 
 defineEmits<{
-    close: [];
+  close: [];
 }>();
 </script>
 

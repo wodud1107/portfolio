@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted } from 'vue';
 import HomeHeroSection from '../components/HomeHeroSection.vue';
+import TechStackSection from '../components/TechStackSection.vue';
+import ProjectShowcaseSection from '../components/ProjectShowcaseSection.vue';
+import ExperienceSection from '../components/ExperienceSection.vue';
+import CredentialSection from '../components/CredentialSection.vue';
 import CredentialModal from '../components/CredentialModal.vue';
+import type { Credential } from '../types/portfolio';
 import { useActiveItem } from '../composables/useActiveItem';
-import ProjectCard from '../components/ProjectCard.vue';
 import { publicAsset } from '../data/assets';
 import { contactLinks } from '../data/contact';
 import { experiences } from '../data/experience';
 import { featuredProjects, secondaryProjects } from '../data/projects';
 import { stackGroups } from '../data/techStack';
 
-const credentials = [
+const credentials: Credential[] = [
   {
     title: 'Naver Boostcamp Web·Mobile 10기 iOS 과정',
     type: '수료증',
@@ -22,8 +26,6 @@ const credentials = [
     image: publicAsset('assets/experience/previews/sqld.jpg'),
   },
 ];
-
-type Credential = (typeof credentials)[number];
 
 const email = contactLinks.find((link) => link.label === 'Email');
 const github = contactLinks.find((link) => link.label === 'GitHub');
@@ -53,96 +55,19 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown));
     :blog="blog"
   />
 
-  <section id="tech" class="section">
-    <div class="section-heading compact-heading">
-      <p class="eyebrow">Tech Stack</p>
-      <h2>프로젝트에서 사용한 기술</h2>
-    </div>
-    <div class="stack-grid">
-      <article v-for="group in stackGroups" :key="group.title" class="stack-group">
-        <h3>{{ group.title }}</h3>
-        <div class="stack-list">
-          <span v-for="item in group.items" :key="item">{{ item }}</span>
-        </div>
-      </article>
-    </div>
-  </section>
+  <TechStackSection :stack-groups="stackGroups" />
 
-  <section id="projects" class="section">
-    <div class="section-heading inline-heading">
-      <div>
-        <p class="eyebrow">Selected Projects</p>
-        <h2>대표 프로젝트</h2>
-      </div>
-      <RouterLink class="text-link" to="/projects">전체 프로젝트 보기</RouterLink>
-    </div>
-    <div class="project-grid two-column">
-      <ProjectCard v-for="project in featuredProjects" :key="project.slug" :project="project" />
-    </div>
-  </section>
+  <ProjectShowcaseSection
+    :featured-projects="featuredProjects"
+    :secondary-projects="secondaryProjects"
+  />
 
-  <section class="section compact-section">
-    <div class="section-heading">
-      <p class="eyebrow">Additional Projects</p>
-      <h2>다른 프로젝트</h2>
-    </div>
-    <div class="project-grid">
-      <ProjectCard
-        v-for="project in secondaryProjects"
-        :key="project.slug"
-        :project="project"
-        compact
-      />
-    </div>
-  </section>
+  <ExperienceSection :experiences="experiences" :blog="blog" />
 
-  <section id="experience" class="section">
-    <div class="section-heading inline-heading">
-      <div>
-        <p class="eyebrow">Experience</p>
-        <h2>경험과 활동</h2>
-      </div>
-      <a v-if="blog?.href" class="text-link" :href="blog.href" target="_blank" rel="noreferrer">
-        블로그 보기
-      </a>
-    </div>
-
-    <div class="timeline">
-      <article v-for="item in experiences" :key="item.title" class="timeline-item">
-        <p class="timeline-period">{{ item.period }}</p>
-        <div>
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.description }}</p>
-          <ul>
-            <li v-for="point in item.points" :key="point">{{ point }}</li>
-          </ul>
-          <div class="tag-row">
-            <span v-for="tag in item.tags" :key="tag">{{ tag }}</span>
-          </div>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <section class="section compact-section">
-    <div class="section-heading">
-      <p class="eyebrow">Credentials</p>
-      <h2>자격증 및 수료 자료</h2>
-    </div>
-    <div class="credential-grid">
-      <button
-        v-for="credential in credentials"
-        :key="credential.title"
-        class="credential-card"
-        type="button"
-        @click="openCredential(credential)"
-      >
-        <img :src="credential.image" :alt="`${credential.title} 미리보기`" loading="lazy" />
-        <span>{{ credential.type }}</span>
-        <strong>{{ credential.title }}</strong>
-      </button>
-    </div>
-  </section>
+  <CredentialSection
+    :credentials="credentials"
+    @select-credential="openCredential"
+  />
 
   <CredentialModal
     v-if="activeCredential"

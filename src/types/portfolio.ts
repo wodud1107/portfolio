@@ -89,3 +89,9 @@ export interface Project {
     relatedWriting?: ProjectRelatedWriting;
     extraSections?: ProjectDetailSection[];
 }
+
+export interface Credential {
+  title: string;
+  type: string;
+  image: string;
+}
