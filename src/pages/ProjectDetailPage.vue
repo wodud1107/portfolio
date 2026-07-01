@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useRoute } from 'vue-router';
+import CodeSnippetModal from '../components/CodeSnippetModal.vue';
+import { useActiveItem } from '../composables/useActiveItem';
 import ImageCarousel from '../components/ImageCarousel.vue';
 import { findProjectBySlug } from '../data/projects';
 import type { ProjectCodeSnippet, ProjectDecisionStory } from '../data/projects';
 import { highlightPortfolioText } from '../utils/highlightText';
-import { highlightedSwiftLines } from '../utils/swiftHighlight';
 import {
   getPerformanceScreenshots,
   getProductScreenshots,
@@ -15,25 +16,21 @@ import {
 
 const route = useRoute();
 const project = computed(() => findProjectBySlug(String(route.params.slug)));
-const activeSnippet = ref<ProjectCodeSnippet | null>(null);
 const backLink = computed(() =>
-  route.query.from === 'home'
-    ? { to: { name: 'home', hash: '#projects' }, label: '← 홈으로 돌아가기' }
-    : { to: { name: 'projects' }, label: '← 프로젝트 목록으로 돌아가기' },
+route.query.from === 'home'
+? { to: { name: 'home', hash: '#projects' }, label: '← 홈으로 돌아가기' }
+: { to: { name: 'projects' }, label: '← 프로젝트 목록으로 돌아가기' },
 );
 const productScreenshots = computed(() => getProductScreenshots(project.value));
 const performanceScreenshots = computed(() => getPerformanceScreenshots(project.value));
+const {
+  activeItem: activeSnippet,
+  openItem: openSnippet,
+  closeItem: closeSnippet,
+} = useActiveItem<ProjectCodeSnippet>();
 
 function snippetForStory(story: ProjectDecisionStory, fallbackIndex: number) {
   return getSnippetForStory(project.value, story, fallbackIndex);
-}
-
-function openSnippet(snippet?: ProjectCodeSnippet) {
-  if (snippet) activeSnippet.value = snippet;
-}
-
-function closeSnippet() {
-  activeSnippet.value = null;
 }
 
 function roleSectionTitle() {
@@ -263,30 +260,9 @@ function roleSectionTitle() {
     <RouterLink class="text-link" to="/projects">프로젝트 목록으로 돌아가기</RouterLink>
   </section>
 
-  <Teleport to="body">
-    <div
-      v-if="activeSnippet"
-      class="code-modal"
-      role="dialog"
-      aria-modal="true"
-      :aria-label="`${activeSnippet.title} 코드 보기`"
-      tabindex="-1"
-      @keydown.esc="closeSnippet"
-    >
-      <button class="modal-backdrop" type="button" aria-label="코드 닫기" @click="closeSnippet" />
-      <section class="code-modal-panel">
-        <button class="modal-close" type="button" aria-label="닫기" @click="closeSnippet">×</button>
-        <h2>{{ activeSnippet.title }}</h2>
-        <p>{{ activeSnippet.description }}</p>
-        <pre class="swift-code-block"><code>
-          <span
-            v-for="line in highlightedSwiftLines(activeSnippet.code)"
-            :key="line.index"
-            class="swift-code-line"
-            :class="{ 'core-line': line.core }"
-          ><span class="line-number">{{ line.index + 1 }}</span><span class="line-content" v-html="line.html || ' '"></span></span>
-        </code></pre>
-      </section>
-    </div>
-  </Teleport>
+  <CodeSnippetModal
+    v-if="activeSnippet"
+    :snippet="activeSnippet"
+    @close="closeSnippet"
+  />
 </template>
