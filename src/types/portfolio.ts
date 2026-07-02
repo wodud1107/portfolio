@@ -47,6 +47,7 @@ export interface ProjectDecisionStory {
     problem: string;
     decision: string;
     result: string;
+    collaborationNote?: string;
     image?: {
         src: string;
         alt: string;

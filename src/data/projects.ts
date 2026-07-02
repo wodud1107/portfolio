@@ -194,6 +194,8 @@ export const projects: Project[] = [
           "SwiftData와 Repository 계층으로 로컬 상태를 먼저 방출하고, 연속 상태 변화는 AsyncStream으로 전달하도록 흐름을 분리했습니다.",
         result:
           "서버 응답, 로컬 캐시, 화면 상태가 Repository 중심의 한 방향 흐름으로 정리되면서, ViewModel과 SwiftUI View가 일관된 상태를 구독할 수 있었습니다.",
+        collaborationNote:
+          "AsyncStream 도입 과정에서는 팀의 기존 Combine 흐름을 모두 바꾸기보다, 적용 기준을 먼저 제안하고 리뷰를 통해 합의했습니다. 실시간 감지처럼 기존 Combine 구조가 적합한 영역은 유지하고, 로컬 캐시를 먼저 방출한 뒤 네트워크 응답을 순차적으로 이어 전달해야 하는 Data 계층 흐름에만 AsyncStream을 적용했습니다. 이를 통해 기술 일관성을 해치지 않으면서도, 해당 PR에서는 비동기 데이터 흐름의 의도와 가독성을 높일 수 있었습니다.",
         image: {
           src: publicAsset("assets/damago/Local First 파이프라인.png"),
           alt: "Damago Local-First 상태 동기화 파이프라인",

@@ -819,6 +819,11 @@ dd {
   gap: 14px;
 }
 
+.pdr-list .collaboration-note-row {
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
 .pdr-list dd {
   color: #303030;
   line-height: 1.65;
@@ -1408,6 +1413,11 @@ dd {
   gap: 12px;
 }
 
+.print-pdr-list .collaboration-note-row {
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+
 .print-pdr-list dt {
   justify-self: start;
   color: var(--accent);
@@ -1455,6 +1465,10 @@ dd {
 .print-role-breakdown {
   display: grid;
   gap: 10px;
+}
+
+.print-role-breakdown + .print-performance-table {
+  margin-top: 12px;
 }
 
 .print-role-breakdown article,
@@ -2063,6 +2077,10 @@ body:has(.print-page) main {
     gap: 3mm;
   }
 
+  .print-role-breakdown + .print-performance-table {
+    margin-top: 3mm;
+  }
+
   .print-role-breakdown article {
     padding: 3mm;
   }
@@ -2135,6 +2153,11 @@ body:has(.print-page) main {
   .print-pdr-list div {
     grid-template-columns: 22mm minmax(0, 1fr);
     gap: 3mm;
+  }
+
+  .print-pdr-list .collaboration-note-row {
+    grid-template-columns: 1fr;
+    gap: 1mm;
   }
 
   .print-pdr-list dt {

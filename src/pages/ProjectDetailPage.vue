@@ -140,6 +140,10 @@ function roleSectionTitle() {
               <dt>Result</dt>
               <dd v-html="highlightPortfolioText(story.result)"></dd>
             </div>
+            <div v-if="story.collaborationNote" class="collaboration-note-row">
+              <dt>Collaboration Note</dt>
+              <dd v-html="highlightPortfolioText(story.collaborationNote)"></dd>
+            </div>
           </dl>
           <figure v-if="story.image" class="decision-story-image">
             <img :src="story.image.src" :alt="story.image.alt" loading="lazy" />

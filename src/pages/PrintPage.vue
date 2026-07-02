@@ -696,6 +696,27 @@ function highlightedSwiftLines(code: string) {
             v-html="highlightPortfolioText(item)"
           ></li>
         </ul>
+        <table
+          v-if="section.includePerformanceImages && section.project.slug === 'damago'"
+          class="print-performance-table"
+        >
+          <thead>
+            <tr>
+              <th>구분</th>
+              <th>Core Animation Commits</th>
+              <th>GPU Hitch</th>
+              <th>적용 여부</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="row in damagoPerformanceRows" :key="row.label">
+              <th>{{ row.label }}</th>
+              <td>{{ row.commits }}</td>
+              <td>{{ row.hitch }}</td>
+              <td>{{ row.status }}</td>
+            </tr>
+          </tbody>
+        </table>
       </section>
 
       <section v-if="section.summaryProjects?.length" class="print-section">
@@ -766,6 +787,10 @@ function highlightedSwiftLines(code: string) {
                   highlightPortfolioText(printStoryResult(section.project, story))
                 "
               ></dd>
+            </div>
+            <div v-if="story.collaborationNote" class="collaboration-note-row">
+              <dt>Collaboration Note</dt>
+              <dd v-html="highlightPortfolioText(story.collaborationNote)"></dd>
             </div>
           </dl>
           <div v-if="story.links?.length" class="print-link-list">
@@ -862,27 +887,6 @@ function highlightedSwiftLines(code: string) {
         class="print-section"
       >
         <h3>Performance Evidence</h3>
-        <table
-          v-if="section.project.slug === 'damago'"
-          class="print-performance-table"
-        >
-          <thead>
-            <tr>
-              <th>구분</th>
-              <th>Core Animation Commits</th>
-              <th>GPU Hitch</th>
-              <th>적용 여부</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in damagoPerformanceRows" :key="row.label">
-              <th>{{ row.label }}</th>
-              <td>{{ row.commits }}</td>
-              <td>{{ row.hitch }}</td>
-              <td>{{ row.status }}</td>
-            </tr>
-          </tbody>
-        </table>
         <div class="print-image-grid print-performance-grid">
           <figure
             v-for="screenshot in performanceScreenshotsForPrint(
