@@ -50,10 +50,14 @@ interface PrintCopy {
   }[];
 }
 
+type PrintVariant = "ios" | "general" | "android";
+
 const route = useRoute();
-const variant = computed(() =>
-  route.params.variant === "general" ? "general" : "ios",
-);
+const variant = computed<PrintVariant>(() => {
+  if (route.params.variant === "general") return "general";
+  if (route.params.variant === "android") return "android";
+  return "ios";
+});
 
 const contactOrder = ["GitHub", "Email", "Blog"];
 const contacts = contactOrder
@@ -64,22 +68,22 @@ const contacts = contactOrder
 
 const profileImage = publicAsset("assets/profile.jpeg");
 
-const printCopies: Record<"ios" | "general", PrintCopy> = {
+const printCopies: Record<PrintVariant, PrintCopy> = {
   ios: {
     introParagraphs: [
-      "iOS 앱에서 사용자가 직접 마주치는 상태 지연, 화면 끊김, 알림 신뢰성 문제를 줄이는 데 집중해온 개발자입니다. Damago에서는 출시 앱의 상태 동기화, 렌더링 성능, 운영 안정성을 다뤘고, Puzzole에서는 개인 프로젝트로 앱 흐름과 퍼즐 도메인 경계를 설계했습니다.",
-      "좋은 구현보다 먼저 좋은 문제 정의가 필요하다고 생각합니다. 측정 가능한 근거와 유지보수 가능한 경계를 함께 보며, 선택한 이유가 다음 개발자에게도 이어지도록 의사결정 과정을 문서와 PR에 남기는 방식을 지향합니다.",
+      "iOS 앱에서 사용자가 직접 마주치는 상태 지연, 화면 끊김, 알림 신뢰성 문제를 줄이는 데 집중해온 개발자입니다. Damago에서는 출시 앱의 상태 동기화, 렌더링 성능, 운영 안정성을 다뤘고, Puzzole에서는 개인 프로젝트로 앱 흐름과 퍼즐 규칙, 입력 경계를 설계했습니다.",
+      "좋은 구현은 좋은 문제 정의에서 시작한다고 생각합니다. 측정 가능한 근거와 유지보수 가능한 경계를 함께 보고, 선택한 이유가 다음 개발자에게도 이어지도록 PR과 문서에 의사결정 과정을 남기는 방식을 지향합니다.",
     ],
     strengths: [
       {
         title: "상태 동기화 설계",
         description:
-          "SwiftData 로컬 캐시, 서버 API 응답, AsyncStream으로 연결해 끊김 없는 화면 상태 흐름을 구현했습니다.",
+          "SwiftData 로컬 캐시, 서버 API 응답, AsyncStream을 연결해 화면 진입 시 로컬 상태를 먼저 제공하는 흐름을 구현했습니다.",
       },
       {
         title: "성능 측정 기반 개선",
         description:
-          "Instruments로 Core Animation Commit과 GPU Hitch를 측정하고 수치와 유지보수성을 함께 비교했습니다.",
+          "Instruments로 Core Animation Commit과 GPU Hitch를 측정하고, 성능 개선 폭과 유지보수성을 함께 비교했습니다.",
       },
       {
         title: "출시 후 안정성 대응",
@@ -90,8 +94,8 @@ const printCopies: Record<"ios" | "general", PrintCopy> = {
   },
   general: {
     introParagraphs: [
-      "앱 개발을 출발점으로 사용자 흐름, 데이터 흐름, 배포 환경을 함께 보며 제품 문제를 좁혀가는 개발자입니다. iOS 실서비스 경험을 기반으로 Vapor API, DB migration, Vue SPA 배포까지 직접 연결해보며 클라이언트 밖의 경계도 이해하려고 했습니다.",
-      "빠르게 만드는 것과 오래 가져가는 것 사이의 균형을 중요하게 봅니다. MVP에서 남길 것과 덜어낼 것을 구분하고, 문제-선택-결과가 드러나는 기록을 통해 협업자가 같은 맥락에서 다음 개선을 이어갈 수 있게 만드는 개발 방식을 지향합니다.",
+      "앱 개발을 출발점으로 사용자 흐름, 데이터 흐름, 배포 환경을 함께 보며 제품 문제를 좁혀가는 개발자입니다. iOS 실서비스 경험을 기반으로 Android MVP 확장, Vapor API, DB migration, Vue SPA 배포까지 직접 연결해보며 기술 경계가 바뀔 때 책임을 어떻게 나눌지 고민해왔습니다.",
+      "빠르게 만드는 것과 오래 가져가는 것 사이의 균형을 중요하게 봅니다. MVP에서는 먼저 닫아야 할 흐름과 이후로 미룰 확장 범위를 구분하고, 문제-선택-결과가 드러나는 기록을 남겨 다음 개선이 같은 맥락에서 이어질 수 있도록 합니다.",
     ],
     strengths: [
       {
@@ -105,9 +109,32 @@ const printCopies: Record<"ios" | "general", PrintCopy> = {
           "iOS 앱뿐 아니라 Vapor REST API, DB migration, CSV import처럼 데이터가 제품 화면까지 이어지는 흐름을 직접 구성했습니다.",
       },
       {
-        title: "프론트엔드 배포 경계",
+        title: "플랫폼·배포 경계 확장",
         description:
-          "Vue SPA의 GitHub Pages 배포 구조와 라우팅 fallback을 정리하며, 정적 배포 환경에서 사용자 접근 경로가 깨지지 않도록 구성했습니다.",
+          "iOS 제품 구조를 Android MVP로 확장하고, Vue SPA의 GitHub Pages 배포 구조를 정리하며 기술 환경이 달라질 때 책임을 나누는 방식을 검증했습니다.",
+      },
+    ],
+  },
+  android: {
+    introParagraphs: [
+      "iOS 앱 개발 경험을 바탕으로, 기존 제품의 핵심 규칙과 데이터를 Android 환경에서 다시 검증해본 개발자입니다. Puzzole Android MVP에서는 Kotlin과 Jetpack Compose로 작은 기능 흐름을 먼저 닫고, 이후 ViewModel/StateFlow, suspend Repository, Canvas 입력 구조를 단계적으로 보강했습니다.",
+      "낯선 플랫폼을 빠르게 따라 하기보다, 기능을 작게 나누고 각 단계의 책임과 검증 기준을 먼저 세우는 방식을 선호합니다. 이번 Android 확장에서는 화면 구현보다 규칙, 데이터 로딩, 상태 관리, 입력 처리의 경계를 분리하는 데 집중했습니다.",
+    ],
+    strengths: [
+      {
+        title: "플랫폼 확장 설계",
+        description:
+          "iOS Puzzole의 핵심 규칙과 스테이지 데이터를 Kotlin/Compose 환경에서 다시 검증하며, 플랫폼별로 달라지는 책임과 유지할 수 있는 규칙을 나눴습니다.",
+      },
+      {
+        title: "상태 관리와 데이터 로딩 경계",
+        description:
+          "ViewModel/StateFlow와 suspend Repository를 적용해 화면 상태와 데이터 로딩 책임을 분리했습니다.",
+      },
+      {
+        title: "테스트 가능한 입력 구조",
+        description:
+          "Canvas 기반 보드 입력과 좌표 변환을 분리해, 화면 좌표가 퍼즐 칸으로 해석되는 과정을 JVM 테스트 가능한 구조로 정리했습니다.",
       },
     ],
   },
@@ -121,14 +148,17 @@ function projectBySlug(slug: string) {
 
 const damago = projectBySlug("damago");
 const puzzole = projectBySlug("puzzole");
+const puzzoleAndroid = projectBySlug("puzzole-android");
 const csFlashCards = projectBySlug("cs-flashcards");
 const portfolio = projectBySlug("portfolio");
 const wwdcTranslator = projectBySlug("wwdc-translator");
 
 const coreMessage = computed(() =>
   variant.value === "ios"
-    ? "출시된 iOS 앱에서 사용자 체감 문제를 성능, 상태 동기화, 운영 안정성 관점으로 개선한 개발자"
-    : "앱 개발을 중심으로 제품 문제를 구조화하고, 클라이언트·서버·프론트엔드 배포까지 확장해본 개발자",
+    ? "출시 iOS 앱에서 상태 지연, 화면 끊김, 운영 불안정성을 개선해온 개발자"
+    : variant.value === "android"
+      ? "iOS 앱 설계 경험을 Android로 확장하며, Kotlin/Compose 기반 기능 흐름을 구조화해 검증한 개발자"
+      : "앱 개발을 출발점으로 제품 흐름과 기술 경계를 함께 구조화해온 개발자",
 );
 
 const damagoPerformanceRows = [
@@ -164,6 +194,18 @@ const puzzolePrintRoleDetails = [
   "스테이지 생성 도구와 검증 로직으로 정답이 하나인 퍼즐 1000개를 만들고, 앱에서는 카탈로그 로딩부터 플레이·힌트·해금 저장까지 구현했습니다.",
   "SwiftUI 화면과 UIKit 보드 뷰의 역할을 나눠 한 손가락 칠하기, 두 손가락 이동/확대, 미니맵 탐색이 충돌하지 않도록 구성했습니다.",
   "광고·구매·진행 저장이 서로의 흐름을 흔들지 않도록 경계를 분리하고, 서버 확장은 v1 이후 계획으로 남겼습니다.",
+];
+
+const puzzoleAndroidPrintOverview = [
+  "Puzzole Android MVP는 iOS Puzzole의 핵심 규칙과 스테이지 데이터를 Android 환경에서 다시 검증한 확장 프로젝트입니다.",
+  "전면 포팅보다 load → play → validate → complete로 이어지는 작은 기능 흐름을 먼저 닫는 데 집중했습니다.",
+  "출력물에서는 상태 관리, 비동기 데이터 로딩, 보드 입력 검증처럼 Android 지원에서 설명할 핵심 근거만 요약합니다.",
+];
+
+const puzzoleAndroidPrintRoleDetails = [
+  "Kotlin/Compose 기반으로 규칙, 데이터 로딩, 플레이 상태, 화면의 책임을 나눴습니다.",
+  "ViewModel/StateFlow와 suspend Repository로 화면 상태와 데이터 로딩의 경계를 정리했습니다.",
+  "Canvas 기반 보드 입력과 좌표 변환을 분리해 테스트 가능한 구조를 확인했습니다.",
 ];
 
 const puzzolePrintStoryCopy: Record<
@@ -265,6 +307,7 @@ const printSections = computed<PrintSection[]>(() => {
   if (
     !damago ||
     !puzzole ||
+    !puzzoleAndroid ||
     !csFlashCards ||
     !portfolio ||
     !wwdcTranslator
@@ -299,9 +342,21 @@ const printSections = computed<PrintSection[]>(() => {
           "힌트와 완료 판정 기준 통합",
           "서버 없이 동작하는 v1",
         ],
-        printSummary:
-          "대표 개인 프로젝트: 검증된 스테이지 1000개를 앱에 포함하고, 힌트·플레이·진행 저장을 서버 없이 동작하는 iOS 퍼즐 앱 흐름으로 연결했습니다.",
         includeCode: true,
+      },
+      {
+        title: "Puzzole Android MVP - 플랫폼 확장",
+        project: puzzoleAndroid,
+        includeOverview: true,
+        includeRole: true,
+        includeProductImages: true,
+        storyTitles: [
+          "전면 포팅이 아닌 작은 기능 흐름",
+          "퍼즐 규칙과 JSON 경계 분리",
+          "ViewModel과 StateFlow 승격",
+          "suspend Repository 경계",
+          "Canvas 기반 보드 입력 실험",
+        ],
       },
       {
         title: "CS FlashCards - Vapor / REST API / DB Migration",
@@ -325,6 +380,56 @@ const printSections = computed<PrintSection[]>(() => {
           "GitHub Pages SPA 경로 대응",
         ],
         includeLinks: true,
+      },
+    ];
+  }
+
+  if (variant.value === "android") {
+    return [
+      {
+        title: "Puzzole Android MVP - Android 확장 검증",
+        project: puzzoleAndroid,
+        includeOverview: true,
+        includeRole: true,
+        includeProductImages: true,
+        storyTitles: [
+          "전면 포팅이 아닌 작은 기능 흐름",
+          "퍼즐 규칙과 JSON 경계 분리",
+          "ViewModel과 StateFlow 승격",
+          "suspend Repository 경계",
+          "Canvas 기반 보드 입력 실험",
+        ],
+        printSummary:
+          "iOS Puzzole의 핵심 규칙과 스테이지 데이터를 Android 환경에서 재검증하고, ViewModel/StateFlow·suspend Repository·Canvas 입력을 적용해 load → play → validate → complete 흐름을 단계적으로 보강했습니다.",
+      },
+      {
+        title: "Puzzole - 원본 iOS 제품 설계",
+        project: puzzole,
+        includeOverview: true,
+        includeRole: true,
+        includeProductImages: true,
+        storyTitles: [
+          "정답이 하나인 스테이지 카탈로그",
+          "힌트와 완료 판정 기준 통합",
+          "서버 없이 동작하는 v1",
+        ],
+      },
+      {
+        title: "Damago - 출시 iOS 앱",
+        project: damago,
+        includeOverview: true,
+        includeRole: true,
+        includeProductImages: true,
+        storyTitles: [
+          "Local-First 상태 동기화",
+          "렌더링 병목 개선",
+          "출시 후 크래시 대응",
+        ],
+        includePerformanceImages: true,
+      },
+      {
+        title: "Other Projects",
+        summaryProjects: [csFlashCards, portfolio],
       },
     ];
   }
@@ -363,8 +468,6 @@ const printSections = computed<PrintSection[]>(() => {
         "서버 없이 동작하는 v1",
       ],
       includeCode: true,
-      printSummary:
-        "대표 개인 프로젝트: 검증된 스테이지 1000개를 앱에 포함하고, 힌트·플레이·진행 저장을 서버 없이 동작하는 iOS 퍼즐 앱 흐름으로 연결했습니다.",
       codeIntro:
         "스테이지 검증, 힌트 선택, 로컬 진행 저장 경계를 보여주는 핵심 코드 일부를 발췌했습니다.",
     },
@@ -412,11 +515,13 @@ function printRoleItems(items: string[]) {
 
 function overviewItemsForPrint(project: Project) {
   if (project.slug === "puzzole") return puzzolePrintOverview;
+  if (project.slug === "puzzole-android") return puzzoleAndroidPrintOverview;
   return project.overview;
 }
 
 function roleItemsForPrint(project: Project) {
   if (project.slug === "puzzole") return puzzolePrintRoleDetails;
+  if (project.slug === "puzzole-android") return puzzoleAndroidPrintRoleDetails;
   return project.roleDetails;
 }
 
@@ -535,7 +640,10 @@ function highlightedSwiftLines(code: string) {
 <template>
   <section
     class="print-page"
-    :class="{ 'print-page--general': variant === 'general' }"
+    :class="{
+      'print-page--general': variant === 'general',
+      'print-page--android': variant === 'android',
+    }"
   >
     <div class="print-toolbar no-print">
       <RouterLink class="text-link" to="/">← 홈으로 돌아가기</RouterLink>

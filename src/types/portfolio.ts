@@ -1,9 +1,11 @@
 export const PROJECT_CATEGORIES = [
     'iOS',
+    'Android',
     'Frontend',
     'Backend',
     'Product',
     'Performance',
+    'Architecture',
 ] as const;
 
 export const PROJECT_FILTERS = ['All', ...PROJECT_CATEGORIES] as const;

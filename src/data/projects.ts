@@ -12,7 +12,8 @@ export const projects: Project[] = [
   {
     slug: "damago",
     name: "Damago",
-    summary: "Live Activity와 Dynamic Island를 활용한 커플 소통 iOS 앱",
+    summary:
+      "Local-First 동기화, Live Activity 응답 개선, 렌더링 병목 분석으로 실서비스 iOS 앱의 상태 신뢰성과 체감 성능을 개선한 프로젝트",
     role: "iOS Client Developer",
     period: "2025 - 2026",
     status: "Released",
@@ -74,7 +75,7 @@ export const projects: Project[] = [
       },
     ],
     featuredSummary:
-      "대표 프로젝트: App Store 출시 iOS 앱에서 상태 동기화, 렌더링 성능, 알림 신뢰성, 출시 후 크래시 대응을 담당했습니다.",
+      "App Store 출시 iOS 앱에서 상태 동기화, Live Activity 응답, 렌더링 병목, 출시 후 안정화 대응을 맡았습니다. SwiftData·AsyncStream, ActivityKit, Instruments, CI/CD 자동화를 활용해 화면 상태 흐름과 운영 안정성을 개선했습니다.",
     relatedWriting: {
       title: "SwiftUI Rendering Pipeline",
       description:
@@ -151,7 +152,7 @@ export const projects: Project[] = [
     ],
     overview: [
       "Damago는 커플이 앱을 계속 열지 않아도 잠금화면, Live Activity, Dynamic Island에서 서로의 상태를 확인할 수 있는 iOS 앱입니다.",
-      "팀 프로젝트에서 iOS 클라이언트 개발자로 참여해 화면 상태 동기화, ActivityKit 연동, 렌더링 성능 개선, 출시 후 크래시 대응을 담당했습니다.",
+      "팀 프로젝트에서 iOS 클라이언트 개발자로 참여해 네트워크 지연과 비동기 상태 변화 속에서도 화면, Live Activity, 알림 흐름이 일관되게 이어지도록 상태 동기화와 성능 개선, 출시 안정화 대응을 담당했습니다.",
     ],
     problem: [
       "네트워크 응답을 기다리는 화면 흐름에서는 API 지연이나 실패가 곧바로 빈 상태와 늦은 피드백으로 이어질 수 있었습니다.",
@@ -189,11 +190,11 @@ export const projects: Project[] = [
       {
         title: "Local-First 상태 동기화",
         problem:
-          "네트워크 응답을 기다린 뒤 화면을 갱신하면, API 지연이나 실패가 곧바로 빈 상태와 늦은 피드백으로 이어질 수 있었습니다.",
+          "네트워크 응답을 기다리는 구조에서는 API 지연이나 실패가 빈 상태와 늦은 피드백으로 이어질 수 있었습니다.",
         decision:
-          "SwiftData와 Repository 계층으로 로컬 상태를 먼저 방출하고, 연속 상태 변화는 AsyncStream으로 전달하도록 흐름을 분리했습니다.",
+          "SwiftData 로컬 캐시를 Repository 계층에 연결하고, 서버 응답은 AsyncStream으로 순차 전달하도록 분리했습니다.",
         result:
-          "서버 응답, 로컬 캐시, 화면 상태가 Repository 중심의 한 방향 흐름으로 정리되면서, ViewModel과 SwiftUI View가 일관된 상태를 구독할 수 있었습니다.",
+          "화면 진입 시 로컬 상태를 먼저 제공하고, 서버 응답·로컬 캐시·화면 상태를 한 방향 흐름으로 정리했습니다.",
         collaborationNote:
           "AsyncStream 도입 과정에서는 팀의 기존 Combine 흐름을 모두 바꾸기보다, 적용 기준을 먼저 제안하고 리뷰를 통해 합의했습니다. 실시간 감지처럼 기존 Combine 구조가 적합한 영역은 유지하고, 로컬 캐시를 먼저 방출한 뒤 네트워크 응답을 순차적으로 이어 전달해야 하는 Data 계층 흐름에만 AsyncStream을 적용했습니다. 이를 통해 기술 일관성을 해치지 않으면서도, 해당 PR에서는 비동기 데이터 흐름의 의도와 가독성을 높일 수 있었습니다.",
         image: {
@@ -214,11 +215,11 @@ export const projects: Project[] = [
       {
         title: "렌더링 병목 개선",
         problem:
-          "상태 변화에 비해 화면 갱신 범위가 넓어 Core Animation Commit과 GPU Hitch가 누적되고, 실제 화면 전환에서 체감 성능 저하가 발생했습니다.",
+          "뽑기 애니메이션에서 Core Animation Commit과 GPU Hitch가 누적되어 화면 전환 끊김이 발생했습니다.",
         decision:
-          "Instruments의 Core Animation, Frame Lifetimes, Hitch 트랙을 기준으로 반복 렌더링 지점을 좁혔고, 명령형 애니메이션 실험과 선언형 UI 유지안을 비교했습니다.",
+          "Instruments로 병목을 계측하고, 명령형 애니메이션 실험과 SwiftUI 선언형 최종안을 비교했습니다.",
         result:
-          "실험상 Core Animation Commits 166회, GPU Hitch 1회까지 줄일 수 있었지만, 최종안은 유지보수 가능한 선언형 UI를 유지하며 2,411회/7회 수준으로 개선했습니다.",
+          "실험상 Commits 3,175회→166회, GPU Hitch 10회→1회를 확인했고, 최종안은 유지보수성을 고려해 2,411회/7회 수준으로 개선했습니다.",
         links: [
           {
             label: "PR #341 · CAAnimation 적용 검토",
@@ -233,9 +234,9 @@ export const projects: Project[] = [
       {
         title: "FCM 유실 대응 재시도 구조",
         problem:
-          "푸시 전송이 네트워크나 서버 상태에 따라 실패하면 커플 앱의 핵심 경험인 즉각적인 상호작용이 끊길 수 있었습니다.",
+          "푸시 전송이 네트워크나 서버 상태에 따라 실패하면 커플 앱의 즉각적인 상호작용이 끊길 수 있었습니다.",
         decision:
-          "단순 재요청 대신 서버 측 Cloud Tasks 큐에 실패 작업을 쌓고, 10초, 60초, 300초로 이어지는 지수 백오프 재시도 흐름을 구성했습니다.",
+          "서버 측 Cloud Tasks 큐에 실패 작업을 쌓고, 10초·60초·300초 지수 백오프 재시도 흐름을 구성했습니다.",
         result:
           "일시적인 전송 실패가 곧바로 기능 실패로 이어지지 않도록 만들고, 푸시 유실 가능성을 운영 관점에서 낮췄습니다.",
         links: [
@@ -248,11 +249,11 @@ export const projects: Project[] = [
       {
         title: "CI/CD와 배포 피드백 자동화",
         problem:
-          "수동 빌드와 테스트 확인에 의존하면 출시 직전 결함 확인이 늦어지고, 팀 프로젝트에서 배포 피드백 속도가 떨어질 수 있었습니다.",
+          "수동 빌드와 테스트 확인에 의존하면 출시 직전 결함 확인이 늦어지고 배포 피드백 속도가 떨어질 수 있었습니다.",
         decision:
-          "Fastlane과 GitHub Actions를 연결하고, Swift Testing 결과를 xcdbeautify 로그로 정리해 PR 단계에서 확인할 수 있게 했습니다.",
+          "Fastlane과 GitHub Actions를 연결하고, Swift Testing 결과와 빌드 로그를 xcdbeautify로 정리했습니다.",
         result:
-          "빌드와 테스트 결과를 PR 흐름 안에서 확인하게 되어 배포 전 피드백과 실패 원인 추적이 쉬워졌습니다.",
+          "평균 6분대 피드백 루프를 만들고 잠재 결함 14%를 사전에 차단해, PR 단계의 실패 원인 추적을 쉽게 했습니다.",
         links: [
           {
             label: "PR #344 · CI/CD 구축",
@@ -263,11 +264,11 @@ export const projects: Project[] = [
       {
         title: "출시 후 크래시 대응",
         problem:
-          "설정 탭 진입, 캐릭터 변경, Release 환경 비동기 클로저 생명주기 문제처럼 실제 사용자 흐름에서 크래시가 발생했습니다.",
+          "출시 이후 설정 탭 진입, 캐릭터 변경, Release 환경 비동기 처리처럼 실제 사용자 흐름에서 크래시가 발생했습니다.",
         decision:
           "강제 언래핑을 제거하고 서버 enum 불일치를 도메인 에러로 처리했으며, UI 상태 변경은 @MainActor 경계 안으로 모았습니다.",
         result:
-          "설정 탭 진입 크래시와 enum 불일치 fatalError를 PR로 반영했고, Release 환경에서 재현된 비동기 문제의 원인을 좁혔습니다.",
+          "설정 탭 진입 크래시와 enum 불일치 fatalError를 PR 단위로 수정하고, Release 환경 비동기 문제의 원인을 좁혔습니다.",
         links: [
           {
             label: "PR #348 · 설정 탭 크래시 대응",
@@ -289,7 +290,7 @@ export const projects: Project[] = [
     slug: "puzzole",
     name: "Puzzole",
     summary:
-      "검증된 스테이지 1000개를 앱에 포함하고, 플레이·힌트·진행 저장을 서버 없이 연결한 iOS 퍼즐 앱",
+      "정답이 하나인 스테이지 1000개를 검증해 앱에 포함하고, 힌트·완료 판정·진행 저장을 로컬 우선 구조로 연결한 iOS 퍼즐 앱 MVP",
     role: "Solo iOS / Product Developer",
     period: "2026 - In Progress",
     status: "MVP",
@@ -308,10 +309,12 @@ export const projects: Project[] = [
       "Swift Testing",
     ],
     links: [],
+    featuredSummary:
+      "정답 유일성 검증, 힌트/완료 판정 기준 통합, 로컬 진행 저장을 통해 서버 없이도 일관된 퍼즐 진행 흐름을 구성했습니다. SwiftUI 화면과 UIKit 보드 뷰의 역할을 나눠 칠하기, 이동, 확대/축소, 미니맵 탐색이 충돌하지 않도록 입력 경계를 분리했습니다.",
     overview: [
-      "Puzzole은 플레이어가 보드의 셀을 칠해 반복 도형 해답을 완성하는 iOS 퍼즐 앱입니다.",
-      "퍼즐 데이터 생성·검증 로직과 앱 화면 흐름을 분리하고, 앱에서는 스테이지 선택, 보드 플레이, 힌트, 진행 저장을 연결했습니다.",
-      "v1은 서버 없이 동작하도록 검증된 스테이지 1000개를 앱에 포함하고, 완료/해금 상태는 기기에 저장합니다.",
+      "Puzzole은 플레이어가 보드의 셀을 칠해 반복 도형 해답을 완성하는 iOS 퍼즐 앱입니다. 단순히 퍼즐을 제공하는 데서 그치지 않고, 힌트와 완료 판정이 신뢰되도록 정답이 하나인 스테이지만 선별하는 검증 흐름을 먼저 설계했습니다.",
+      "v1에서는 서버 동기화보다 플레이 안정성을 우선해 검증된 스테이지 1000개를 앱에 포함하고, 완료/해금 상태를 로컬에 저장하도록 구성했습니다.",
+      "SwiftUI 화면과 UIKit 보드 뷰의 역할을 나눠 칠하기, 이동, 확대/축소, 미니맵 탐색이 충돌하지 않도록 입력 경계를 분리했습니다.",
       "스테이지 팩 추가, 진행 동기화, 구매 검증은 첫 출시 범위에서 분리해 이후 서버 확장 계획으로 남겼습니다.",
     ],
     problem: [
@@ -340,29 +343,29 @@ export const projects: Project[] = [
       {
         title: "정답이 하나인 스테이지 카탈로그",
         problem:
-          "힌트와 완료 판정이 신뢰되려면 같은 보드를 여러 방식으로 풀 수 있으면 안 됐습니다. 리팩터링 전 샘플 50개 검증은 574.47초가 걸렸고 통과 비율은 24%였습니다.",
+          "여러 방식으로 풀리는 스테이지는 힌트와 완료 판정의 기준을 흐릴 수 있었습니다.",
         decision:
-          "생성된 퍼즐을 별도 검증 단계에서 다시 분석해 다른 풀이 가능성을 탐색하고, 정답이 하나인 스테이지만 앱에 포함하도록 했습니다.",
+          "퍼즐 생성 로직과 별도로 대체 풀이 가능성을 탐색하는 검증 단계를 구성했습니다.",
         result:
-          "개선 후 검증 한도 100000 조건에서 1000개 스테이지를 8.46초에 재확인했고, 정답이 하나인 스테이지 1000개와 실패/복수 정답 0개를 확인했습니다. 리팩터링 전 샘플 50개 검증 574.47초, 통과 비율 24%였던 병목을 출시 가능한 수준으로 줄였습니다.",
+          "검증 한도 100000 조건에서 1000개 스테이지를 8.46초에 재확인했고, 실패/복수 정답 0개를 확인했습니다.",
       },
       {
         title: "힌트와 완료 판정 기준 통합",
         problem:
-          "초기 규칙처럼 어떤 방식으로든 비슷한 모양을 만들면 정답으로 인정하면, 힌트가 가리킬 하나의 기준이 흐려졌습니다.",
+          "비슷한 모양을 만들면 정답으로 인정하는 방식에서는 힌트가 가리킬 하나의 기준이 흐려졌습니다.",
         decision:
-          "스테이지를 만들 때 정한 목표 배치를 완료 판정과 힌트의 공통 기준으로 삼고, 이미 칠한 셀과 덜 겹치는 남은 셀을 힌트로 보여주도록 했습니다.",
+          "스테이지를 만들 때 정한 목표 배치를 완료 판정과 힌트의 공통 기준으로 삼았습니다.",
         result:
-          "색상 선택의 자유는 유지하면서도, 힌트와 완료 판정은 같은 기준으로 일관되게 동작하게 됐습니다.",
+          "색상 선택의 자유는 유지하면서도, 힌트와 완료 판정이 같은 기준으로 일관되게 동작하게 했습니다.",
       },
       {
         title: "서버 없이 동작하는 v1",
         problem:
-          "v1에 서버 동기화와 계정을 넣으면 네트워크 실패, 개인정보 처리, 심사 리스크가 퍼즐 경험보다 먼저 커질 수 있었습니다.",
+          "첫 버전에 계정·동기화를 포함하면 네트워크 실패, 개인정보, 심사 리스크가 먼저 커질 수 있었습니다.",
         decision:
-          "v1은 앱에 포함된 스테이지와 로컬 진행 저장으로 완성하고, 스테이지 팩, 진행 동기화, 구매 검증은 후속 서버 확장으로 분리했습니다.",
+          "v1은 앱 내장 스테이지와 로컬 진행 저장으로 완성하고, 서버 동기화는 후속 확장으로 분리했습니다.",
         result:
-          "오프라인에서도 플레이 가능한 MVP를 먼저 만들고, 출시 이후 필요한 범위만 서버로 확장할 수 있는 여지를 남겼습니다.",
+          "오프라인에서도 퍼즐 로드, 힌트 제공, 진행 저장이 가능한 MVP 흐름을 먼저 확보했습니다.",
       },
       {
         title: "완료 저장과 광고/구매 경계 분리",
@@ -378,7 +381,7 @@ export const projects: Project[] = [
         problem:
           "큰 보드를 한 화면에 모두 맞추면 셀이 작아지고, 한 손가락 스크롤은 칠하기 조작과 충돌했습니다.",
         decision:
-          "한 손가락은 칠하기에 쓰고, 두 손가락 이동과 확대/축소는 보드 카메라가 처리하도록 나눴습니다. 보드가 화면 밖으로 잘릴 때는 미니맵을 보여줬습니다.",
+          "한 손가락은 칠하기, 두 손가락은 이동·확대/축소로 나누고, 큰 보드에는 미니맵 탐색을 붙였습니다.",
         result:
           "작은 보드는 단순하게, 큰 보드는 탐색 가능한 방식으로 다뤄 셀 크기와 조작성을 함께 확보했습니다.",
       },
@@ -839,12 +842,130 @@ final class MiniMapUIView: UIView {
     ],
     extraSections: [
       {
+        title: "Platform Expansion",
+        items: [
+          "Android MVP에서는 iOS Puzzole의 핵심 퍼즐 규칙과 스테이지 데이터를 Kotlin/Compose 환경에서 재검증했습니다.",
+          "자세한 내용은 Puzzole Android MVP 프로젝트 카드에 서술하였습니다.",
+        ],
+      },
+      {
         title: "Server Expansion Boundary",
         items: [
           "v1은 앱에 포함된 스테이지와 기기 내 진행 저장만으로 서버 없이 동작합니다.",
           "출시 이후에는 서버에서 스테이지 팩을 내려받고 기기에 캐시할 수 있도록, 스테이지 목록과 진행 저장의 책임을 분리해 두었습니다.",
           "진행 동기화와 서버 측 구매 검증은 계정 또는 익명 기기 식별자가 필요하므로 첫 출시 범위에서 제외했습니다.",
         ],
+      },
+    ],
+  },
+  {
+    slug: "puzzole-android",
+    name: "Puzzole Android MVP",
+    summary:
+      "iOS 퍼즐 앱의 핵심 규칙과 퍼즐 데이터를 Android로 확장하며, ViewModel/StateFlow·suspend Repository·Canvas 입력까지 작은 흐름으로 검증한 프로젝트",
+    role: "Android MVP Developer",
+    period: "2026",
+    status: "MVP",
+    featured: false,
+    categories: ["Android", "Product", "Architecture"],
+    tags: ["Personal Project", "Platform Expansion", "MVP"],
+    keywords: [
+      "Kotlin",
+      "Jetpack Compose",
+      "ViewModel/StateFlow",
+      "Canvas",
+      "JVM Unit Test",
+    ],
+    links: [],
+    overview: [
+      "Puzzole Android MVP는 iOS로 구현한 퍼즐 앱의 핵심 규칙과 퍼즐 데이터를 Android 환경에서 다시 검증한 확장 프로젝트입니다.",
+      "전체 앱을 전면 포팅하기보다 규칙, 데이터 로딩, 플레이 상태, 화면을 나누고 load → play → validate → complete 흐름을 작은 단위로 완성했습니다.",
+      "이후 Android 표준 상태 관리, 비동기 데이터 로딩, Canvas 기반 보드 입력을 추가해 실제 앱 구조에 가까워지도록 단계적으로 보강했습니다.",
+    ],
+    problem: [
+      "전체 iOS 앱을 한 번에 Android로 옮기면 학습 비용과 구현 범위가 동시에 커질 수 있었습니다.",
+      "화면 코드가 퍼즐 규칙이나 JSON 파싱을 직접 알게 되면 이후 데이터 확장, 진행 동기화, UI 변경의 영향이 커질 수 있었습니다.",
+      "초기 디버그용 격자 화면만으로는 실제 퍼즐 앱의 보드 입력 경험을 충분히 보여주기 어려웠습니다.",
+    ],
+    roleDetails: [
+      "Android Studio와 Gradle Kotlin DSL 기반 프로젝트를 구성하고 Compose 앱 실행 환경을 확인했습니다.",
+      "iOS PuzzleKit의 격자 위치, 기본 도형, 배치, 퍼즐 스테이지 규칙을 순수 Kotlin 규칙 계층으로 이식했습니다.",
+      "iOS 스테이지 목록과 JSON 일부를 Android assets로 옮기고, kotlinx.serialization 변환 계층을 통해 앱 내부 모델로 바꿨습니다.",
+      "플레이 상태 관리를 AndroidX ViewModel과 StateFlow 기반으로 승격하고, Compose 화면이 생명주기에 맞춰 상태를 읽도록 구성했습니다.",
+      "스테이지 로딩을 suspend API로 정리해 이후 백엔드 데이터 소스로 확장 가능한 호출 경계를 만들었습니다.",
+      "Canvas와 pointerInput 기반 보드 입력을 실험하고, 좌표 변환 책임을 분리해 JVM 테스트 가능한 구조로 정리했습니다.",
+    ],
+    decisionStories: [
+      {
+        title: "전면 포팅이 아닌 작은 기능 흐름",
+        problem:
+          "전체 iOS 앱을 한 번에 옮기면 Android 학습 비용과 구현 범위가 동시에 커질 수 있었습니다.",
+        decision:
+          "규칙, 데이터 로딩, 플레이 상태, 화면을 나누고 load → play → validate → complete 흐름만 MVP 범위로 고정했습니다.",
+        result:
+          "기존 iOS 제품의 핵심 규칙과 데이터를 Android에서 같은 흐름으로 다룰 수 있는지 검증했습니다.",
+      },
+      {
+        title: "퍼즐 규칙과 JSON 경계 분리",
+        problem:
+          "Swift Codable 기반 JSON 형식을 Android 퍼즐 규칙 모델에 직접 묶으면 확장 시 결합도가 커질 수 있었습니다.",
+        decision:
+          "퍼즐 규칙은 순수 Kotlin 모델에 두고, JSON 형식 차이는 데이터 변환 계층에서 흡수했습니다.",
+        result:
+          "기존 iOS 퍼즐 데이터를 Android에서 재사용하면서도 핵심 규칙은 저장 형식에 의존하지 않게 했습니다.",
+      },
+      {
+        title: "ViewModel과 StateFlow 승격",
+        problem:
+          "일반 Kotlin class 기반 상태 관리는 빠른 검증에는 유리했지만, Compose 화면과 생명주기에 맞춘 상태 연결을 설명하기에는 부족했습니다.",
+        decision:
+          "플레이 상태 관리를 AndroidX ViewModel로 승격하고, 내부 상태는 MutableStateFlow로 관리하며 외부에는 StateFlow로 노출했습니다.",
+        result:
+          "Compose 화면이 생명주기에 맞춰 상태를 읽도록 바꾸고, 기존 상태 전이 테스트 가능성도 유지했습니다.",
+      },
+      {
+        title: "suspend Repository 경계",
+        problem:
+          "초기 데이터 로딩은 로컬 파일을 동기적으로 읽었지만, 이후 서버 데이터로 바뀔 가능성이 있었습니다.",
+        decision:
+          "스테이지 목록과 상세 로딩을 suspend API로 바꾸고, 화면에서는 비동기 흐름으로 데이터를 로딩하도록 정리했습니다.",
+        result:
+          "현재는 로컬 데이터를 사용하더라도 이후 백엔드 데이터 소스로 확장할 때 화면 호출 구조를 크게 흔들지 않는 경계를 만들었습니다.",
+      },
+      {
+        title: "Canvas 기반 보드 입력 실험",
+        problem:
+          "단순 격자 버튼 화면은 연결 검증에는 충분했지만, 퍼즐 앱의 실제 보드 입력 경험을 보여주기에는 약했습니다.",
+        decision:
+          "Canvas 기반 보드와 pointerInput을 추가하고, 화면 좌표를 퍼즐 칸 위치로 바꾸는 계산 책임을 분리했습니다.",
+        result:
+          "정사각형 보드 매핑, 가로로 긴 퍼즐의 중앙 정렬, 보드 바깥 입력 무시, 칸 위치 계산을 테스트 가능한 구조로 검증했습니다.",
+      },
+    ],
+    screenshots: [
+      {
+        src: publicAsset("assets/puzzole-android/debug-play-empty.png"),
+        alt: "Puzzole Android MVP 초기 보드 화면",
+        caption:
+          "Android assets에서 스테이지를 로드해 Compose 화면에 표시한 초기 보드",
+        type: "wide",
+        group: "product",
+      },
+      {
+        src: publicAsset("assets/puzzole-android/debug-play-solving.png"),
+        alt: "Puzzole Android MVP 풀이 중 보드 화면",
+        caption:
+          "Canvas 기반 보드 입력과 색칠 상태 전이를 확인한 풀이 중 화면",
+        type: "wide",
+        group: "product",
+      },
+      {
+        src: publicAsset("assets/puzzole-android/debug-play-solved.png"),
+        alt: "Puzzole Android MVP 완료 판정 화면",
+        caption:
+          "플레이 상태 검증 결과가 완료 상태로 반영된 Android MVP 화면",
+        type: "wide",
+        group: "product",
       },
     ],
   },
