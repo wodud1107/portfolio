@@ -90,9 +90,10 @@ button {
   font-weight: 700;
 }
 
-.site-nav a.router-link-active {
+.site-nav a.is-active {
   color: var(--accent);
   background: var(--accent-soft);
+  font-weight: 900;
 }
 
 .site-nav a:hover {
