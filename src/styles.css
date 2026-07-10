@@ -357,6 +357,30 @@ p {
   border-radius: 8px;
 }
 
+.open-source-card {
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.open-source-card-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.open-source-card .card-topline {
+  margin: 0 0 6px;
+}
+
+.open-source-card p:not(.card-topline) {
+  margin: 0;
+}
+
 .strength-item {
   padding: 18px;
 }
@@ -1376,6 +1400,51 @@ dd {
 
 .print-stack-list span:nth-child(3n) {
   border-color: rgba(255, 204, 0, 0.42);
+}
+
+.print-open-source-section {
+  padding: 2.5mm 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.print-open-source-card {
+  padding: 2mm 3mm;
+  background: var(--accent-soft);
+  border: 1px solid rgba(0, 87, 255, 0.18);
+  border-radius: 8px;
+}
+
+.print-open-source-card .eyebrow {
+  margin: 0 0 1mm;
+  font-size: 7.6pt;
+}
+
+.print-open-source-card h3 {
+  margin: 0;
+  font-size: 9.2pt;
+}
+
+.print-open-source-title-row {
+  display: flex;
+  gap: 2.5mm;
+  align-items: baseline;
+}
+
+.print-open-source-card p:not(.eyebrow) {
+  margin: 1mm 0 0;
+  color: #303030;
+  font-size: 8.2pt;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+
+.print-open-source-card a {
+  color: var(--accent);
+  font-size: 8pt;
+  font-weight: 900;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
 }
 
 .print-project {

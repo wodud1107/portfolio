@@ -12,6 +12,7 @@ import type {
   ProjectScreenshot,
 } from "../data/projects";
 import { stackGroups } from "../data/techStack";
+import { openSourceContributions } from "../data/openSourceContributions";
 import { highlightPortfolioText } from "../utils/highlightText";
 import {
   getRoleSectionTitle,
@@ -691,6 +692,25 @@ function highlightedSwiftLines(code: string) {
           </div>
         </article>
       </div>
+    </section>
+
+    <section class="print-open-source-section avoid-break">
+      <article
+        v-for="contribution in openSourceContributions"
+        :key="contribution.href"
+        class="print-open-source-card"
+      >
+        <div>
+          <p class="eyebrow">
+            Open Source Contribution · {{ contribution.project }} · {{ contribution.status }}
+          </p>
+          <div class="print-open-source-title-row">
+            <h3>{{ contribution.title }}</h3>
+            <a :href="contribution.href">PR #2550 ↗</a>
+          </div>
+          <p>{{ contribution.printSummary }}</p>
+        </div>
+      </article>
     </section>
 
     <section class="print-strength-section">

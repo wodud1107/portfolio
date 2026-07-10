@@ -6,6 +6,7 @@ import ProjectShowcaseSection from '../components/ProjectShowcaseSection.vue';
 import ExperienceSection from '../components/ExperienceSection.vue';
 import CredentialSection from '../components/CredentialSection.vue';
 import CredentialModal from '../components/CredentialModal.vue';
+import OpenSourceContributionSection from '../components/OpenSourceContributionSection.vue';
 import { profileImage } from '../data/profile';
 import { useActiveItem } from '../composables/useActiveItem';
 import { experiences } from '../data/experience';
@@ -14,6 +15,7 @@ import { findContact } from '../data/contact';
 import type { Credential } from '../types/portfolio';
 import { featuredProjects, secondaryProjects } from '../data/projects';
 import { stackGroups } from '../data/techStack';
+import { openSourceContributions } from '../data/openSourceContributions';
 
 const email = findContact('Email')
 const github = findContact('GitHub')
@@ -48,6 +50,8 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleKeydown));
     :featured-projects="featuredProjects"
     :secondary-projects="secondaryProjects"
   />
+
+  <OpenSourceContributionSection :contributions="openSourceContributions" />
 
   <ExperienceSection :experiences="experiences" :blog="blog" />
 
