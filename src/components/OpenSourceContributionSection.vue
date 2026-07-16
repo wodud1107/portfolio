@@ -22,9 +22,20 @@ defineProps<{
         <span class="status-pill">{{ contribution.status }}</span>
       </div>
       <p>{{ contribution.summary }}</p>
-      <a class="text-link" :href="contribution.href" target="_blank" rel="noreferrer">
-        PR #2550 보기 ↗
-      </a>
+      <div class="open-source-links">
+        <a class="text-link" :href="contribution.href" target="_blank" rel="noreferrer">
+          기여 PR #2550 ↗
+        </a>
+        <a
+          v-if="contribution.mergeHref"
+          class="text-link"
+          :href="contribution.mergeHref"
+          target="_blank"
+          rel="noreferrer"
+        >
+          최종 병합 #2555 ↗
+        </a>
+      </div>
     </article>
   </section>
 </template>

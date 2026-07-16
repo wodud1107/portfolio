@@ -707,6 +707,7 @@ function highlightedSwiftLines(code: string) {
           <div class="print-open-source-title-row">
             <h3>{{ contribution.title }}</h3>
             <a :href="contribution.href">PR #2550 ↗</a>
+            <a v-if="contribution.mergeHref" :href="contribution.mergeHref">#2555 ↗</a>
           </div>
           <p>{{ contribution.printSummary }}</p>
         </div>

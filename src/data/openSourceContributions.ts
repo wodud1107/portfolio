@@ -5,17 +5,19 @@ export interface OpenSourceContribution {
   summary: string;
   printSummary: string;
   href: string;
+  mergeHref?: string;
 }
 
 export const openSourceContributions: OpenSourceContribution[] = [
   {
-    project: 'Kingfisher',
-    title: 'SwiftUI KFImage 레이아웃 회귀 수정',
-    status: 'PR 검토 대기',
+    project: "Kingfisher",
+    title: "SwiftUI KFImage 레이아웃 수정 및 전환 회귀 검증",
+    status: "Included in merged PR #2555",
     summary:
-      '이미지 로딩 전 placeholder 또는 onFailureView가 표시될 때 빈 이미지 브랜치가 레이아웃에 참여해 KFImage 영역이 커지는 이슈를 재현했습니다. ImageBinder와 KFImageRenderer 흐름을 따라 렌더링 조건을 좁히고, placeholder와 failure view 경로를 보장하는 회귀 테스트를 추가했습니다.',
+      "Kingfisher #2533을 재현하고 KFImageRenderer와 ImageBinder의 상태 전이를 추적해, 빈 이미지 브랜치가 placeholder와 onFailureView의 레이아웃에 영향을 주는 문제를 수정했습니다. 리뷰 과정에서 fade, load transition, 외부 transition과 callback 순서의 회귀 가능성을 재현하고 테스트와 데모 검증으로 보완했습니다. 이후 maintainer가 fade 중 이미지 크기도 함께 변하는 scaling 부작용을 추가로 수정했으며, 제 변경을 포함한 후속 PR #2555가 최종 병합되었습니다.",
     printSummary:
-      '#2533 SwiftUI 레이아웃 버그를 재현해 KFImageRenderer의 렌더링 조건을 보완하고, placeholder와 onFailureView 회귀 테스트를 추가했습니다.',
-    href: 'https://github.com/onevcat/Kingfisher/pull/2550',
+      "#2533을 재현해 빈 이미지 브랜치가 placeholder·failure 레이아웃에 영향을 주는 문제를 수정했습니다. fade·load transition, 외부 transition과 callback 순서를 회귀 테스트와 데모로 검증했으며, maintainer의 scaling 보완을 포함한 후속 PR #2555에 반영되어 병합되었습니다.",
+    href: "https://github.com/onevcat/Kingfisher/pull/2550",
+    mergeHref: "https://github.com/onevcat/Kingfisher/pull/2555",
   },
 ];

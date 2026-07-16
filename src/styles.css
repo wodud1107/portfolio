@@ -382,6 +382,12 @@ p {
   margin: 0;
 }
 
+.open-source-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .strength-item {
   padding: 18px;
 }
