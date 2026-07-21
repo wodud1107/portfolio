@@ -2090,6 +2090,25 @@ body:has(.print-page) main {
   font-weight: 900;
 }
 
+.print-page--android .print-strength-section {
+  padding-top: 1mm;
+}
+
+.print-page--android .print-strength-section h2 {
+  margin-top: 1.5mm;
+}
+
+.print-page--android .print-strength-list {
+  gap: 1mm;
+  padding: 0.8mm;
+}
+
+.print-page--android .print-strength-list li {
+  padding: 0.8mm;
+  font-size: 8.4pt;
+  line-height: 1.42;
+}
+
 @media print {
   @page {
     size: A4;
