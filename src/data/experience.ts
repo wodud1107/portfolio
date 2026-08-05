@@ -14,20 +14,8 @@ export const experiences: ExperienceItem[] = [
     points: [
       'UIKit, SwiftUI, Swift Concurrency, Firebase 기반 앱 개발 실습',
       '코드 리뷰와 PR 중심 협업 프로세스 경험',
-      'Damago 팀 프로젝트에서 출시와 운영 단계까지 참여',
     ],
     tags: ['iOS', 'Team Project', 'Code Review'],
-  },
-  {
-    period: '2025 - 2026',
-    title: 'Damago 실서비스 팀 프로젝트',
-    description: '커플 소통 iOS 앱의 클라이언트 구조, Live Activity, 성능 개선, 크래시 대응을 담당했습니다.',
-    points: [
-      'Local-First 흐름과 AsyncStream 기반 상태 동기화 구현',
-      'Instruments로 렌더링 병목을 분석하고 Core Animation Commit/GPU Hitch 감소',
-      'App Store 출시 이후 사용자 제보 기반 크래시 원인 분석과 PR 반영',
-    ],
-    tags: ['Released', 'SwiftData', 'ActivityKit', 'CI/CD'],
   },
   {
     period: '2020.03 - 2026.08 졸업예정',

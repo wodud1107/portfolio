@@ -75,7 +75,7 @@ export const projects: Project[] = [
       },
     ],
     featuredSummary:
-      "App Store 출시 iOS 앱에서 상태 동기화, Live Activity 응답, 렌더링 병목, 출시 후 안정화 대응을 맡았습니다. SwiftData·AsyncStream, ActivityKit, Instruments, CI/CD 자동화를 활용해 화면 상태 흐름과 운영 안정성을 개선했습니다.",
+      "상태 동기화, Live Activity, 렌더링 병목, 테스트·출시 후 안정화 대응을 맡았습니다. SwiftData·AsyncStream, ActivityKit, Instruments, CI/CD 자동화를 활용해 화면 상태 흐름과 운영 안정성을 개선했습니다.",
     relatedWriting: {
       title: "SwiftUI Rendering Pipeline",
       description:
@@ -152,7 +152,7 @@ export const projects: Project[] = [
     ],
     overview: [
       "Damago는 커플이 앱을 계속 열지 않아도 잠금화면, Live Activity, Dynamic Island에서 서로의 상태를 확인할 수 있는 iOS 앱입니다.",
-      "팀 프로젝트에서 iOS 클라이언트 개발자로 참여해 네트워크 지연과 비동기 상태 변화 속에서도 화면, Live Activity, 알림 흐름이 일관되게 이어지도록 상태 동기화와 성능 개선, 출시 안정화 대응을 담당했습니다.",
+      "팀 프로젝트에서 iOS 클라이언트 개발자로 참여해 네트워크 지연과 비동기 상태 변화 속에서도 화면, Live Activity, 알림 흐름이 일관되게 이어지도록 상태 동기화와 성능 개선, 테스트·출시 안정화 대응을 담당했습니다.",
     ],
     problem: [
       "네트워크 응답을 기다리는 화면 흐름에서는 API 지연이나 실패가 곧바로 빈 상태와 늦은 피드백으로 이어질 수 있었습니다.",
@@ -165,14 +165,15 @@ export const projects: Project[] = [
         title: "직접 구현",
         items: [
           "AsyncStream 기반 파이프라인으로 SwiftData 로컬 캐시와 서버 API 응답을 연결해, 끊김 없는 화면 상태 동기화 흐름을 구현했습니다.",
+          "ActivityKit 기반 잠금화면·Dynamic Island UI를 구현하고, APNs push-to-start 및 update token을 서버와 연결해 앱을 열지 않아도 Live Activity를 시작·갱신하는 흐름을 구축했습니다.",
           "Instruments로 렌더링 병목을 측정하고 Core Animation Commit/GPU Hitch 개선안을 비교해 최종 적용안을 PR로 반영했습니다.",
-          "Live Activity 업데이트 흐름과 FCM/Cloud Tasks 기반 재시도 구조를 각각 구현·연동했습니다.",
         ],
       },
       {
-        title: "설계 참여",
+        title: "설계·품질 참여",
         items: [
           "네트워크 결과를 기다린 뒤 화면을 갱신하는 방식 대신, 로컬 상태를 먼저 방출하는 Local-First 방향을 팀 논의 안에서 구체화했습니다.",
+          "Home·Signin·Store 등 핵심 ViewModel의 단위 테스트와 중복 요청·전송 실패 후 상태 롤백 회귀 테스트를 작성하고, 비동기 Task의 종료·대기 조건을 정리해 CI의 간헐적 실패를 안정화했습니다.",
           "UIKit은 기본 네비게이션 구조에, SwiftUI는 복잡한 화면 구성과 애니메이션에 집중하도록 역할을 분리했습니다.",
           "Fastlane/GitHub Actions 기반 배포 피드백 흐름을 PR 단계에서 확인할 수 있도록 구성했습니다.",
         ],
@@ -182,7 +183,7 @@ export const projects: Project[] = [
         items: [
           "App Store 출시 이후 설정 탭 진입 크래시와 서버 enum 불일치 fatalError를 분석하고 PR 단위로 수정했습니다.",
           "Release 환경에서 재현된 비동기 클로저 생명주기 문제를 추적하고, UI 상태 변경을 @MainActor 경계 안으로 모았습니다.",
-          "FCM 전송 실패 가능성을 Cloud Tasks 재시도 구조로 낮춰 일시적 네트워크 실패가 곧바로 기능 실패로 이어지지 않도록 보완했습니다.",
+          "APNs/FCM 토큰 등록·갱신과 환경별 인증 경로를 점검하고, Cloud Tasks 재시도로 전송 실패를 복구해 디바이스 토큰 생성부터 푸시 전달까지의 흐름을 보완했습니다.",
         ],
       },
     ],
@@ -236,9 +237,9 @@ export const projects: Project[] = [
         problem:
           "푸시 전송이 네트워크나 서버 상태에 따라 실패하면 커플 앱의 즉각적인 상호작용이 끊길 수 있었습니다.",
         decision:
-          "서버 측 Cloud Tasks 큐에 실패 작업을 쌓고, 10초·60초·300초 지수 백오프 재시도 흐름을 구성했습니다.",
+          "APNs/FCM 토큰의 등록·갱신과 환경별 인증 경로를 점검하고, 서버 측 Cloud Tasks 큐에는 실패 작업을 쌓아 10초·60초·300초 지수 백오프 재시도 흐름을 구성했습니다.",
         result:
-          "일시적인 전송 실패가 곧바로 기능 실패로 이어지지 않도록 만들고, 푸시 유실 가능성을 운영 관점에서 낮췄습니다.",
+          "일시적인 토큰 등록·전송 실패가 곧바로 기능 실패로 이어지지 않도록 만들고, 디바이스 등록부터 푸시 전달까지의 유실 가능성을 운영 관점에서 낮췄습니다.",
         links: [
           {
             label: "PR #274 · FCM 재시도 구조",

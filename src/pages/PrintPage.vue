@@ -171,8 +171,8 @@ const damagoPerformanceRows = [
 const damagoReliabilityRows = [
   {
     area: "알림 유실",
-    decision: "Cloud Tasks 큐 기반 10초, 60초, 300초 재시도",
-    result: "일시적 네트워크 실패가 곧바로 기능 실패로 이어지지 않도록 완충",
+    decision: "APNs/FCM 토큰 등록·갱신과 Cloud Tasks 큐 기반 10초, 60초, 300초 재시도",
+    result: "디바이스 등록부터 일시적 전송 실패 복구까지 푸시 전달 흐름을 완충",
   },
   {
     area: "Release 크래시",
