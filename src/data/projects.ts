@@ -199,7 +199,7 @@ export const projects: Project[] = [
         collaborationNote:
           "AsyncStream 도입 과정에서는 팀의 기존 Combine 흐름을 모두 바꾸기보다, 적용 기준을 먼저 제안하고 리뷰를 통해 합의했습니다. 실시간 감지처럼 기존 Combine 구조가 적합한 영역은 유지하고, 로컬 캐시를 먼저 방출한 뒤 네트워크 응답을 순차적으로 이어 전달해야 하는 Data 계층 흐름에만 AsyncStream을 적용했습니다. 이를 통해 기술 일관성을 해치지 않으면서도, 해당 PR에서는 비동기 데이터 흐름의 의도와 가독성을 높일 수 있었습니다.",
         image: {
-          src: publicAsset("assets/damago/Local First 파이프라인.png"),
+          src: publicAsset("assets/damago/local-first-pipeline.png"),
           alt: "Damago Local-First 상태 동기화 파이프라인",
         },
         links: [

@@ -450,7 +450,7 @@ const printSections = computed<PrintSection[]>(() => {
       ],
       diagram: {
         title: "Local-First Pipeline",
-        src: publicAsset("assets/damago/Local First 파이프라인.png"),
+        src: publicAsset("assets/damago/local-first-pipeline.png"),
         alt: "Damago Local-First 상태 동기화 파이프라인",
       },
       includePerformanceImages: true,
