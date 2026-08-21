@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import type { Project } from '../data/projects';
 import { highlightPortfolioText } from '../utils/highlightText';
 import ImageCarousel from './ImageCarousel.vue';
@@ -11,6 +11,7 @@ const props = defineProps<{
 }>();
 
 const route = useRoute();
+const router = useRouter();
 const previewScreenshots = computed(() =>
   props.project.screenshots?.filter((screenshot) => screenshot.group !== 'performance').slice(0, 5) ?? [],
 );
@@ -19,10 +20,27 @@ const detailRoute = computed(() => ({
   params: { slug: props.project.slug },
   query: { from: route.name === 'home' ? 'home' : 'projects' },
 }));
+
+function openDetail() {
+  router.push(detailRoute.value);
+}
+
+function isInteractiveTarget(target: EventTarget | null) {
+  return target instanceof Element && Boolean(target.closest('a, button'));
+}
+
+function handleCardClick(event: MouseEvent) {
+  if (!isInteractiveTarget(event.target)) openDetail();
+}
+
 </script>
 
 <template>
-  <article class="flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" :class="{ 'p-4': compact }">
+  <article
+    class="flex h-full cursor-pointer flex-col rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+    :class="{ 'p-4': compact }"
+    @click="handleCardClick"
+  >
     <div class="flex items-center justify-between gap-3 text-xs font-extrabold tracking-wide text-neutral-500 uppercase">
       <span class="rounded-full bg-blue-50 px-2.5 py-1 text-blue-700">{{ project.status }}</span>
       <span class="text-right">{{ project.period }}</span>
