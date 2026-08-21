@@ -121,7 +121,7 @@ export const projects: Project[] = [
     summary:
       '정답 유일성이 검증된 퍼즐 경험을 iOS에서 만들고, 같은 제품의 핵심 규칙과 흐름을 Android까지 확장한 개인 프로젝트',
     role: 'Solo Product Developer',
-    period: '2026.05 - 2026.06',
+    period: '2026.05 - Present',
     status: 'Released',
     featured: true,
     categories: ['iOS', 'Android', 'Product', 'Architecture'],
@@ -204,7 +204,7 @@ export const projects: Project[] = [
     summary:
       'React·Zustand 클라이언트와 Spring Boot 기반 인증·콘서트 조회 API를 함께 구현하고 있는 팀 프로젝트',
     role: 'Full-stack Developer · Team Project',
-    period: '2026.08 - In Progress',
+    period: '2026.08 - Present',
     status: 'In Progress',
     featured: true,
     categories: ['Frontend', 'Backend', 'Product'],
