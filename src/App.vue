@@ -64,18 +64,19 @@ watch(
 </script>
 
 <template>
-  <div class="site-shell">
-    <header class="site-header">
-      <RouterLink class="brand" to="/" aria-label="김재영 포트폴리오 홈">
-        <img class="brand-mark" :src="brandMark" alt="" />
+  <div class="min-h-screen bg-white text-neutral-900">
+    <header class="no-print sticky top-0 z-20 flex flex-col items-start gap-2 border-b border-neutral-200 bg-white/90 px-5 py-3 backdrop-blur sm:flex-row sm:items-center sm:justify-between sm:gap-4 md:px-10 lg:px-16">
+      <RouterLink class="inline-flex items-center gap-2.5 whitespace-nowrap text-sm font-extrabold tracking-tight" to="/" aria-label="김재영 포트폴리오 홈">
+        <img class="size-8 rounded-lg object-cover" :src="brandMark" alt="" />
         <span>Jaeyoung Kim</span>
       </RouterLink>
-      <nav class="site-nav" aria-label="주요 메뉴">
+      <nav class="flex w-full flex-wrap justify-start gap-1 sm:w-auto sm:justify-end" aria-label="주요 메뉴">
         <RouterLink
           v-for="item in internalNavItems"
           :key="item.label"
           :to="item.to"
-          :class="{ 'is-active': activeNavId === item.id }"
+          class="rounded-lg px-2.5 py-2 text-sm font-bold text-neutral-500 transition hover:bg-blue-50 hover:text-blue-700 sm:px-3"
+          :class="{ 'bg-blue-50! text-blue-700!': activeNavId === item.id }"
           :aria-current="activeNavId === item.id ? 'page' : undefined"
         >
           {{ item.label }}
@@ -83,6 +84,7 @@ watch(
         <a
           v-for="item in externalNavItems"
           :key="item.href"
+          class="rounded-lg px-2.5 py-2 text-sm font-bold text-neutral-500 transition hover:bg-blue-50 hover:text-blue-700 sm:px-3"
           :href="item.href"
           target="_blank"
           rel="noreferrer"
@@ -92,7 +94,7 @@ watch(
       </nav>
     </header>
 
-    <main>
+    <main class="mx-auto w-[min(1120px,calc(100%-2.5rem))]">
       <RouterView />
     </main>
   </div>

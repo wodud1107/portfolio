@@ -126,6 +126,6 @@ const emphasisPattern = new RegExp(
 export function highlightPortfolioText(value: string) {
   return escapeHtml(value).replace(
     emphasisPattern,
-    '<strong class="portfolio-emphasis">$1</strong>',
+    '<strong class="font-extrabold text-neutral-950">$1</strong>',
   );
 }

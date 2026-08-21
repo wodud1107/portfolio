@@ -9,29 +9,26 @@ defineProps<{
 </script>
 
 <template>
-  <section id="experience" class="section">
-    <div class="section-heading inline-heading">
+  <section id="experience" class="py-14 md:py-20">
+    <div class="mb-7 flex items-end justify-between gap-4">
       <div>
-        <p class="eyebrow">Experience</p>
-        <h2>경험과 활동</h2>
+        <p class="mb-2 text-xs font-extrabold tracking-[0.14em] text-blue-700 uppercase">Experience</p>
+        <h2 class="text-2xl font-extrabold tracking-tight text-neutral-950">경험과 활동</h2>
       </div>
-      <a v-if="blog?.href" class="text-link" :href="blog.href" target="_blank" rel="noreferrer">
+      <a v-if="blog?.href" class="text-sm font-extrabold text-blue-700 underline underline-offset-4 hover:text-blue-900" :href="blog.href" target="_blank" rel="noreferrer">
         블로그 보기
       </a>
     </div>
 
-    <div class="timeline">
-      <article v-for="item in experiences" :key="item.title" class="timeline-item">
-        <p class="timeline-period">{{ item.period }}</p>
+    <div class="border-t border-neutral-200">
+      <article v-for="item in experiences" :key="item.title" class="grid gap-3 border-b border-neutral-200 py-5 md:grid-cols-[180px_minmax(0,1fr)] md:gap-6">
+        <p class="text-sm font-extrabold text-neutral-500">{{ item.period }}</p>
         <div>
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.description }}</p>
-          <ul>
-            <li v-for="point in item.points" :key="point">{{ point }}</li>
+          <h3 class="text-base font-extrabold text-neutral-950">{{ item.title }}</h3>
+          <p class="mt-2 text-sm leading-6 text-neutral-700">{{ item.description }}</p>
+          <ul v-if="item.points?.length" class="mt-3 grid gap-1.5 text-sm leading-6 text-neutral-700">
+            <li v-for="point in item.points" :key="point" class="relative pl-4 before:absolute before:top-2.5 before:left-0 before:size-1.5 before:rounded-full before:bg-blue-600">{{ point }}</li>
           </ul>
-          <div class="tag-row">
-            <span v-for="tag in item.tags" :key="tag">{{ tag }}</span>
-          </div>
         </div>
       </article>
     </div>

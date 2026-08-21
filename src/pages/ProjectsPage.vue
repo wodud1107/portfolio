@@ -23,16 +23,16 @@ const filteredProjects = computed(() => {
   <PageHeader
     eyebrow="Projects"
     title="프로젝트 목록"
-    description="대표 프로젝트와 보조 프로젝트를 역할이 겹치지 않도록 나눠 정리했습니다."
+    description="세 프로젝트에 서로 다른 문제 해결 경험이 드러나도록 정리했습니다."
   />
 
-  <section class="section tight-section">
-    <div class="filter-row" aria-label="프로젝트 필터">
+  <section class="py-8 pb-16 md:py-10 md:pb-20">
+    <div class="mb-7 flex flex-wrap gap-2" aria-label="프로젝트 필터">
       <button
         v-for="filter in PROJECT_FILTERS"
         :key="filter"
-        class="filter-button"
-        :class="{ active: selectedFilter === filter }"
+        class="rounded-full border border-neutral-200 px-3.5 py-2 text-sm font-bold text-neutral-600 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
+        :class="{ 'border-blue-600! bg-blue-600! text-white!': selectedFilter === filter }"
         type="button"
         @click="selectedFilter = filter"
       >
@@ -40,7 +40,7 @@ const filteredProjects = computed(() => {
       </button>
     </div>
 
-    <div class="project-grid">
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
       <ProjectCard v-for="project in filteredProjects" :key="project.slug" :project="project" />
     </div>
   </section>
