@@ -136,7 +136,6 @@ export const projects: Project[] = [
         label: 'Google Play',
         href: 'https://play.google.com/store/apps/details?id=com.kjy.puzzole',
       },
-      { label: 'GitHub', href: 'https://github.com/wodud1107/Puzzole' },
     ],
     featuredSummary:
       'iOS 버전은 심사 결과를 기다리고 있으며, Android는 Google Play에 출시했습니다. 한 제품의 퍼즐 규칙과 진행 흐름을 중심에 두고, 플랫폼마다 달라지는 UI와 상태 관리의 경계를 나눴습니다.',
