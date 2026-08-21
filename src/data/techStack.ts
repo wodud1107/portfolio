@@ -14,7 +14,7 @@ export const stackGroups: StackGroup[] = [
   },
   {
     title: 'Frontend',
-    items: ['Vue 3', 'Vue Router', 'Vite', 'Plain CSS'],
+    items: ['React', 'TypeScript', 'Zustand', 'TanStack Query', 'Vue 3', 'Tailwind CSS'],
   },
   {
     title: "Android",
@@ -23,14 +23,6 @@ export const stackGroups: StackGroup[] = [
   },
   {
     title: 'Backend / Data',
-    items: ['Firebase', 'Cloud Functions', 'Vapor', 'REST API', 'DB Migration'],
-  },
-  {
-    title: 'Architecture',
-    items: ['MVVM', 'Clean Architecture', 'SPM', 'Local-First', 'Swift Testing'],
-  },
-  {
-    title: 'Tools',
-    items: ['Xcode', 'Instruments', 'GitHub Actions', 'GitHub Pages', 'Fastlane'],
+    items: ['Spring Boot', 'Spring Data JPA', 'JWT', 'OpenAPI', 'Flyway', 'MySQL', 'Redis', 'Firebase', 'Cloud Tasks'],
   },
 ];

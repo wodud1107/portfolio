@@ -18,8 +18,7 @@ const router = createRouter({
     { path: '/', name: 'home', component: HomePage },
     { path: '/projects', name: 'projects', component: ProjectsPage },
     { path: '/projects/:slug', name: 'project-detail', component: ProjectDetailPage },
-    { path: '/print/:variant(ios|general|android)', name: 'print', component: PrintPage },
-    { path: '/print', redirect: '/print/ios' },
+    { path: '/print', name: 'print', component: PrintPage },
     { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFoundPage },
   ],
 });

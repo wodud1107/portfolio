@@ -13,17 +13,17 @@ export const PROJECT_FILTERS = ['All', ...PROJECT_CATEGORIES] as const;
 export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
 export type ProjectFilter = (typeof PROJECT_FILTERS)[number];
 
-export type ProjectStatus = 'Released' | 'MVP' | 'Prototype' | 'Coursework';
+export type ProjectStatus = 'Released' | 'In Progress' | 'MVP' | 'Prototype' | 'Coursework';
 
 export interface ProjectLink {
-    label: string;
-    href: string;
+  label: string;
+  href: string;
 }
 
-export interface ProjectDetailSection {
-    title: string;
-    items: string[];
-    links?: ProjectLink[];
+export interface ProjectHighlight {
+  label: string;
+  value: string;
+  description?: string;
 }
 
 export interface ProjectScreenshot {
@@ -33,15 +33,6 @@ export interface ProjectScreenshot {
     type?: 'phone' | 'wide';
     group?: 'product' | 'performance';
     notes?: string[];
-}
-
-export interface ProjectCodeSnippet {
-    title: string;
-    storyTitle?: string;
-    source: string;
-    description: string;
-    code: string;
-    printCode?: string;
 }
 
 export interface ProjectDecisionStory {
@@ -58,17 +49,6 @@ export interface ProjectDecisionStory {
     links?: ProjectLink[];
 }
 
-export interface ProjectRoleGroup {
-    title: string;
-    items: string[];
-}
-
-export interface ProjectRelatedWriting {
-    title: string;
-    description: string;
-    link: ProjectLink;
-}
-
 export interface Project {
     slug: string;
     name: string;
@@ -78,19 +58,16 @@ export interface Project {
     status: ProjectStatus;
     featured: boolean;
     categories: ProjectCategory[];
-    tags: string[];
-    keywords: string[];
-    links: ProjectLink[];
+  tags: string[];
+  keywords: string[];
+  links: ProjectLink[];
+  highlights?: ProjectHighlight[];
     featuredSummary?: string;
     overview: string[];
     problem: string[];
     roleDetails: string[];
-    roleBreakdown?: ProjectRoleGroup[];
     decisionStories?: ProjectDecisionStory[];
     screenshots?: ProjectScreenshot[];
-    codeSnippets?: ProjectCodeSnippet[];
-    relatedWriting?: ProjectRelatedWriting;
-    extraSections?: ProjectDetailSection[];
 }
 
 export interface Credential {

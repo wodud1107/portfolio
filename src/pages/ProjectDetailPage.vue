@@ -1,272 +1,139 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import CodeSnippetModal from '../components/CodeSnippetModal.vue';
-import { useActiveItem } from '../composables/useActiveItem';
 import ImageCarousel from '../components/ImageCarousel.vue';
 import { findProjectBySlug } from '../data/projects';
-import type { ProjectCodeSnippet, ProjectDecisionStory } from '../data/projects';
 import { highlightPortfolioText } from '../utils/highlightText';
-import {
-  getPerformanceScreenshots,
-  getProductScreenshots,
-  getRoleSectionTitle,
-  getSnippetForStory,
-} from '../utils/projectDisplay'
+import { getPerformanceScreenshots, getProductScreenshots } from '../utils/projectDisplay';
 
 const route = useRoute();
 const project = computed(() => findProjectBySlug(String(route.params.slug)));
 const backLink = computed(() =>
-route.query.from === 'home'
-? { to: { name: 'home', hash: '#projects' }, label: '← 홈으로 돌아가기' }
-: { to: { name: 'projects' }, label: '← 프로젝트 목록으로 돌아가기' },
+  route.query.from === 'home'
+    ? { to: { name: 'home', hash: '#projects' }, label: '← 홈으로 돌아가기' }
+    : { to: { name: 'projects' }, label: '← 프로젝트 목록으로 돌아가기' },
 );
 const productScreenshots = computed(() => getProductScreenshots(project.value));
 const performanceScreenshots = computed(() => getPerformanceScreenshots(project.value));
-const {
-  activeItem: activeSnippet,
-  openItem: openSnippet,
-  closeItem: closeSnippet,
-} = useActiveItem<ProjectCodeSnippet>();
-
-function snippetForStory(story: ProjectDecisionStory, fallbackIndex: number) {
-  return getSnippetForStory(project.value, story, fallbackIndex);
-}
-
-function roleSectionTitle() {
-  return project.value ? getRoleSectionTitle(project.value) : 'My Role';
-}
 </script>
 
 <template>
-  <section v-if="project" class="detail-page">
-    <RouterLink class="text-link back-link" :to="backLink.to">{{ backLink.label }}</RouterLink>
+  <section v-if="project" class="py-10 md:py-16">
+    <RouterLink class="text-sm font-extrabold text-blue-700 underline underline-offset-4 hover:text-blue-900" :to="backLink.to">
+      {{ backLink.label }}
+    </RouterLink>
 
-    <header class="detail-header">
+    <header class="mt-8 grid gap-8 border-b border-neutral-200 pb-10 lg:grid-cols-[minmax(0,1fr)_260px]">
       <div>
-        <p class="eyebrow">{{ project.status }} · {{ project.period }}</p>
-        <h1>{{ project.name }}</h1>
-        <p v-html="highlightPortfolioText(project.summary)"></p>
+        <p class="text-xs font-extrabold tracking-[0.14em] text-blue-700 uppercase">{{ project.status }} · {{ project.period }}</p>
+        <h1 class="mt-3 text-4xl font-extrabold tracking-tight text-neutral-950 md:text-5xl">{{ project.name }}</h1>
+        <p class="mt-5 max-w-3xl text-base leading-7 text-neutral-700 md:text-lg" v-html="highlightPortfolioText(project.summary)"></p>
       </div>
-      <dl class="detail-meta">
+      <dl class="grid content-start gap-4 rounded-2xl bg-neutral-50 p-5 text-sm">
         <div>
-          <dt>Role</dt>
-          <dd>{{ project.role }}</dd>
+          <dt class="text-xs font-extrabold tracking-wide text-neutral-500 uppercase">Role</dt>
+          <dd class="mt-1 font-bold text-neutral-900">{{ project.role }}</dd>
         </div>
         <div>
-          <dt>Category</dt>
-          <dd>{{ project.categories.join(' / ') }}</dd>
+          <dt class="text-xs font-extrabold tracking-wide text-neutral-500 uppercase">Platform</dt>
+          <dd class="mt-1 font-bold text-neutral-900">{{ project.categories.join(' / ') }}</dd>
         </div>
       </dl>
     </header>
 
-    <article v-if="productScreenshots.length" class="detail-section media-section primary-media-section">
-      <h2>Screenshots</h2>
-      <ImageCarousel :images="productScreenshots" />
-    </article>
+    <section v-if="project.highlights?.length" class="grid gap-3 border-b border-neutral-200 py-7 sm:grid-cols-2">
+      <article v-for="highlight in project.highlights" :key="highlight.label" class="rounded-2xl border border-blue-100 bg-blue-50/60 p-5">
+        <p class="text-xs font-extrabold tracking-wide text-blue-700 uppercase">{{ highlight.label }}</p>
+        <p class="mt-2 text-xl font-extrabold tracking-tight text-neutral-950">{{ highlight.value }}</p>
+      </article>
+    </section>
 
-    <div class="tag-row detail-tags">
-      <span v-for="tag in [...project.tags, ...project.keywords]" :key="tag">{{ tag }}</span>
-    </div>
-
-    <p v-if="project.featuredSummary" class="project-featured-summary">
-      <span v-html="highlightPortfolioText(project.featuredSummary)"></span>
-    </p>
-
-    <article class="detail-section">
-      <h2>Overview</h2>
-      <ul>
-        <li
-          v-for="item in project.overview"
-          :key="item"
-          v-html="highlightPortfolioText(item)"
-        ></li>
-      </ul>
-    </article>
-
-    <article class="detail-section">
-      <h2>{{ roleSectionTitle() }}</h2>
-      <div v-if="project.roleBreakdown?.length" class="role-breakdown">
-        <section v-for="group in project.roleBreakdown" :key="group.title">
-          <h3>{{ group.title }}</h3>
-          <ul>
-            <li
-              v-for="item in group.items"
-              :key="item"
-              v-html="highlightPortfolioText(item)"
-            ></li>
-          </ul>
-        </section>
+    <section class="grid gap-8 py-10 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div>
+        <p class="text-xs font-extrabold tracking-[0.14em] text-blue-700 uppercase">Overview</p>
+        <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-neutral-950">어떤 제품에서 무엇을 맡았는가</h2>
+        <ul class="mt-5 grid gap-3 text-sm leading-6 text-neutral-700">
+          <li v-for="item in project.overview" :key="item" class="relative pl-4 before:absolute before:top-2.5 before:left-0 before:size-1.5 before:rounded-full before:bg-blue-600" v-html="highlightPortfolioText(item)"></li>
+        </ul>
       </div>
-      <ul v-else>
-        <li
-          v-for="item in project.roleDetails"
-          :key="item"
-          v-html="highlightPortfolioText(item)"
-        ></li>
-      </ul>
-    </article>
+      <aside class="rounded-2xl border border-neutral-200 p-5">
+        <p class="text-xs font-extrabold tracking-wide text-neutral-500 uppercase">Core tech</p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <span v-for="keyword in project.keywords" :key="keyword" class="rounded-md bg-neutral-100 px-2.5 py-1.5 text-xs font-bold text-neutral-700">{{ keyword }}</span>
+        </div>
+      </aside>
+    </section>
 
-    <article class="detail-section">
-      <h2>Problem</h2>
-      <ul>
-        <li
-          v-for="item in project.problem"
-          :key="item"
-          v-html="highlightPortfolioText(item)"
-        ></li>
-      </ul>
-    </article>
+    <section v-if="productScreenshots.length" class="border-t border-neutral-200 py-10">
+      <p class="text-xs font-extrabold tracking-[0.14em] text-blue-700 uppercase">Product</p>
+      <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-neutral-950">제품 화면</h2>
+      <div class="mt-6">
+        <ImageCarousel :images="productScreenshots" />
+      </div>
+    </section>
 
-    <article v-if="project.decisionStories?.length" class="detail-section">
-      <h2>Decision Stories</h2>
-      <div class="decision-story-list">
-        <section
-          v-for="(story, storyIndex) in project.decisionStories"
-          :key="story.title"
-          class="decision-story"
-        >
-          <h3>{{ story.title }}</h3>
-          <dl class="pdr-list">
+    <section class="border-t border-neutral-200 py-10">
+      <p class="text-xs font-extrabold tracking-[0.14em] text-blue-700 uppercase">My contribution</p>
+      <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-neutral-950">담당 범위</h2>
+      <ul class="mt-5 grid gap-3 md:grid-cols-3">
+        <li v-for="item in project.roleDetails" :key="item" class="rounded-xl border border-neutral-200 p-4 text-sm leading-6 text-neutral-700" v-html="highlightPortfolioText(item)"></li>
+      </ul>
+    </section>
+
+    <section v-if="project.decisionStories?.length" class="border-t border-neutral-200 py-10">
+      <p class="text-xs font-extrabold tracking-[0.14em] text-blue-700 uppercase">Technical decisions</p>
+      <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-neutral-950">문제 해결 과정</h2>
+      <div class="mt-6 grid gap-5">
+        <article v-for="story in project.decisionStories" :key="story.title" class="rounded-2xl border border-neutral-200 p-5 md:p-6">
+          <h3 class="text-lg font-extrabold tracking-tight text-neutral-950">{{ story.title }}</h3>
+          <dl class="mt-5 grid gap-5 md:grid-cols-3">
             <div>
-              <dt>Problem</dt>
-              <dd v-html="highlightPortfolioText(story.problem)"></dd>
+              <dt class="text-xs font-extrabold tracking-wide text-rose-600 uppercase">Problem</dt>
+              <dd class="mt-2 text-sm leading-6 text-neutral-700" v-html="highlightPortfolioText(story.problem)"></dd>
             </div>
             <div>
-              <dt>Decision</dt>
-              <dd v-html="highlightPortfolioText(story.decision)"></dd>
+              <dt class="text-xs font-extrabold tracking-wide text-amber-700 uppercase">Decision</dt>
+              <dd class="mt-2 text-sm leading-6 text-neutral-700" v-html="highlightPortfolioText(story.decision)"></dd>
             </div>
             <div>
-              <dt>Result</dt>
-              <dd v-html="highlightPortfolioText(story.result)"></dd>
-            </div>
-            <div v-if="story.collaborationNote" class="collaboration-note-row">
-              <dt>Collaboration Note</dt>
-              <dd v-html="highlightPortfolioText(story.collaborationNote)"></dd>
+              <dt class="text-xs font-extrabold tracking-wide text-emerald-700 uppercase">Result</dt>
+              <dd class="mt-2 text-sm leading-6 font-semibold text-neutral-800" v-html="highlightPortfolioText(story.result)"></dd>
             </div>
           </dl>
-          <figure v-if="story.image" class="decision-story-image">
-            <img :src="story.image.src" :alt="story.image.alt" loading="lazy" />
-            <figcaption v-if="story.image.caption">{{ story.image.caption }}</figcaption>
+          <p v-if="story.collaborationNote" class="mt-5 rounded-xl bg-neutral-50 p-4 text-sm leading-6 text-neutral-700"><span class="font-extrabold text-neutral-950">협업 방식. </span>{{ story.collaborationNote }}</p>
+          <figure v-if="story.image" class="mt-5 overflow-hidden rounded-xl border border-neutral-200">
+            <img class="block w-full" :src="story.image.src" :alt="story.image.alt" loading="lazy" />
+            <figcaption v-if="story.image.caption" class="border-t border-neutral-200 px-4 py-3 text-sm text-neutral-600">{{ story.image.caption }}</figcaption>
           </figure>
-          <div v-if="story.links?.length" class="section-link-list">
-            <a
-              v-for="link in story.links"
-              :key="link.href"
-              :href="link.href"
-              target="_blank"
-              rel="noreferrer"
-            >
-              {{ link.label }}
-            </a>
+          <div v-if="story.links?.length" class="mt-5 flex flex-wrap gap-3">
+            <a v-for="link in story.links" :key="link.href" class="text-sm font-extrabold text-blue-700 underline underline-offset-4 hover:text-blue-900" :href="link.href" target="_blank" rel="noreferrer">{{ link.label }} ↗</a>
           </div>
-          <div v-if="snippetForStory(story, storyIndex)" class="story-code-block">
-            <p>관련 코드</p>
-            <div class="code-chip-list story-code-chip-list">
-              <button
-                class="code-chip"
-                type="button"
-                :aria-label="`${snippetForStory(story, storyIndex)?.title} 코드 확인하기`"
-                @click="openSnippet(snippetForStory(story, storyIndex))"
-              >
-                <strong>코드 확인하기</strong>
-              </button>
-            </div>
-          </div>
-        </section>
+        </article>
       </div>
-    </article>
+    </section>
 
-    <article v-if="project.relatedWriting" class="detail-section related-writing-section">
-      <h2>Related Writing</h2>
-      <h3>{{ project.relatedWriting.title }}</h3>
-      <p v-html="highlightPortfolioText(project.relatedWriting.description)"></p>
-      <div class="section-link-list">
-        <a
-          :href="project.relatedWriting.link.href"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {{ project.relatedWriting.link.label }}
-        </a>
-      </div>
-    </article>
-
-    <article v-if="performanceScreenshots.length" class="detail-section media-section">
-      <h2>Performance Evidence</h2>
-      <p>
-        Instruments 캡처는 단순 화면 예시가 아니라, 렌더링 병목을 찾고 개선 효과를 확인한
-        근거입니다. 개선 전후에 어떤 트랙과 수치를 봤는지 함께 읽히도록 정리했습니다.
-      </p>
-      <div class="performance-gallery">
-        <figure
-          v-for="screenshot in performanceScreenshots"
-          :key="screenshot.src"
-          class="performance-card"
-        >
-          <img :src="screenshot.src" :alt="screenshot.alt" loading="lazy" />
-          <figcaption>
-            <strong>{{ screenshot.caption }}</strong>
-            <ul v-if="screenshot.notes?.length">
-              <li v-for="note in screenshot.notes" :key="note">{{ note }}</li>
-            </ul>
-          </figcaption>
+    <section v-if="performanceScreenshots.length" class="border-t border-neutral-200 py-10">
+      <p class="text-xs font-extrabold tracking-[0.14em] text-blue-700 uppercase">Measured evidence</p>
+      <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-neutral-950">성능 계측 근거</h2>
+      <div class="mt-6 grid gap-5 md:grid-cols-2">
+        <figure v-for="screenshot in performanceScreenshots" :key="screenshot.src" class="overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50">
+          <img class="block w-full" :src="screenshot.src" :alt="screenshot.alt" loading="lazy" />
+          <figcaption class="p-4 text-sm font-semibold leading-6 text-neutral-700">{{ screenshot.caption }}</figcaption>
         </figure>
       </div>
-    </article>
+    </section>
 
-    <article
-      v-for="section in project.extraSections"
-      :key="section.title"
-      class="detail-section"
-    >
-      <h2>{{ section.title }}</h2>
-      <ul>
-        <li
-          v-for="item in section.items"
-          :key="item"
-          v-html="highlightPortfolioText(item)"
-        ></li>
-      </ul>
-      <div v-if="section.links?.length" class="section-link-list">
-        <a
-          v-for="link in section.links"
-          :key="link.href"
-          :href="link.href"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {{ link.label }}
-        </a>
+    <section v-if="project.links.length" class="border-t border-neutral-200 py-10">
+      <h2 class="text-2xl font-extrabold tracking-tight text-neutral-950">Links</h2>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a v-for="link in project.links" :key="link.href" class="rounded-full border border-neutral-300 px-4 py-2.5 text-sm font-extrabold text-neutral-800 transition hover:border-blue-600 hover:bg-blue-50 hover:text-blue-700" :href="link.href" target="_blank" rel="noreferrer">{{ link.label }} ↗</a>
       </div>
-    </article>
-
-    <article v-if="project.links.length" class="detail-section">
-      <h2>Links</h2>
-      <div class="link-list">
-        <a
-          v-for="link in project.links"
-          :key="link.href"
-          class="button"
-          :href="link.href"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {{ link.label }}
-        </a>
-      </div>
-    </article>
+    </section>
   </section>
 
-  <section v-else class="page-header">
-    <p class="eyebrow">Not Found</p>
-    <h1>프로젝트를 찾을 수 없습니다.</h1>
-    <RouterLink class="text-link" to="/projects">프로젝트 목록으로 돌아가기</RouterLink>
+  <section v-else class="py-16">
+    <p class="text-xs font-extrabold tracking-[0.14em] text-blue-700 uppercase">Not Found</p>
+    <h1 class="mt-3 text-4xl font-extrabold tracking-tight text-neutral-950">프로젝트를 찾을 수 없습니다.</h1>
+    <RouterLink class="mt-6 inline-block text-sm font-extrabold text-blue-700 underline underline-offset-4" to="/projects">프로젝트 목록으로 돌아가기</RouterLink>
   </section>
-
-  <CodeSnippetModal
-    v-if="activeSnippet"
-    :snippet="activeSnippet"
-    @close="closeSnippet"
-  />
 </template>
