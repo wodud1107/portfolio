@@ -43,7 +43,7 @@ const profileImage = publicAsset("assets/profile.jpeg");
 
 const currentPrintCopy: PrintCopy = {
   introParagraphs: [
-    "앱 개발을 출발점으로 사용자 흐름, 데이터 흐름, 배포 환경을 함께 보며 제품 문제를 좁혀가는 개발자입니다. Damago의 iOS 출시 및 운영, Puzzole의 제품 설계·안드로이드 출시, Tikkle의 풀스택 협업을 통해 기술 경계를 제품 흐름에 맞춰 설계해왔습니다.",
+    "앱 개발을 출발점으로 사용자 흐름, 데이터 흐름, 배포 환경을 함께 보며 제품 문제를 좁혀가는 개발자입니다. Damago의 iOS 출시 및 운영, Puzzole의 제품 설계·App Store·Google Play 출시, Tikkle의 풀스택 협업을 통해 기술 경계를 제품 흐름에 맞춰 설계해왔습니다.",
     "빠르게 만드는 것과 오래 가져가는 것 사이의 균형을 중요하게 봅니다. MVP에서는 먼저 닫아야 할 흐름과 이후로 미룰 확장 범위를 구분하고, 문제 해결 과정이 드러나는 기록을 남기고 팀과 함께 성장할 수 있는 구조를 설계합니다.",
   ],
   strengths: [
@@ -60,7 +60,7 @@ const currentPrintCopy: PrintCopy = {
     {
       title: "플랫폼·배포 경계 확장",
       description:
-        "Puzzole의 핵심 규칙과 스테이지 데이터를 Android까지 확장하고 Google Play 배포 흐름을 경험했습니다.",
+        "Puzzole의 핵심 규칙과 스테이지 데이터를 두 플랫폼으로 확장하고 App Store·Google Play 배포 흐름을 경험했습니다.",
     },
   ],
 };
@@ -102,7 +102,7 @@ const printSections: PrintSection[] =
           title: "Puzzole - 출시 퍼즐 제품",
           project: puzzole,
           summary:
-            "정답 유일성이 검증된 퍼즐 규칙과 진행 흐름을 구현하고, Android 버전을 Google Play에 출시했습니다.",
+            "정답 유일성이 검증된 퍼즐 규칙과 진행 흐름을 구현하고, iOS·Android 버전을 App Store와 Google Play에 출시했습니다.",
           includeOverview: true,
           includeRole: true,
           includeProductImages: true,
@@ -152,7 +152,7 @@ function overviewItemsForPrint(project: Project) {
   if (project.slug === "puzzole") {
     return [
       "셀을 칠해 반복 도형 해답을 완성하는 출시 퍼즐 제품입니다.",
-      "정답 유일성 검증, 힌트·완료 판정, 로컬 진행 저장을 공통 규칙으로 두고 Android 버전을 Google Play에 출시했습니다.",
+      "정답 유일성 검증, 힌트·완료 판정, 로컬 진행 저장을 공통 규칙으로 두고 iOS·Android 버전을 App Store와 Google Play에 출시했습니다.",
     ];
   }
 

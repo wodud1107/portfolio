@@ -119,17 +119,17 @@ export const projects: Project[] = [
     slug: 'puzzole',
     name: 'Puzzole',
     summary:
-      '정답 유일성이 검증된 퍼즐 경험을 iOS에서 만들고, 같은 제품의 핵심 규칙과 흐름을 Android까지 확장한 개인 프로젝트',
+      '정답 유일성이 검증된 퍼즐 경험을 iOS와 Android로 구현해 App Store와 Google Play에 출시한 개인 프로젝트',
     role: 'Solo Product Developer',
     period: '2026.05 - Present',
     status: 'Released',
     featured: true,
     categories: ['iOS', 'Android', 'Product', 'Architecture'],
-    tags: ['Personal Product', 'iOS Review Pending', 'Google Play Released'],
+    tags: ['Personal Product', 'App Store Released', 'Google Play Released'],
     keywords: ['SwiftUI', 'UIKit', 'Kotlin', 'Jetpack Compose', 'ViewModel / StateFlow'],
     highlights: [
       { label: '검증 후 포함한 스테이지', value: '1,000개' },
-      { label: 'Android 배포 상태', value: 'Google Play 출시' },
+      { label: '배포 상태', value: 'App Store · Google Play 출시' },
     ],
     links: [
       {
@@ -142,10 +142,10 @@ export const projects: Project[] = [
       },
     ],
     featuredSummary:
-      'iOS 버전은 심사 결과를 기다리고 있으며, Android는 Google Play에 출시했습니다. 한 제품의 퍼즐 규칙과 진행 흐름을 중심에 두고, 플랫폼마다 달라지는 UI와 상태 관리의 경계를 나눴습니다.',
+      'iOS와 Android 버전을 App Store와 Google Play에 출시했습니다. 한 제품의 퍼즐 규칙과 진행 흐름을 중심에 두고, 플랫폼마다 달라지는 UI와 상태 관리의 경계를 나눴습니다.',
     overview: [
       '셀을 칠해 반복 도형 해답을 완성하는 개인 퍼즐 제품입니다.',
-      '정답 유일성 검증, 힌트·완료 판정의 공통 기준, 로컬 진행 저장을 먼저 설계한 뒤 Android 확장까지 진행했습니다.',
+      '정답 유일성 검증, 힌트·완료 판정의 공통 기준, 로컬 진행 저장을 먼저 설계한 뒤 두 플랫폼에 출시했습니다.',
     ],
     problem: [
       '여러 해답이 가능한 스테이지는 힌트와 완료 판정의 신뢰성을 흔들 수 있었습니다.',
